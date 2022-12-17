@@ -130,9 +130,9 @@ public class LocalDriver {
                 "\uDD06\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06" +
                 " ... starting Generator ..." + DateTime.now().toDateTimeISO().toString());
         String result = sendRequest("getCities", 90000);
-        LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 ... \uD83E\uDD6C cities json: \n" + result);
+        LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06  \uD83E\uDD6C cities json: \n" + result);
         City[] cityArray = GSON.fromJson(result, City[].class);
-        LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 ... \uD83E\uDD6C cities found: " + cityArray.length);
+        LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06  \uD83E\uDD6C cities found: " + cityArray.length);
 
         try {
             Timer timer = new Timer();
