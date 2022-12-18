@@ -37,7 +37,6 @@ public class LocalDriver {
         //urlPrefix=http://localhost:8080/;periodInMinutes=60;intervalInSeconds=10;minutesAgo=60;upperCount=350
         Map<String, String> env = System.getenv();
         urlPrefix = env.get("urlPrefix");
-        int intervalInSeconds = Integer.parseInt(env.get("intervalInSeconds"));
         int periodInMinutes = Integer.parseInt(env.get("periodInMinutes"));
         minutesAgo = Integer.parseInt(env.get("minutesAgo"));
         upperCount = Integer.parseInt(env.get("upperCount"));
@@ -45,12 +44,12 @@ public class LocalDriver {
         callBigJob = env.get("callBigJob");
 
         LOGGER.info("\uD83D\uDD35\uD83D\uDD35 urlPrefix: " + urlPrefix + " minutesAgo: " + minutesAgo);
-        LOGGER.info("\uD83D\uDD35\uD83D\uDD35 intervalInSeconds: " + intervalInSeconds
+        LOGGER.info("\uD83D\uDD35\uD83D\uDD35 "
                 + " periodInMinutes: " + periodInMinutes + " upperCount: " + upperCount);
 
         httpClient = HttpClient.newHttpClient();
         try {
-            startGeneration(TimeUnit.SECONDS.toMillis(intervalInSeconds),
+            startGeneration(TimeUnit.SECONDS.toMillis(1),
                     TimeUnit.MINUTES.toMillis(periodInMinutes));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -199,7 +198,6 @@ public class LocalDriver {
             throw new RuntimeException(e);
         }
     }
-
     private static final Random random = new Random(System.currentTimeMillis());
 
     private static void generate(City[] cityArray) {

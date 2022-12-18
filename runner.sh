@@ -2,10 +2,9 @@ echo "🔵🔵starting LocalDriver ..."
 echo "🔵🔵setting LocalDriver environment variables ..."
 
 export urlPrefix=http://localhost:8080/
-export intervalInSeconds=10
-export minutesAgo=60
+export minutesAgo=180
 export periodInMinutes=60
-export upperCount=200
+export upperCount=300
 export maximumTicks=25
 export callBigJob=true
 
