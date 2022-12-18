@@ -1,0 +1,1294 @@
+{
+  "messages": [
+    {
+      "type": "generateEventsByCity",
+      "message": "Alberton, Gauteng",
+      "count": 154,
+      "elapsedSeconds": 12.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Aliwal North, Eastern Cape",
+      "count": 55,
+      "elapsedSeconds": 9.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Beaufort West, Western Cape",
+      "count": 86,
+      "elapsedSeconds": 7.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Benoni, Gauteng",
+      "count": 46,
+      "elapsedSeconds": 7.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Bethal, Mpumalanga",
+      "count": 37,
+      "elapsedSeconds": 6.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Bhisho, Eastern Cape",
+      "count": 121,
+      "elapsedSeconds": 4.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Bloemfontein, Free State",
+      "count": 61,
+      "elapsedSeconds": 4.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Brakpan, Gauteng",
+      "count": 92,
+      "elapsedSeconds": 4.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Brits, North West",
+      "count": 62,
+      "elapsedSeconds": 3.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Cape Town, Western Cape",
+      "count": 183,
+      "elapsedSeconds": 8.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Carletonville, Gauteng",
+      "count": 40,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Centurion, Gauteng",
+      "count": 129,
+      "elapsedSeconds": 6.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Cradock, Eastern Cape",
+      "count": 61,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "De Aar, Northern Cape",
+      "count": 38,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Durban, KwaZulu-Natal",
+      "count": 59,
+      "elapsedSeconds": 4.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "East London, Eastern Cape",
+      "count": 51,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "George, Western Cape",
+      "count": 129,
+      "elapsedSeconds": 3.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Gqeberha, Eastern Cape",
+      "count": 108,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Graaff-Reinet, Eastern Cape",
+      "count": 125,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Grahamstown, Eastern Cape",
+      "count": 109,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Hermanus, Western Cape",
+      "count": 39,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Jeffrey\u0027s Bay, Eastern Cape",
+      "count": 11,
+      "elapsedSeconds": 7.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Johannesburg, Gauteng",
+      "count": 30,
+      "elapsedSeconds": 5.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Kimberley, Northern Cape",
+      "count": 62,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Klerksdorp, North West",
+      "count": 122,
+      "elapsedSeconds": 3.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Knysna, Western Cape",
+      "count": 43,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Kroonstad, Free State",
+      "count": 84,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Kuilsrivier, Western Cape",
+      "count": 103,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Ladysmith, KwaZulu-Natal",
+      "count": 43,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Lebowakgomo, Limpopo",
+      "count": 156,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Lichtenburg, North West",
+      "count": 130,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Mahikeng, North West",
+      "count": 90,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Malmesbury, Western Cape",
+      "count": 177,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Middelburg, Mpumalanga",
+      "count": 34,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Mmabatho, North West",
+      "count": 75,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Mossel Bay, Western Cape",
+      "count": 144,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Musina, Limpopo",
+      "count": 75,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Nelspruit, Mpumalanga",
+      "count": 88,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Oudtshoorn, Western Cape",
+      "count": 5,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Paarl, Western Cape",
+      "count": 98,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Pietermaritzburg, KwaZulu-Natal",
+      "count": 20,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Polokwane, Limpopo",
+      "count": 62,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Port Shepstone, KwaZulu-Natal",
+      "count": 136,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Potchefstroom, North West",
+      "count": 145,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Pretoria, Gauteng",
+      "count": 165,
+      "elapsedSeconds": 4.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Queenstown, Eastern Cape",
+      "count": 80,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Randburg, Gauteng",
+      "count": 96,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Roodepoort, Gauteng",
+      "count": 179,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Rustenburg, North West",
+      "count": 176,
+      "elapsedSeconds": 3.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Saldanha, Western Cape",
+      "count": 103,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Sandton, Gauteng",
+      "count": 175,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Springs, Gauteng",
+      "count": 90,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Standerton, Mpumalanga",
+      "count": 37,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Thohoyandou, Limpopo",
+      "count": 76,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Tzaneen, Limpopo",
+      "count": 86,
+      "elapsedSeconds": 2.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Uitenhage, Eastern Cape",
+      "count": 16,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Ulundi, KwaZulu-Natal",
+      "count": 22,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Umtata, Eastern Cape",
+      "count": 20,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Upington, Northern Cape",
+      "count": 93,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Vanderbijlpark, Gauteng",
+      "count": 56,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Vereeniging, Gauteng",
+      "count": 125,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Volksrust, Mpumalanga",
+      "count": 53,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Vredenburg, Western Cape",
+      "count": 37,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Vryburg, North West",
+      "count": 40,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Vryheid, KwaZulu-Natal",
+      "count": 13,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Welkom, Free State",
+      "count": 49,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "type": "generateEventsByCity",
+      "message": "Worcester, Western Cape",
+      "count": 44,
+      "elapsedSeconds": 2.0
+    }
+  ],
+  "aggregates": [
+    {
+      "cityId": "7751c047-d8c0-420b-866e-5f9d56c23fb8",
+      "cityName": "Alberton",
+      "date": "2022-12-17T22:56:51.702+02:00",
+      "longDate": 1671310611702,
+      "numberOfEvents": 391,
+      "minutesAgo": 60,
+      "totalSpent": 569179.0,
+      "averageRating": 2.7672634271099743,
+      "latitude": -26.2672,
+      "longitude": 28.1219,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "f3afd795-6eac-416b-88a7-580ee2210117",
+      "cityName": "Aliwal North",
+      "date": "2022-12-17T22:56:52.500+02:00",
+      "longDate": 1671310612500,
+      "numberOfEvents": 281,
+      "minutesAgo": 60,
+      "totalSpent": 438692.0,
+      "averageRating": 1.886120996441281,
+      "latitude": -30.7,
+      "longitude": 26.7,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "22b23a7e-def7-4296-99cd-242905a76427",
+      "cityName": "Beaufort West",
+      "date": "2022-12-17T22:56:53.290+02:00",
+      "longDate": 1671310613290,
+      "numberOfEvents": 235,
+      "minutesAgo": 60,
+      "totalSpent": 346387.0,
+      "averageRating": 4.212765957446808,
+      "latitude": -32.35,
+      "longitude": 22.5833,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "0f9f2176-0de2-4222-b8d7-d3e6f91702b9",
+      "cityName": "Benoni",
+      "date": "2022-12-17T22:56:54.060+02:00",
+      "longDate": 1671310614060,
+      "numberOfEvents": 89,
+      "minutesAgo": 60,
+      "totalSpent": 127793.0,
+      "averageRating": 4.191011235955056,
+      "latitude": -26.1883,
+      "longitude": 28.3206,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "df25af88-3970-43c0-bc52-95af6304ec2e",
+      "cityName": "Bethal",
+      "date": "2022-12-17T22:56:54.738+02:00",
+      "longDate": 1671310614738,
+      "numberOfEvents": 50,
+      "minutesAgo": 60,
+      "totalSpent": 79470.0,
+      "averageRating": 4.22,
+      "latitude": -26.45,
+      "longitude": 29.45,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "cab61b2a-b0a3-4918-b983-c429a591a5b2",
+      "cityName": "Bhisho",
+      "date": "2022-12-17T22:56:55.531+02:00",
+      "longDate": 1671310615531,
+      "numberOfEvents": 218,
+      "minutesAgo": 60,
+      "totalSpent": 318892.0,
+      "averageRating": 3.169724770642202,
+      "latitude": -32.8494,
+      "longitude": 27.4381,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "f062dd64-698c-47f6-b863-cebb42f6bed9",
+      "cityName": "Bloemfontein",
+      "date": "2022-12-17T22:56:56.333+02:00",
+      "longDate": 1671310616333,
+      "numberOfEvents": 310,
+      "minutesAgo": 60,
+      "totalSpent": 453715.0,
+      "averageRating": 4.209677419354839,
+      "latitude": -29.1,
+      "longitude": 26.2167,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "6c8d0277-a8d4-46bd-8800-6d8b5460c6d0",
+      "cityName": "Brakpan",
+      "date": "2022-12-17T22:56:57.456+02:00",
+      "longDate": 1671310617456,
+      "numberOfEvents": 173,
+      "minutesAgo": 60,
+      "totalSpent": 269463.0,
+      "averageRating": 4.184971098265896,
+      "latitude": -26.2353,
+      "longitude": 28.37,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "34415344-54bd-4460-84c7-7e459db9b4c7",
+      "cityName": "Brits",
+      "date": "2022-12-17T22:56:58.367+02:00",
+      "longDate": 1671310618367,
+      "numberOfEvents": 258,
+      "minutesAgo": 60,
+      "totalSpent": 392467.0,
+      "averageRating": 3.5697674418604652,
+      "latitude": -25.6167,
+      "longitude": 27.7667,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "343a49ed-253d-4536-aa29-d0302f3fa025",
+      "cityName": "Cape Town",
+      "date": "2022-12-17T22:56:59.176+02:00",
+      "longDate": 1671310619176,
+      "numberOfEvents": 461,
+      "minutesAgo": 60,
+      "totalSpent": 727023.0,
+      "averageRating": 4.206073752711497,
+      "latitude": -33.925,
+      "longitude": 18.425,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "2252a5c2-405c-4992-9ece-668287662d57",
+      "cityName": "Carletonville",
+      "date": "2022-12-17T22:57:00.181+02:00",
+      "longDate": 1671310620181,
+      "numberOfEvents": 160,
+      "minutesAgo": 60,
+      "totalSpent": 232857.0,
+      "averageRating": 4.11875,
+      "latitude": -26.3581,
+      "longitude": 27.3981,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "a870ff08-2bb0-4aaf-aa49-c5336b372fcc",
+      "cityName": "Centurion",
+      "date": "2022-12-17T22:57:01.369+02:00",
+      "longDate": 1671310621369,
+      "numberOfEvents": 251,
+      "minutesAgo": 60,
+      "totalSpent": 356440.0,
+      "averageRating": 2.9721115537848606,
+      "latitude": -25.8603,
+      "longitude": 28.1894,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "fbe9caa5-09c2-4cc6-b7d8-5eac1bdb5453",
+      "cityName": "Cradock",
+      "date": "2022-12-17T22:57:02.151+02:00",
+      "longDate": 1671310622151,
+      "numberOfEvents": 151,
+      "minutesAgo": 60,
+      "totalSpent": 229746.0,
+      "averageRating": 4.185430463576159,
+      "latitude": -32.1833,
+      "longitude": 25.6167,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "0c8b3dcd-53cf-4680-a695-2921104d3a74",
+      "cityName": "De Aar",
+      "date": "2022-12-17T22:57:03.051+02:00",
+      "longDate": 1671310623051,
+      "numberOfEvents": 172,
+      "minutesAgo": 60,
+      "totalSpent": 257880.0,
+      "averageRating": 4.203488372093023,
+      "latitude": -30.65,
+      "longitude": 24.0167,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "db69115e-6f47-41bc-a314-37827417f62b",
+      "cityName": "Durban",
+      "date": "2022-12-17T22:57:03.826+02:00",
+      "longDate": 1671310623826,
+      "numberOfEvents": 160,
+      "minutesAgo": 60,
+      "totalSpent": 239469.0,
+      "averageRating": 3.225,
+      "latitude": -29.8583,
+      "longitude": 31.025,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "51b3bf49-7f25-493b-963a-703d516227ce",
+      "cityName": "East London",
+      "date": "2022-12-17T22:57:04.452+02:00",
+      "longDate": 1671310624452,
+      "numberOfEvents": 75,
+      "minutesAgo": 60,
+      "totalSpent": 108918.0,
+      "averageRating": 2.546666666666667,
+      "latitude": -33.0153,
+      "longitude": 27.9116,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "5b8b6b12-98d8-4947-8841-8aefb66ada42",
+      "cityName": "George",
+      "date": "2022-12-17T22:57:05.278+02:00",
+      "longDate": 1671310625278,
+      "numberOfEvents": 409,
+      "minutesAgo": 60,
+      "totalSpent": 621628.0,
+      "averageRating": 4.202933985330073,
+      "latitude": -33.9667,
+      "longitude": 22.45,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "d487e096-930c-4252-b4e2-3e8409150225",
+      "cityName": "Gqeberha",
+      "date": "2022-12-17T22:57:06.085+02:00",
+      "longDate": 1671310626085,
+      "numberOfEvents": 234,
+      "minutesAgo": 60,
+      "totalSpent": 344752.0,
+      "averageRating": 4.217948717948718,
+      "latitude": -33.9581,
+      "longitude": 25.6,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "88654f30-3f4c-44a5-b7a9-b53642e73649",
+      "cityName": "Graaff-Reinet",
+      "date": "2022-12-17T22:57:07.382+02:00",
+      "longDate": 1671310627382,
+      "numberOfEvents": 276,
+      "minutesAgo": 60,
+      "totalSpent": 427174.0,
+      "averageRating": 4.163043478260869,
+      "latitude": -32.2522,
+      "longitude": 24.5406,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "99b1860d-63f5-43d9-b2ef-a1d0810b6124",
+      "cityName": "Grahamstown",
+      "date": "2022-12-17T22:57:08.187+02:00",
+      "longDate": 1671310628187,
+      "numberOfEvents": 269,
+      "minutesAgo": 60,
+      "totalSpent": 443039.0,
+      "averageRating": 2.806691449814126,
+      "latitude": -33.2996,
+      "longitude": 26.52,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "7a7f4481-9aec-4d5a-829f-ed4efa766ca9",
+      "cityName": "Hermanus",
+      "date": "2022-12-17T22:57:08.977+02:00",
+      "longDate": 1671310628978,
+      "numberOfEvents": 84,
+      "minutesAgo": 60,
+      "totalSpent": 131307.0,
+      "averageRating": 3.0595238095238093,
+      "latitude": -34.4167,
+      "longitude": 19.3,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "7e4b5c7d-72bf-4367-8d30-770817696bd7",
+      "cityName": "Jeffrey\u0027s Bay",
+      "date": "2022-12-17T22:57:09.656+02:00",
+      "longDate": 1671310629656,
+      "numberOfEvents": 36,
+      "minutesAgo": 60,
+      "totalSpent": 56119.0,
+      "averageRating": 3.5277777777777777,
+      "latitude": -34.0333,
+      "longitude": 24.9167,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "4b60ab59-b1fc-43f9-85ca-aeff33c8e22f",
+      "cityName": "Johannesburg",
+      "date": "2022-12-17T22:57:10.433+02:00",
+      "longDate": 1671310630433,
+      "numberOfEvents": 227,
+      "minutesAgo": 60,
+      "totalSpent": 345409.0,
+      "averageRating": 4.20704845814978,
+      "latitude": -26.2044,
+      "longitude": 28.0416,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "7409a248-0d2f-4ff4-8217-3c1e2c25c6e0",
+      "cityName": "Kimberley",
+      "date": "2022-12-17T22:57:11.679+02:00",
+      "longDate": 1671310631679,
+      "numberOfEvents": 319,
+      "minutesAgo": 60,
+      "totalSpent": 502102.0,
+      "averageRating": 4.200626959247649,
+      "latitude": -28.7386,
+      "longitude": 24.7586,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "2ac555e4-4325-47b5-b998-419c9ac9d593",
+      "cityName": "Klerksdorp",
+      "date": "2022-12-17T22:57:12.964+02:00",
+      "longDate": 1671310632964,
+      "numberOfEvents": 194,
+      "minutesAgo": 60,
+      "totalSpent": 284520.0,
+      "averageRating": 4.231958762886598,
+      "latitude": -26.8667,
+      "longitude": 26.6667,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "1ddfba87-9934-4561-b9c7-e6e339662ee1",
+      "cityName": "Knysna",
+      "date": "2022-12-17T22:57:13.976+02:00",
+      "longDate": 1671310633976,
+      "numberOfEvents": 313,
+      "minutesAgo": 60,
+      "totalSpent": 444042.0,
+      "averageRating": 3.840255591054313,
+      "latitude": -34.0356,
+      "longitude": 23.0489,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "34bdc9a2-880b-4c91-bc0e-c5adff4b0ec5",
+      "cityName": "Kroonstad",
+      "date": "2022-12-17T22:57:15.108+02:00",
+      "longDate": 1671310635108,
+      "numberOfEvents": 335,
+      "minutesAgo": 60,
+      "totalSpent": 502437.0,
+      "averageRating": 4.208955223880597,
+      "latitude": -27.6456,
+      "longitude": 27.2317,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "9fb34931-c92c-43bc-b852-05b68694603c",
+      "cityName": "Kuilsrivier",
+      "date": "2022-12-17T22:57:15.907+02:00",
+      "longDate": 1671310635907,
+      "numberOfEvents": 255,
+      "minutesAgo": 60,
+      "totalSpent": 397291.0,
+      "averageRating": 1.796078431372549,
+      "latitude": -34.0333,
+      "longitude": 18.7,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "ef93322b-3d05-4420-8352-6fc2c0546d0d",
+      "cityName": "Ladysmith",
+      "date": "2022-12-17T22:57:16.688+02:00",
+      "longDate": 1671310636688,
+      "numberOfEvents": 163,
+      "minutesAgo": 60,
+      "totalSpent": 238136.0,
+      "averageRating": 2.4478527607361964,
+      "latitude": -28.5539,
+      "longitude": 29.7825,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "bbeb1f7f-8fff-4fa5-9a0b-a041950f020b",
+      "cityName": "Lebowakgomo",
+      "date": "2022-12-17T22:57:17.490+02:00",
+      "longDate": 1671310637490,
+      "numberOfEvents": 161,
+      "minutesAgo": 60,
+      "totalSpent": 238255.0,
+      "averageRating": 4.093167701863354,
+      "latitude": -24.305,
+      "longitude": 29.565,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "25c71d33-2d2d-49e0-9e05-59beac4b3ffc",
+      "cityName": "Lichtenburg",
+      "date": "2022-12-17T22:57:18.273+02:00",
+      "longDate": 1671310638273,
+      "numberOfEvents": 132,
+      "minutesAgo": 60,
+      "totalSpent": 208336.0,
+      "averageRating": 4.204545454545454,
+      "latitude": -26.15,
+      "longitude": 26.1667,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "63cc1b50-f832-4587-96ff-7ebe7ca68007",
+      "cityName": "Mahikeng",
+      "date": "2022-12-17T22:57:19.423+02:00",
+      "longDate": 1671310639423,
+      "numberOfEvents": 177,
+      "minutesAgo": 60,
+      "totalSpent": 268662.0,
+      "averageRating": 4.19774011299435,
+      "latitude": -25.8653,
+      "longitude": 25.6442,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "ea7f369b-b001-4d68-9db1-a90a9c9b3a60",
+      "cityName": "Malmesbury",
+      "date": "2022-12-17T22:57:20.232+02:00",
+      "longDate": 1671310640232,
+      "numberOfEvents": 338,
+      "minutesAgo": 60,
+      "totalSpent": 504631.0,
+      "averageRating": 4.22189349112426,
+      "latitude": -33.45,
+      "longitude": 18.7333,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "81f3f46a-815b-4919-9df3-686b3a673add",
+      "cityName": "Middelburg",
+      "date": "2022-12-17T22:57:21.738+02:00",
+      "longDate": 1671310641738,
+      "numberOfEvents": 266,
+      "minutesAgo": 60,
+      "totalSpent": 397513.0,
+      "averageRating": 2.112781954887218,
+      "latitude": -25.7684,
+      "longitude": 29.4783,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "32a39541-be09-4b47-b47a-7f57d1122fe4",
+      "cityName": "Mmabatho",
+      "date": "2022-12-17T22:57:22.720+02:00",
+      "longDate": 1671310642721,
+      "numberOfEvents": 256,
+      "minutesAgo": 60,
+      "totalSpent": 375386.0,
+      "averageRating": 4.14453125,
+      "latitude": -25.85,
+      "longitude": 25.6333,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "3afd386c-2ff6-48ee-936f-da83d6e57761",
+      "cityName": "Mossel Bay",
+      "date": "2022-12-17T22:57:23.519+02:00",
+      "longDate": 1671310643519,
+      "numberOfEvents": 410,
+      "minutesAgo": 60,
+      "totalSpent": 649563.0,
+      "averageRating": 3.3536585365853657,
+      "latitude": -34.1833,
+      "longitude": 22.1333,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "8b7ec36c-7309-420e-a1ad-7da690b20d90",
+      "cityName": "Musina",
+      "date": "2022-12-17T22:57:24.292+02:00",
+      "longDate": 1671310644292,
+      "numberOfEvents": 171,
+      "minutesAgo": 60,
+      "totalSpent": 257506.0,
+      "averageRating": 4.187134502923977,
+      "latitude": -22.3381,
+      "longitude": 30.0417,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "8bdcefe1-68ff-4078-ac4b-0efdd4b1c4b9",
+      "cityName": "Nelspruit",
+      "date": "2022-12-17T22:57:25.405+02:00",
+      "longDate": 1671310645405,
+      "numberOfEvents": 365,
+      "minutesAgo": 60,
+      "totalSpent": 572596.0,
+      "averageRating": 4.1287671232876715,
+      "latitude": -25.4745,
+      "longitude": 30.9703,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "b8873c72-881c-4967-bc60-cdbc80750281",
+      "cityName": "Oudtshoorn",
+      "date": "2022-12-17T22:57:26.185+02:00",
+      "longDate": 1671310646185,
+      "numberOfEvents": 93,
+      "minutesAgo": 60,
+      "totalSpent": 155237.0,
+      "averageRating": 4.139784946236559,
+      "latitude": -33.5833,
+      "longitude": 22.2,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "79b1325a-2a89-4a47-a4b8-3e2db40454ea",
+      "cityName": "Paarl",
+      "date": "2022-12-17T22:57:26.983+02:00",
+      "longDate": 1671310646983,
+      "numberOfEvents": 163,
+      "minutesAgo": 60,
+      "totalSpent": 242283.0,
+      "averageRating": 4.214723926380368,
+      "latitude": -33.7242,
+      "longitude": 18.9558,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "508c28c2-02d2-4647-8783-97151a68ecaf",
+      "cityName": "Pietermaritzburg",
+      "date": "2022-12-17T22:57:27.812+02:00",
+      "longDate": 1671310647812,
+      "numberOfEvents": 267,
+      "minutesAgo": 60,
+      "totalSpent": 400622.0,
+      "averageRating": 1.9925093632958801,
+      "latitude": -29.5833,
+      "longitude": 30.4167,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "ed0b0279-fa53-4848-8de5-b4520aebb12a",
+      "cityName": "Polokwane",
+      "date": "2022-12-17T22:57:29.052+02:00",
+      "longDate": 1671310649052,
+      "numberOfEvents": 148,
+      "minutesAgo": 60,
+      "totalSpent": 212382.0,
+      "averageRating": 4.195945945945946,
+      "latitude": -23.9,
+      "longitude": 29.45,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "a24207c5-a76f-4002-af33-2855212da881",
+      "cityName": "Port Shepstone",
+      "date": "2022-12-17T22:57:30.479+02:00",
+      "longDate": 1671310650479,
+      "numberOfEvents": 275,
+      "minutesAgo": 60,
+      "totalSpent": 426827.0,
+      "averageRating": 3.0290909090909093,
+      "latitude": -30.7411,
+      "longitude": 30.4547,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "5b67d6bf-e0a0-4bc7-b39a-7a445e8e5f64",
+      "cityName": "Potchefstroom",
+      "date": "2022-12-17T22:57:31.291+02:00",
+      "longDate": 1671310651291,
+      "numberOfEvents": 266,
+      "minutesAgo": 60,
+      "totalSpent": 410370.0,
+      "averageRating": 4.142857142857143,
+      "latitude": -26.715,
+      "longitude": 27.1033,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "381b179f-d0c4-4810-9d73-82de95d155a0",
+      "cityName": "Pretoria",
+      "date": "2022-12-17T22:57:32.556+02:00",
+      "longDate": 1671310652556,
+      "numberOfEvents": 185,
+      "minutesAgo": 60,
+      "totalSpent": 279774.0,
+      "averageRating": 4.264864864864865,
+      "latitude": -25.7464,
+      "longitude": 28.1881,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "b1b243a3-d693-4e76-be37-dc214501373d",
+      "cityName": "Queenstown",
+      "date": "2022-12-17T22:57:33.833+02:00",
+      "longDate": 1671310653833,
+      "numberOfEvents": 253,
+      "minutesAgo": 60,
+      "totalSpent": 373963.0,
+      "averageRating": 2.5019762845849804,
+      "latitude": -31.9,
+      "longitude": 26.8833,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "44e43ca6-4272-4864-9bca-310cdd48bdcb",
+      "cityName": "Randburg",
+      "date": "2022-12-17T22:57:34.614+02:00",
+      "longDate": 1671310654614,
+      "numberOfEvents": 245,
+      "minutesAgo": 60,
+      "totalSpent": 355088.0,
+      "averageRating": 4.183673469387755,
+      "latitude": -26.0936,
+      "longitude": 28.0064,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "5a8f23c1-339c-4371-b850-0c46eebdcecf",
+      "cityName": "Roodepoort",
+      "date": "2022-12-17T22:57:35.447+02:00",
+      "longDate": 1671310655447,
+      "numberOfEvents": 441,
+      "minutesAgo": 60,
+      "totalSpent": 669768.0,
+      "averageRating": 2.764172335600907,
+      "latitude": -26.1625,
+      "longitude": 27.8725,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "acb7049b-dbd9-485b-bf61-bf9921b04d79",
+      "cityName": "Rustenburg",
+      "date": "2022-12-17T22:57:36.227+02:00",
+      "longDate": 1671310656227,
+      "numberOfEvents": 371,
+      "minutesAgo": 60,
+      "totalSpent": 585863.0,
+      "averageRating": 4.175202156334231,
+      "latitude": -25.6667,
+      "longitude": 27.2336,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "c33bfdb0-cfbb-4887-8b75-65c4b4f9db92",
+      "cityName": "Saldanha",
+      "date": "2022-12-17T22:57:37.253+02:00",
+      "longDate": 1671310657253,
+      "numberOfEvents": 294,
+      "minutesAgo": 60,
+      "totalSpent": 427168.0,
+      "averageRating": 4.217687074829932,
+      "latitude": -32.9978,
+      "longitude": 17.9456,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "25156118-6aaf-4d5a-9e89-2eef5d58e3c3",
+      "cityName": "Sandton",
+      "date": "2022-12-17T22:57:38.102+02:00",
+      "longDate": 1671310658102,
+      "numberOfEvents": 448,
+      "minutesAgo": 60,
+      "totalSpent": 691289.0,
+      "averageRating": 2.7142857142857144,
+      "latitude": -26.107,
+      "longitude": 28.0517,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "d5d4971f-fa1f-4d5b-9399-d745f4468cbc",
+      "cityName": "Springs",
+      "date": "2022-12-17T22:57:39.330+02:00",
+      "longDate": 1671310659330,
+      "numberOfEvents": 180,
+      "minutesAgo": 60,
+      "totalSpent": 275470.0,
+      "averageRating": 3.011111111111111,
+      "latitude": -26.2547,
+      "longitude": 28.4428,
+      "elapsedSeconds": 1.0
+    },
+    {
+      "cityId": "a45ada08-6c12-4060-88cc-158c96eb21d2",
+      "cityName": "Standerton",
+      "date": "2022-12-17T22:57:39.954+02:00",
+      "longDate": 1671310659954,
+      "numberOfEvents": 71,
+      "minutesAgo": 60,
+      "totalSpent": 109014.0,
+      "averageRating": 3.183098591549296,
+      "latitude": -26.95,
+      "longitude": 29.25,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "11a9d041-8326-4a8a-9b37-6153963331cf",
+      "cityName": "Thohoyandou",
+      "date": "2022-12-17T22:57:40.721+02:00",
+      "longDate": 1671310660721,
+      "numberOfEvents": 187,
+      "minutesAgo": 60,
+      "totalSpent": 287470.0,
+      "averageRating": 2.8128342245989306,
+      "latitude": -22.95,
+      "longitude": 30.4833,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "4453efe1-a858-463e-89ac-5018ed65a8f7",
+      "cityName": "Tzaneen",
+      "date": "2022-12-17T22:57:41.917+02:00",
+      "longDate": 1671310661917,
+      "numberOfEvents": 262,
+      "minutesAgo": 60,
+      "totalSpent": 382746.0,
+      "averageRating": 1.8091603053435115,
+      "latitude": -23.8333,
+      "longitude": 30.1667,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "4f0293a5-a2a0-4a65-8a73-2567ebccea07",
+      "cityName": "Uitenhage",
+      "date": "2022-12-17T22:57:42.732+02:00",
+      "longDate": 1671310662732,
+      "numberOfEvents": 150,
+      "minutesAgo": 60,
+      "totalSpent": 231068.0,
+      "averageRating": 4.14,
+      "latitude": -33.75,
+      "longitude": 25.4,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "d21abe96-b618-4440-82c4-df18afaa9bc0",
+      "cityName": "Ulundi",
+      "date": "2022-12-17T22:57:43.505+02:00",
+      "longDate": 1671310663505,
+      "numberOfEvents": 151,
+      "minutesAgo": 60,
+      "totalSpent": 240238.0,
+      "averageRating": 4.23841059602649,
+      "latitude": -28.335,
+      "longitude": 31.4161,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "ed4f7287-dab6-41a4-89fc-ae4b9fb9f427",
+      "cityName": "Umtata",
+      "date": "2022-12-17T22:57:44.426+02:00",
+      "longDate": 1671310664426,
+      "numberOfEvents": 235,
+      "minutesAgo": 60,
+      "totalSpent": 328694.0,
+      "averageRating": 4.23404255319149,
+      "latitude": -31.58,
+      "longitude": 28.79,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "adc0138a-3688-46c2-9c62-a5cdca5d8c64",
+      "cityName": "Upington",
+      "date": "2022-12-17T22:57:45.439+02:00",
+      "longDate": 1671310665439,
+      "numberOfEvents": 304,
+      "minutesAgo": 60,
+      "totalSpent": 459053.0,
+      "averageRating": 1.763157894736842,
+      "latitude": -28.4572,
+      "longitude": 21.2425,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "627d05c0-7996-4b32-9791-2d98f0640695",
+      "cityName": "Vanderbijlpark",
+      "date": "2022-12-17T22:57:46.238+02:00",
+      "longDate": 1671310666238,
+      "numberOfEvents": 305,
+      "minutesAgo": 60,
+      "totalSpent": 452761.0,
+      "averageRating": 4.180327868852459,
+      "latitude": -26.6992,
+      "longitude": 27.8356,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "05960dd5-213f-4048-b2ad-9e23f5347c7b",
+      "cityName": "Vereeniging",
+      "date": "2022-12-17T22:57:47.440+02:00",
+      "longDate": 1671310667440,
+      "numberOfEvents": 249,
+      "minutesAgo": 60,
+      "totalSpent": 376565.0,
+      "averageRating": 4.140562248995984,
+      "latitude": -26.6736,
+      "longitude": 27.9319,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "6941fb43-7e79-4a1a-bc7a-37180f98cdb5",
+      "cityName": "Volksrust",
+      "date": "2022-12-17T22:57:48.242+02:00",
+      "longDate": 1671310668242,
+      "numberOfEvents": 237,
+      "minutesAgo": 60,
+      "totalSpent": 379587.0,
+      "averageRating": 1.8016877637130801,
+      "latitude": -27.3667,
+      "longitude": 29.8833,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "2ceb2498-ef0e-4322-b647-e2784fd6bab2",
+      "cityName": "Vredenburg",
+      "date": "2022-12-17T22:57:49.026+02:00",
+      "longDate": 1671310669026,
+      "numberOfEvents": 186,
+      "minutesAgo": 60,
+      "totalSpent": 270032.0,
+      "averageRating": 2.274193548387097,
+      "latitude": -32.9,
+      "longitude": 17.9833,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "598f4e40-1daa-42ae-bdbd-20a52b0ff771",
+      "cityName": "Vryburg",
+      "date": "2022-12-17T22:57:49.816+02:00",
+      "longDate": 1671310669816,
+      "numberOfEvents": 91,
+      "minutesAgo": 60,
+      "totalSpent": 135218.0,
+      "averageRating": 2.923076923076923,
+      "latitude": -26.95,
+      "longitude": 24.7333,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "b28775c8-c603-42ee-9483-64358925b57a",
+      "cityName": "Vryheid",
+      "date": "2022-12-17T22:57:50.598+02:00",
+      "longDate": 1671310670598,
+      "numberOfEvents": 238,
+      "minutesAgo": 60,
+      "totalSpent": 365327.0,
+      "averageRating": 1.9453781512605042,
+      "latitude": -27.7694,
+      "longitude": 30.7914,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "e053ad39-c7ff-499c-8739-a858b2e54bf6",
+      "cityName": "Welkom",
+      "date": "2022-12-17T22:57:51.403+02:00",
+      "longDate": 1671310671403,
+      "numberOfEvents": 130,
+      "minutesAgo": 60,
+      "totalSpent": 197972.0,
+      "averageRating": 1.8076923076923077,
+      "latitude": -27.9831,
+      "longitude": 26.7208,
+      "elapsedSeconds": 0.0
+    },
+    {
+      "cityId": "1b41f314-b153-43e6-a2e0-88bbbdd5baec",
+      "cityName": "Worcester",
+      "date": "2022-12-17T22:57:52.183+02:00",
+      "longDate": 1671310672183,
+      "numberOfEvents": 144,
+      "minutesAgo": 60,
+      "totalSpent": 229239.0,
+      "averageRating": 3.4652777777777777,
+      "latitude": -33.645,
+      "longitude": 19.4436,
+      "elapsedSeconds": 0.0
+    }
+  ],
+  "dashboardData": {
+    "events": 22407,
+    "cities": 67,
+    "places": 2800,
+    "users": 430486,
+    "amount": 3.374400661000022E7,
+    "averageRating": 3.0,
+    "minutesAgo": 60,
+    "longDate": 1671310605206,
+    "date": "2022-12-17T22:56:45.206+02:00",
+    "elapsedSeconds": 8.0
+  },
+  "date": "2022-12-17T22:57:52.412+02:00",
+  "elapsedSeconds": 270.0
+}
+
