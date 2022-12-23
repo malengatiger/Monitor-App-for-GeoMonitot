@@ -29,6 +29,7 @@ public class LocalDriver {
     private static int minutesAgo;
     private static int upperCount, maximumTicks;
     private static String callBigJob;
+    private static boolean isVerbose = true;
 
     public static void main(String[] args) throws Exception {
         LOGGER.info("\uD83C\uDF3C\uD83C\uDF3C\uD83C\uDF3C " +
@@ -42,6 +43,8 @@ public class LocalDriver {
         upperCount = Integer.parseInt(env.get("upperCount"));
         maximumTicks = Integer.parseInt(env.get("maximumTicks"));
         callBigJob = env.get("callBigJob");
+        String v = env.get("isVerbose");
+        isVerbose = v.equalsIgnoreCase("true");
 
         LOGGER.info("\uD83D\uDD35\uD83D\uDD35 urlPrefix: " + urlPrefix + " minutesAgo: " + minutesAgo);
         LOGGER.info("\uD83D\uDD35\uD83D\uDD35 "
@@ -79,23 +82,42 @@ public class LocalDriver {
                 .timeout(Duration.of(60, MINUTES))
                 .GET()
                 .build();
+
         LOGGER.info("\uD83C\uDF00\uD83C\uDF00 final url to send: " + request.uri().toString());
         long start = System.currentTimeMillis();
 
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        GenerationResultsBag bag = GSON.fromJson(response.body(),GenerationResultsBag.class);
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                GenerationResultsBag bag = GSON.fromJson(response.body(), GenerationResultsBag.class);
 
-        long end = System.currentTimeMillis();
-        double elapsed = Double.parseDouble(String.valueOf((end - start) / 1000));
-        LOGGER.info("\uD83C\uDF50\uD83C\uDF50 Response statusCode:"
-                + response.statusCode() + " " + E.AMP + E.AMP + " Elapsed time: " + elapsed + " seconds");
+                long end = System.currentTimeMillis();
+                double elapsed = Double.parseDouble(String.valueOf((end - start) / 1000));
+                LOGGER.info("\uD83C\uDF50\uD83C\uDF50 Response statusCode:"
+                        + response.statusCode() + " " + E.AMP + E.AMP + " Elapsed time: " + elapsed + " seconds");
 
-        LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 " +
-                "The Big Job has completed: " );
-        LOGGER.info(GSON.toJson(bag));
-        LOGGER.info("\n\n\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 " +
-                "The Big Job has completed, waiting for the next cycle, time: "
-                + DateTime.now().toDateTimeISO().toString());
+                LOGGER.info("\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 " +
+                        "The Big Job has completed: elapsedSeconds: " + elapsed);
+
+                if (isVerbose) {
+                    LOGGER.info(GSON.toJson(bag));
+                } else {
+                    LOGGER.info(E.RED_APPLE + E.RED_APPLE + E.RED_APPLE
+                            + " Latest Dashboard calculated: " + GSON.toJson(bag.getDashboardData()) + E.RED_APPLE);
+                }
+                LOGGER.info("\n\n\uD83D\uDD06\uD83D\uDD06\uD83D\uDD06 " +
+                        "The Big Job has completed, waiting for the next cycle, "
+                        + " \uD83D\uDD34 "
+                        + " elapsedSeconds: " + elapsed + " - time: "
+                        + DateTime.now().toDateTimeISO().toString());
+            } else {
+                LOGGER.severe(E.RED_DOT +E.RED_DOT + " Probable bad status code: " + response.statusCode());
+                LOGGER.info(response.body());
+            }
+        } catch (Exception e) {
+            LOGGER.severe(E.RED_DOT +E.RED_DOT +"We have a problem: " + E.RED_DOT + " " + e.getMessage());
+            e.printStackTrace();
+        }
 
     }
 
