@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19bbe26a-5651-4b43-b65b-769fc8fa3433" name="Changes" comment="🔷added better generation call">
+    <list default="true" id="19bbe26a-5651-4b43-b65b-769fc8fa3433" name="Changes" comment="🔵refactored calls">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/runner.sh" beforeDir="false" afterPath="$PROJECT_DIR$/runner.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/boha/LocalDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/boha/LocalDriver.java" afterDir="false" />
@@ -13,6 +13,13 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -109,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671392056818</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="🔵refactored calls">
+      <created>1671761443619</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1671761443619</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -128,7 +142,8 @@
     <MESSAGE value=" test commit" />
     <MESSAGE value="refactored generation - added single call alternative" />
     <MESSAGE value="added better generation call" />
-    <option name="LAST_COMMIT_MESSAGE" value="added better generation call" />
+    <MESSAGE value="refactored calls" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored calls" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
