@@ -1,0 +1,251 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:geo_monitor/library/api/sharedprefs.dart';
+import 'package:geo_monitor/library/bloc/admin_bloc.dart';
+import 'package:geo_monitor/library/data/community.dart';
+import 'package:geo_monitor/library/data/country.dart';
+import 'package:geo_monitor/library/data/user.dart';
+import 'package:geo_monitor/library/functions.dart';
+import 'package:geo_monitor/library/snack.dart';
+import 'package:geo_monitor/library/ui/countries.dart';
+
+class SettlementEditor extends StatefulWidget {
+  final Community settlement;
+
+  SettlementEditor({required this.settlement});
+
+  @override
+  SettlementEditorState createState() => SettlementEditorState();
+
+}
+class SettlementEditorState extends State<SettlementEditor>
+    implements CountryListener {
+  GlobalKey<ScaffoldState> _key = GlobalKey();
+  TextEditingController nameCntrl = TextEditingController();
+  TextEditingController emailCntrl = TextEditingController();
+  TextEditingController cellCntrl = TextEditingController();
+  TextEditingController popCntrl = TextEditingController();
+  bool isBusy = false;
+  User? user;
+  List<Country> countries = [];
+  Community? community;
+
+  @override
+  void initState() {
+    super.initState();
+    nameCntrl.text = widget.settlement.name!;
+    emailCntrl.text = widget.settlement.email!;
+    popCntrl.text = '${widget.settlement.population}';
+    community = widget.settlement;
+    _getData();
+  }
+
+  _getData() async {
+    user = await Prefs.getUser();
+    countries = await adminBloc.getCountries();
+    if (countries.length == 1) {
+      _country = countries.elementAt(0);
+      await Prefs.saveCountry(_country!);
+      prettyPrint(_country!.toJson(), '💙 💙 💙 country.  check country id');
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _key,
+      appBar: AppBar(
+        title: const Text('Settlement Editor'),
+        backgroundColor: Colors.indigo[300],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: Column(
+            children: <Widget>[
+              Text(
+                user == null ? '' : user!.organizationName!,
+                style: Styles.blackBoldMedium,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: isBusy
+          ? Center(
+              child: Container(
+                height: 80,
+                width: 80,
+                child: CircularProgressIndicator(
+                  strokeWidth: 28,
+                  backgroundColor: Colors.pink,
+                ),
+              ),
+            )
+          : ListView(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextField(
+                        controller: nameCntrl,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'Enter settlement name',
+                          labelText: 'Settlement Name',
+                        ),
+                        onChanged: _onNameChanged,
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextField(
+                        controller: emailCntrl,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: 'Enter email address',
+                          labelText: 'Email',
+                        ),
+                        onChanged: _onEmailChanged,
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextField(
+                        controller: cellCntrl,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'Enter cellphone number',
+                          labelText: 'Cellphone',
+                        ),
+                        onChanged: _onCellChanged,
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      TextField(
+                        controller: popCntrl,
+                        keyboardType:
+                            TextInputType.numberWithOptions(signed: false),
+                        decoration: const InputDecoration(
+                          hintText: 'Enter population',
+                          labelText: 'Population',
+                        ),
+                        onChanged: _onPopChanged,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      _country == null
+                          ? Container()
+                          : Text(
+                              _country!.name!,
+                              style: Styles.blackBoldLarge,
+                            ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+
+                        onPressed: _submit,
+
+                        child: Padding(
+                          padding: const EdgeInsets.all(28.0),
+                          child: Text(
+                            'Submit Settlement',
+                            style: Styles.whiteSmall,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Country? _country;
+  @override
+  onCountrySelected(Country country) {
+    _country = country;
+    setState(() {});
+    return null;
+  }
+
+  var name;
+  void _onNameChanged(String value) {
+    name = value;
+  }
+
+  var email;
+  void _onEmailChanged(String value) {
+    email = value;
+  }
+
+  var cell;
+  void _onCellChanged(String value) {
+    cell = value;
+  }
+
+  int pop = 0;
+  void _onPopChanged(String value) {
+    pop = int.parse(value);
+  }
+
+  void _submit() async {
+    setState(() {
+      isBusy = true;
+    });
+
+    try {
+      assert(_country != null);
+      if (community == null) {
+        community = Community(
+          countryId: _country!.countryId,
+          countryName: _country!.name!,
+          name: name,
+          population: pop,
+          email: email, created: DateTime.now().toIso8601String(),
+        );
+        await adminBloc.addCommunity(community!);
+      } else {
+        community!.name = name;
+        community!.population = pop;
+        community!.email = email;
+        await adminBloc.updateCommunity(community!);
+      }
+
+      setState(() {
+        isBusy = false;
+      });
+      AppSnackbar.showSnackbar(
+          scaffoldKey: _key,
+          message: 'Settlement added',
+          textColor: Colors.lightGreen,
+          backgroundColor: Colors.black);
+    } catch (e) {
+      setState(() {
+        isBusy = false;
+      });
+      print(e);
+      // AppSnackbar.showErrorSnackbar(
+      //     scaffoldKey: _key,
+      //     message: '$e',
+      //     actionLabel: 'Error',
+      //     listener: this);
+    }
+  }
+
+  @override
+  onActionPressed(int action) {
+    // TODO: implement onActionPressed
+    return null;
+  }
+}

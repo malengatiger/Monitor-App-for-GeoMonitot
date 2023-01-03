@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+import 'package:geo_monitor/library/data/position.dart';
+
+class Photo {
+  String? url, thumbnailUrl, caption, created, photoId, projectPositionId;
+  String? userId, organizationId;
+  String? userName;
+  Position? projectPosition;
+  double? distanceFromProjectPosition;
+  String? projectId, projectName;
+  int? height, width;
+
+  Photo(
+      {required this.url,
+      required this.caption,
+      required this.created,
+      required this.userId,
+      required this.userName,
+      required this.projectPosition,
+      required this.distanceFromProjectPosition,
+      required this.projectId,
+      required this.thumbnailUrl,
+      required this.photoId,
+      required this.organizationId,
+      required this.projectName,
+      required this.height,
+        required this.projectPositionId,
+      required this.width});
+
+  Photo.fromJson(Map data) {
+    this.projectPositionId = data['projectPositionId'];
+    this.url = data['url'];
+    this.thumbnailUrl = data['thumbnailUrl'];
+    this.caption = data['caption'];
+    this.height = data['height'];
+    this.width = data['width'];
+    this.created = data['created'];
+    this.organizationId = data['organizationId'];
+    this.userId = data['userId'];
+    this.photoId = data['photoId'];
+    this.userName = data['userName'];
+    this.distanceFromProjectPosition = data['distanceFromProjectPosition'];
+    this.projectId = data['projectId'];
+    this.projectName = data['projectName'];
+    if (data['projectPosition'] != null) {
+      this.projectPosition = Position.fromJson(data['projectPosition']);
+    }
+    if (this.height == null) {
+      this.height = -5;
+    }
+    if (this.width == null) {
+      this.width = -10;
+    }
+  }
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'url': url,
+      'projectPositionId': projectPositionId,
+      'caption': caption,
+      'created': created,
+      'width': width,
+      'height': height,
+      'userId': userId,
+      'organizationId': organizationId,
+      'photoId': photoId,
+      'userName': userName,
+      'distanceFromProjectPosition': distanceFromProjectPosition,
+      'projectId': projectId,
+      'projectName': projectName,
+      'thumbnailUrl': thumbnailUrl,
+      'projectPosition': projectPosition == null ? null : projectPosition!.toJson()
+    };
+    return map;
+  }
+}
+
+class Video {
+  String? url, caption, created, thumbnailUrl, videoId, projectPositionId;
+  String? userId, userName, organizationId;
+  Position? projectPosition;
+  double? distanceFromProjectPosition;
+  String? projectId, projectName;
+
+  Video(
+      {required this.url,
+      this.caption,
+        required this.projectPositionId,
+      required this.created,
+      required this.userId,
+      required this.userName,
+      required this.projectPosition,
+      required this.distanceFromProjectPosition,
+      required this.projectId,
+      required this.thumbnailUrl,
+      required this.videoId,
+      required this.organizationId,
+      required this.projectName}); // Video({required this.url, this.userId, required this.created});
+
+  Video.fromJson(Map data) {
+    this.url = data['url'];
+    this.projectPositionId = data['projectPositionId'];
+    this.caption = data['caption'];
+    this.created = data['created'];
+    this.userId = data['userId'];
+    this.organizationId = data['organizationId'];
+    this.thumbnailUrl = data['thumbnailUrl'];
+    this.videoId = data['videoId'];
+    this.userName = data['userName'];
+    this.distanceFromProjectPosition = data['distanceFromProjectPosition'];
+    this.projectId = data['projectId'];
+    this.projectName = data['projectName'];
+    if (data['projectPosition'] != null) {
+      this.projectPosition = Position.fromJson(data['projectPosition']);
+    }
+  }
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'url': url,
+      'projectPositionId': projectPositionId,
+      'caption': caption,
+      'created': created,
+      'userId': userId,
+      'videoId': videoId,
+      'organizationId': organizationId,
+      'userName': userName,
+      'thumbnailUrl': thumbnailUrl,
+      'distanceFromProjectPosition': distanceFromProjectPosition,
+      'projectId': projectId,
+      'projectName': projectName,
+      'projectPosition': projectPosition == null ? null : projectPosition!.toJson()
+    };
+    return map;
+  }
+}
+
+class Condition {
+  String? url, caption, created, conditionId, projectPositionId;
+  String? userId, userName;
+  Position? projectPosition;
+  int? rating;
+  String? projectId, projectName;
+
+  Condition(
+      {required this.url,
+      this.caption,
+      required this.created,
+      required this.conditionId,
+      required this.userId,
+      required this.userName,
+      required this.projectPosition,
+      required this.rating,
+        required this.projectPositionId,
+      required this.projectId,
+      required this.projectName}); // Video({required this.url, this.userId, required this.created});
+
+  Condition.fromJson(Map data) {
+    this.url = data['url'];
+    this.projectPositionId = data['projectPositionId'];
+    this.caption = data['caption'];
+    this.created = data['created'];
+    this.userId = data['userId'];
+    this.conditionId = data['conditionId'];
+
+    this.userName = data['userName'];
+    this.rating = data['rating'];
+    this.projectId = data['projectId'];
+    this.projectName = data['projectName'];
+    if (data['projectPosition'] != null) {
+      this.projectPosition = Position.fromJson(data['projectPosition']);
+    }
+  }
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> map = {
+      'url': url,
+      'projectPositionId': projectPositionId,
+      'caption': caption,
+      'conditionId': conditionId,
+      'created': created,
+      'userId': userId,
+      'userName': userName,
+      'rating': rating,
+      'projectId': projectId,
+      'projectName': projectName,
+      'projectPosition': projectPosition == null ? null : projectPosition!.toJson()
+    };
+    return map;
+  }
+}
+
