@@ -1,2 +1,2 @@
-# field_admin_native
-Android native version of Monitor FieldAdmin App
+# Field Monitor App in Flutter 
+Supports android, iOS, macOS and web
