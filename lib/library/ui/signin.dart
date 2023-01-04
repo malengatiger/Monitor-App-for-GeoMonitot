@@ -25,9 +25,9 @@ class SignInState extends State<SignIn> {
           'Digital Monitor Platform',
           style: Styles.whiteSmall,
         ),
-        backgroundColor: Colors.brown[400],
+        // backgroundColor: Colors.brown[400],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(80),
           child: Column(
             children: [
               Text(widget.type, style: Styles.whiteBoldMedium),
@@ -38,7 +38,7 @@ class SignInState extends State<SignIn> {
           ),
         ),
       ),
-      backgroundColor: Colors.brown[100],
+      // backgroundColor: Colors.brown[100],
       body: isBusy
           ? Center(
               child: SizedBox(

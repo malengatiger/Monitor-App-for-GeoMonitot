@@ -13,13 +13,13 @@ import 'package:uuid/uuid.dart';
 class SchedulerMobile extends StatefulWidget {
   final User user;
 
-  SchedulerMobile(this.user);
+  const SchedulerMobile(this.user, {super.key});
 
   @override
-  _SchedulerMobileState createState() => _SchedulerMobileState();
+  SchedulerMobileState createState() => SchedulerMobileState();
 }
 
-class _SchedulerMobileState extends State<SchedulerMobile>
+class SchedulerMobileState extends State<SchedulerMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool busy = false;
@@ -161,15 +161,13 @@ class FrequencyEditor extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FrequencyEditorState createState() => _FrequencyEditorState();
+  FrequencyEditorState createState() => FrequencyEditorState();
 }
 
-class _FrequencyEditorState extends State<FrequencyEditor> {
-  var _perDayController = TextEditingController(text: "3");
-  var _perWeekController = TextEditingController(text: "0");
-  var _perMonthController = TextEditingController(text: "0");
-  var _width = 300.0;
-  var _height = 480.0;
+class FrequencyEditorState extends State<FrequencyEditor> {
+  final _perDayController = TextEditingController(text: "3");
+  final _perWeekController = TextEditingController(text: "0");
+  final _perMonthController = TextEditingController(text: "0");
   bool busy = false;
 
   @override
@@ -362,14 +360,16 @@ class _FrequencyEditorState extends State<FrequencyEditor> {
           perMonth: _perMonth,
           organizationName: widget.project.organizationName,
           projectName: widget.project.name,
-          fieldMonitorScheduleId: id);
+          fieldMonitorScheduleId: id, userId: '');
 
       var result = await DataAPI.addFieldMonitorSchedule(sc);
       pp('SchedulerMobile: 🍏 🍏 🍏 🍏 RESULT: ${result.toJson()}');
       setState(() {
         busy = false;
       });
-      Navigator.pop(context, true);
+      if (mounted) {
+        Navigator.pop(context, true);
+      }
     } catch (e) {
       // AppSnackbar.showErrorSnackbar(
       //     scaffoldKey: widget.key, message: 'Scheduling failed: $e');

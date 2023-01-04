@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/data/community.dart';
 import 'package:geo_monitor/library/data/country.dart';
@@ -15,6 +14,9 @@ import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/functions.dart';
 import 'package:geo_monitor/library/location/loc_bloc.dart';
 import 'package:universal_platform/universal_platform.dart';
+
+import '../data/video.dart';
+import '../hive_util.dart';
 
 final MonitorBloc monitorBloc = MonitorBloc();
 
@@ -139,11 +141,11 @@ class MonitorBloc {
               .organizationId} user.organizationName: ${user
               .organizationName} ');
 
-      _projects = await LocalMongo.getProjects(organizationId);
+      _projects = await hiveUtil.getProjects(organizationId);
 
       if (_projects.isEmpty || forceRefresh) {
         _projects = await DataAPI.findProjectsByOrganization(organizationId);
-        await LocalMongo.addProjects(projects: _projects);
+        await hiveUtil.addProjects(projects: _projects);
       }
       _projController.sink.add(_projects);
       pp('💜 💜 💜 💜 MonitorBloc: OrganizationProjects found: 💜 ${_projects
@@ -180,12 +182,12 @@ class MonitorBloc {
   Future<List<User>> getOrganizationUsers(
       {required String organizationId, required bool forceRefresh}) async {
     pp('$mm getOrganizationUsers ... forceRefresh: $forceRefresh');
-    _users = await LocalMongo.getUsers();
+    _users = await hiveUtil.getUsers(organizationId: organizationId);
 
     if (_users.isEmpty || forceRefresh) {
       _users = await DataAPI.findUsersByOrganization(organizationId);
       pp('$mm getOrganizationUsers ... _users: ${_users.length} ... will add to cache');
-      await LocalMongo.addUsers(users: _users);
+      await hiveUtil.addUsers(users: _users);
     }
     pp('$mm getOrganizationUsers found: 💜 ${_users.length} users. adding to stream ... ');
     _userController.sink.add(_users);
@@ -201,13 +203,13 @@ class MonitorBloc {
   Future<List<ProjectPosition>> getOrganizationProjectPositions(
       {required String organizationId, required bool forceRefresh}) async {
 
-    _projectPositions = await LocalMongo.getOrganizationProjectPositions();
+    _projectPositions = await hiveUtil.getOrganizationProjectPositions( organizationId: organizationId);
     pp('$mm getOrganizationProjectPositions found ${_projectPositions.length} positions in local cache ');
 
     if (_projectPositions.isEmpty || forceRefresh) {
       _projectPositions = await DataAPI.getOrganizationProjectPositions(organizationId);
       pp('$mm getOrganizationProjectPositions found ${_projectPositions.length} positions from remote database ');
-      await LocalMongo.addProjectPositions(positions: _projectPositions);
+      await hiveUtil.addProjectPositions(positions: _projectPositions);
     }
     _projPositionsController.sink.add(_projectPositions);
     pp('$mm getOrganizationProjectPositions found: 💜 ${_projectPositions.length} projectPositions from local or remote db ');
@@ -217,13 +219,13 @@ class MonitorBloc {
   Future<List<ProjectPosition>> getProjectPositions(
       {required String projectId, required bool forceRefresh}) async {
 
-    _projectPositions = await LocalMongo.getProjectPositions(projectId);
+    _projectPositions = await hiveUtil.getProjectPositions(projectId);
     pp('$mm getProjectPositions found ${_projectPositions.length} positions in local cache ');
 
     if (_projectPositions.isEmpty || forceRefresh) {
       _projectPositions = await DataAPI.findProjectPositionsById(projectId);
       pp('$mm getProjectPositions found ${_projectPositions.length} positions from remote database ');
-      await LocalMongo.addProjectPositions(positions: _projectPositions);
+      await hiveUtil.addProjectPositions(positions: _projectPositions);
     }
     _projPositionsController.sink.add(_projectPositions);
     pp('$mm getProjectPositions found: 💜 ${_projectPositions.length} projectPositions from local or remote db ');
@@ -234,11 +236,11 @@ class MonitorBloc {
       {required String projectId, required bool forceRefresh }) async {
     List<Photo> photos = [];
 
-    photos = await LocalMongo.getProjectPhotos(projectId);
+    photos = await hiveUtil.getProjectPhotos(projectId);
 
     if (photos.isEmpty || forceRefresh) {
       photos = await DataAPI.findPhotosByProject(projectId);
-      await LocalMongo.addPhotos(photos: photos);
+      await hiveUtil.addPhotos(photos: photos);
     }
     _projectPhotoController.sink.add(photos);
     pp('💜 💜 💜 MonitorBloc: getProjectPhotos found: 💜 ${photos.length} photos ');
@@ -248,11 +250,11 @@ class MonitorBloc {
 
   Future<List<FieldMonitorSchedule>> getProjectFieldMonitorSchedules(
       {required String projectId, required bool forceRefresh}) async {
-    _schedules = await LocalMongo.getProjectMonitorSchedules(projectId);
+    _schedules = await hiveUtil.getProjectMonitorSchedules(projectId);
 
     if (_schedules.isEmpty || forceRefresh) {
       _schedules = await DataAPI.getProjectFieldMonitorSchedules(projectId);
-      await LocalMongo.addFieldMonitorSchedules(schedules: _schedules);
+      await hiveUtil.addFieldMonitorSchedules(schedules: _schedules);
     }
 
     _fieldMonitorScheduleController.sink.add(_schedules);
@@ -264,11 +266,11 @@ class MonitorBloc {
   Future<List<FieldMonitorSchedule>> getMonitorFieldMonitorSchedules(
       {required String userId, required bool forceRefresh}) async {
 
-    _schedules = await LocalMongo.getFieldMonitorSchedules(userId);
+    _schedules = await hiveUtil.getFieldMonitorSchedules(userId);
 
     if (_schedules.isEmpty || forceRefresh) {
       _schedules = await DataAPI.getMonitorFieldMonitorSchedules(userId);
-      await LocalMongo.addFieldMonitorSchedules(schedules: _schedules);
+      await hiveUtil.addFieldMonitorSchedules(schedules: _schedules);
     }
     _schedules.sort((a, b) => b.date!.compareTo(a.date!));
     _fieldMonitorScheduleController.sink.add(_schedules);
@@ -281,11 +283,11 @@ class MonitorBloc {
   Future<List<FieldMonitorSchedule>> getOrgFieldMonitorSchedules(
       {required String organizationId, required bool forceRefresh}) async {
     _schedules =
-        await LocalMongo.getOrganizationMonitorSchedules(organizationId);
+        await hiveUtil.getOrganizationMonitorSchedules(organizationId);
 
     if (_schedules.isEmpty || forceRefresh) {
       _schedules = await DataAPI.getOrgFieldMonitorSchedules(organizationId);
-      await LocalMongo.addFieldMonitorSchedules(schedules: _schedules);
+      await hiveUtil.addFieldMonitorSchedules(schedules: _schedules);
     }
 
     _fieldMonitorScheduleController.sink.add(_schedules);
@@ -299,14 +301,14 @@ class MonitorBloc {
     try {
       var android = UniversalPlatform.isAndroid;
       if (android) {
-        _photos = await LocalMongo.getPhotos();
+        _photos = await hiveUtil.getPhotos();
       } else {
         _photos.clear();
       }
 
       if (_photos.isEmpty || forceRefresh) {
         _photos = await DataAPI.getOrganizationPhotos(organizationId);
-        if (android) await LocalMongo.addPhotos(photos: _photos);
+        if (android) await hiveUtil.addPhotos(photos: _photos);
       }
       _photoController.sink.add(_photos);
       pp('💜 💜 💜 MonitorBloc: getOrganizationPhotos found: 💜 ${_photos.length} photos 💜 ');
@@ -323,13 +325,13 @@ class MonitorBloc {
     try {
       var android = UniversalPlatform.isAndroid;
       if (android) {
-        _videos = await LocalMongo.getVideos();
+        //_videos = await hiveUtil.getVideos();
       } else {
         _videos.clear();
       }
       if (_videos.isEmpty || forceRefresh) {
         _videos = await DataAPI.getOrganizationVideos(organizationId);
-        if (android) await LocalMongo.addVideos(videos: _videos);
+        if (android) await hiveUtil.addVideos(videos: _videos);
       }
       _videoController.sink.add(_videos);
       pp('💜 💜 💜 MonitorBloc: getOrganizationVideos found: 💜 ${_videos.length} videos ');
@@ -346,11 +348,11 @@ class MonitorBloc {
     List<Video> videos = [];
     var android = UniversalPlatform.isAndroid;
     if (android) {
-      videos = await LocalMongo.getProjectVideos(projectId);
+      //videos = await hiveUtil.getProjectVideos(projectId);
     }
     if (videos.isEmpty || forceRefresh) {
       videos = await DataAPI.findVideosById(projectId);
-      if (android) await LocalMongo.addVideos(videos: videos);
+      if (android) await hiveUtil.addVideos(videos: videos);
     }
     _projectVideoController.sink.add(videos);
     pp('💜 💜 💜 MonitorBloc: getProjectVideos found: 💜 ${videos.length} videos ');
@@ -371,14 +373,14 @@ class MonitorBloc {
       {required String userId, required bool forceRefresh}) async {
     var android = UniversalPlatform.isAndroid;
     if (android) {
-      _photos = await LocalMongo.getUserPhotos(userId);
+      _photos = await hiveUtil.getUserPhotos(userId);
     } else {
       _photos.clear();
     }
 
     if (_photos.isEmpty || forceRefresh) {
       _photos = await DataAPI.getUserProjectPhotos(userId);
-      if (android) await LocalMongo.addPhotos(photos: _photos);
+      if (android) await hiveUtil.addPhotos(photos: _photos);
     }
     _photoController.sink.add(_photos);
     pp('💜 💜 💜 MonitorBloc: getUserProjectPhotos found: 💜 ${_photos.length} photos ');
@@ -389,14 +391,14 @@ class MonitorBloc {
       {required String userId, required bool forceRefresh}) async {
     var android = UniversalPlatform.isAndroid;
     if (android) {
-      _videos = await LocalMongo.getUserVideos(userId);
+      _videos = await hiveUtil.getUserVideos(userId);
     } else {
       _videos.clear();
     }
 
     if (_videos.isEmpty || forceRefresh) {
       _videos = await DataAPI.getUserProjectVideos(userId);
-      if (android) await LocalMongo.addVideos(videos: _videos);
+      if (android) await hiveUtil.addVideos(videos: _videos);
     }
     _videoController.sink.add(_videos);
     pp('💜 💜 💜 MonitorBloc: getUserProjectVideos found: 💜 ${_videos.length} videos ');

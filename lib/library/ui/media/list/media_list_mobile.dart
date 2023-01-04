@@ -14,6 +14,7 @@ import 'package:geo_monitor/library/ui/project_monitor/project_monitor_main.dart
 import 'package:geo_monitor/library/ui/project_monitor/project_monitor_mobile.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../../data/video.dart';
 import '../../../functions.dart';
 import '../../../snack.dart';
 
@@ -88,7 +89,7 @@ class _MediaListMobileState extends State<MediaListMobile>
     });
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   @override
   void dispose() {
     _controller.dispose();

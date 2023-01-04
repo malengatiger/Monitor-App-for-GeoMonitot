@@ -27,9 +27,11 @@ import '../../library/api/sharedprefs.dart';
 import '../../library/bloc/fcm_bloc.dart';
 import '../../library/bloc/monitor_bloc.dart';
 import '../../library/bloc/theme_bloc.dart';
+import '../../library/data/org_message.dart';
 import '../../library/data/photo.dart';
 import '../../library/data/project.dart';
 import '../../library/data/user.dart';
+import '../../library/data/video.dart';
 import '../../library/functions.dart';
 import '../../library/generic_functions.dart';
 import '../../library/geofence/geofencer_two.dart';
@@ -427,7 +429,7 @@ class DashboardMobileState extends State<DashboardMobile>
     );
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   void _handleBottomNav(int value) {
     switch (value) {
       case 0:

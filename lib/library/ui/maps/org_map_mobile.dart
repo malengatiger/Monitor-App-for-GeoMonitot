@@ -2,29 +2,31 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:geo_monitor/library/data/organization.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
 import 'package:geo_monitor/library/data/project_position.dart';
 
 import '../../functions.dart';
+import '../../hive_util.dart';
 
 class OrganizationMapMobile extends StatefulWidget {
+  const OrganizationMapMobile({super.key, required this.organization});
+
+  final Organization organization;
   @override
-  _OrganizationMapMobileState createState() => _OrganizationMapMobileState();
+  OrganizationMapMobileState createState() => OrganizationMapMobileState();
 }
 
-class _OrganizationMapMobileState extends State<OrganizationMapMobile>
+class OrganizationMapMobileState extends State<OrganizationMapMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   Completer<GoogleMapController> _mapController = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   var random = Random(DateTime.now().millisecondsSinceEpoch);
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   static const DEFAULT_ZOOM = 10.0;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-25.42796133580664, 26.085749655962),
     zoom: DEFAULT_ZOOM,
   );
@@ -38,7 +40,7 @@ class _OrganizationMapMobileState extends State<OrganizationMapMobile>
 
   List<ProjectPosition> _positions = [];
   void _getProjectPositions() async {
-    _positions = await LocalMongo.getOrganizationProjectPositions();
+    _positions = await hiveUtil.getOrganizationProjectPositions(organizationId: widget.organization.organizationId!);
     _addMarkers();
     setState(() {});
   }

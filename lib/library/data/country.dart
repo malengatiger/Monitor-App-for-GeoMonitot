@@ -1,8 +1,21 @@
-import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
 
+part 'country.g.dart';
+
+@HiveType(typeId: 1)
 class Country {
-  String? name, countryId, countryCode;
+  @HiveField(0)
+  String? name;
+
+  @HiveField(1)
+  String? countryId;
+
+  @HiveField(2)
+  String? countryCode;
+
+  @HiveField(3)
   int population = 0;
+
   Country(
       {required this.name,
         required this.population,

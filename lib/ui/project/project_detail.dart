@@ -345,31 +345,31 @@ class Basics extends StatelessWidget {
       elevation: 4,
       child: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text('${settlement.email}'),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text('${settlement.countryName}'),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Population'),
-              SizedBox(
+              const Text('Population'),
+              const SizedBox(
                 width: 12,
               ),
               Text(
-                '${getFormattedNumber(settlement.population, context)}',
+                getFormattedNumber(settlement.population!, context),
                 style: Styles.blackBoldMedium,
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],

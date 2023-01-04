@@ -1,29 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:geo_monitor/library/data/position.dart';
 import 'package:hive/hive.dart';
 
-part 'photo.g.dart';
+part 'video.g.dart';
 
-@HiveType(typeId: 4)
-class Photo {
+@HiveType(typeId: 10)
+class Video {
   @HiveField(0)
   String? url;
   @HiveField(1)
-  String? thumbnailUrl;
-  @HiveField(2)
   String? caption;
-  @HiveField(3)
+  @HiveField(2)
   String? created;
+  @HiveField(3)
+  String? thumbnailUrl;
   @HiveField(4)
-  String? photoId;
+  String? videoId;
   @HiveField(5)
   String? projectPositionId;
   @HiveField(6)
   String? userId;
   @HiveField(7)
-  String? organizationId;
-  @HiveField(8)
   String? userName;
+  @HiveField(8)
+  String? organizationId;
   @HiveField(9)
   Position? projectPosition;
   @HiveField(10)
@@ -32,51 +31,37 @@ class Photo {
   String? projectId;
   @HiveField(12)
   String? projectName;
-  @HiveField(13)
-  int? height;
-  @HiveField(14)
-  int? width;
 
-  Photo(
+  Video(
       {required this.url,
-      required this.caption,
-      required this.created,
-      required this.userId,
-      required this.userName,
-      required this.projectPosition,
-      required this.distanceFromProjectPosition,
-      required this.projectId,
-      required this.thumbnailUrl,
-      required this.photoId,
-      required this.organizationId,
-      required this.projectName,
-      required this.height,
+        this.caption,
         required this.projectPositionId,
-      required this.width});
+        required this.created,
+        required this.userId,
+        required this.userName,
+        required this.projectPosition,
+        required this.distanceFromProjectPosition,
+        required this.projectId,
+        required this.thumbnailUrl,
+        required this.videoId,
+        required this.organizationId,
+        required this.projectName}); // Video({required this.url, this.userId, required this.created});
 
-  Photo.fromJson(Map data) {
-    this.projectPositionId = data['projectPositionId'];
+  Video.fromJson(Map data) {
     this.url = data['url'];
-    this.thumbnailUrl = data['thumbnailUrl'];
+    this.projectPositionId = data['projectPositionId'];
     this.caption = data['caption'];
-    this.height = data['height'];
-    this.width = data['width'];
     this.created = data['created'];
-    this.organizationId = data['organizationId'];
     this.userId = data['userId'];
-    this.photoId = data['photoId'];
+    this.organizationId = data['organizationId'];
+    this.thumbnailUrl = data['thumbnailUrl'];
+    this.videoId = data['videoId'];
     this.userName = data['userName'];
     this.distanceFromProjectPosition = data['distanceFromProjectPosition'];
     this.projectId = data['projectId'];
     this.projectName = data['projectName'];
     if (data['projectPosition'] != null) {
       this.projectPosition = Position.fromJson(data['projectPosition']);
-    }
-    if (this.height == null) {
-      this.height = -5;
-    }
-    if (this.width == null) {
-      this.width = -10;
     }
   }
   Map<String, dynamic> toJson() {
@@ -85,23 +70,16 @@ class Photo {
       'projectPositionId': projectPositionId,
       'caption': caption,
       'created': created,
-      'width': width,
-      'height': height,
       'userId': userId,
+      'videoId': videoId,
       'organizationId': organizationId,
-      'photoId': photoId,
       'userName': userName,
+      'thumbnailUrl': thumbnailUrl,
       'distanceFromProjectPosition': distanceFromProjectPosition,
       'projectId': projectId,
       'projectName': projectName,
-      'thumbnailUrl': thumbnailUrl,
       'projectPosition': projectPosition == null ? null : projectPosition!.toJson()
     };
     return map;
   }
 }
-
-
-
-
-

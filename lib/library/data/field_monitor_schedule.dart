@@ -1,15 +1,33 @@
-import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
 
+part 'field_monitor_schedule.g.dart';
+
+@HiveType(typeId: 2)
 class FieldMonitorSchedule {
-  String? fieldMonitorScheduleId,
-      fieldMonitorId,
-      adminId,
-      organizationId,
-      projectId,
-      projectName,
-      date,
-      organizationName;
-  int? perDay, perWeek, perMonth;
+  @HiveField(0)
+  String? fieldMonitorScheduleId;
+  @HiveField(1)
+  String? fieldMonitorId;
+  @HiveField(2)
+  String? adminId;
+  @HiveField(3)
+  String? organizationId;
+  @HiveField(4)
+  String? projectId;
+  @HiveField(5)
+  String? projectName;
+  @HiveField(6)
+  String? date;
+  @HiveField(7)
+  String? organizationName;
+  @HiveField(8)
+  int? perDay;
+  @HiveField(9)
+  int? perWeek;
+  @HiveField(10)
+  int? perMonth;
+  @HiveField(11)
+  String? userId;
 
   FieldMonitorSchedule(
       {required this.fieldMonitorId,
@@ -22,24 +40,28 @@ class FieldMonitorSchedule {
       this.perMonth,
       this.projectName,
       this.organizationName,
+      required this.userId,
       required this.organizationId});
 
   FieldMonitorSchedule.fromJson(Map data) {
-    this.fieldMonitorId = data['fieldMonitorId'];
-    this.fieldMonitorScheduleId = data['fieldMonitorScheduleId'];
-    this.adminId = data['adminId'];
-    this.organizationId = data['organizationId'];
-    this.projectId = data['projectId'];
-    this.projectName = data['projectName'];
-    this.organizationName = data['organizationName'];
-    this.perDay = data['perDay'];
-    this.perWeek = data['perWeek'];
-    this.perMonth = data['perMonth'];
-    this.date = data['date'];
+    fieldMonitorId = data['fieldMonitorId'];
+    userId = data['userId'];
+
+    fieldMonitorScheduleId = data['fieldMonitorScheduleId'];
+    adminId = data['adminId'];
+    organizationId = data['organizationId'];
+    projectId = data['projectId'];
+    projectName = data['projectName'];
+    organizationName = data['organizationName'];
+    perDay = data['perDay'];
+    perWeek = data['perWeek'];
+    perMonth = data['perMonth'];
+    date = data['date'];
   }
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'fieldMonitorId': fieldMonitorId,
+      'userId': userId,
       'fieldMonitorScheduleId': fieldMonitorScheduleId,
       'date': date,
       'adminId': adminId,

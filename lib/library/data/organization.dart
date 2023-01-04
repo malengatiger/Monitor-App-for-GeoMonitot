@@ -1,7 +1,22 @@
+import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 
+part 'organization.g.dart';
+
+@HiveType(typeId: 8)
 class Organization {
-  String? name, countryId, organizationId, email, countryName, created;
+  @HiveField(0)
+  String? name;
+  @HiveField(1)
+  String? countryId;
+  @HiveField(2)
+  String? organizationId;
+  @HiveField(3)
+  String? email;
+  @HiveField(4)
+  String? countryName;
+  @HiveField(5)
+  String? created;
 
   Organization(
       {required this.name,

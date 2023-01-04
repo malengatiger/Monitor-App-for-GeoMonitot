@@ -1,17 +1,38 @@
+import 'package:geo_monitor/library/data/video.dart';
+import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 import 'package:geo_monitor/library/data/photo.dart';
 import 'package:geo_monitor/library/data/position.dart';
 import 'package:geo_monitor/library/data/ratingContent.dart';
 
 import 'city.dart';
+part 'community.g.dart';
 
+@HiveType(typeId: 13)
 class Community {
-  String? name, countryId, communityId, email, countryName, created;
-  late int population = 0;
+  @HiveField(0)
+  String? name;
+  @HiveField(1)
+  String? countryId;
+  @HiveField(2)
+  String? communityId;
+  @HiveField(3)
+  String? email;
+  @HiveField(4)
+  String? countryName;
+  @HiveField(5)
+  String? created;
+  @HiveField(6)
+  int? population = 7;
+  @HiveField(8)
   List<Position>? polygon = [];
+  @HiveField(9)
   List<Photo>? photoUrls = [];
+  @HiveField(10)
   List<Video>? videoUrls = [];
+  @HiveField(11)
   List<RatingContent>? ratings = [];
+  @HiveField(12)
   List<City>? nearestCities = [];
 
   Community(

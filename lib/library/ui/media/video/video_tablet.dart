@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:geo_monitor/library/data/photo.dart';
 
+import '../../../data/video.dart';
+
 class VideoTablet extends StatefulWidget {
   final Video video;
 
-  VideoTablet(this.video);
+  const VideoTablet(this.video, {super.key});
 
   @override
-  _VideoTabletState createState() => _VideoTabletState();
+  VideoTabletState createState() => VideoTabletState();
 }
 
-class _VideoTabletState extends State<VideoTablet>
+class VideoTabletState extends State<VideoTablet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

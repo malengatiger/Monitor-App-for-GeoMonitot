@@ -15,6 +15,7 @@ import 'package:geo_monitor/library/location/loc_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../data/video.dart';
 import '../functions.dart';
 import 'data_api.dart';
 

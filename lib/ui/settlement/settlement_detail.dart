@@ -9,14 +9,14 @@ import '../questionnaire/questionnaire_editor.dart';
 class SettlementDetail extends StatefulWidget {
   final Community settlement;
 
-  SettlementDetail(this.settlement);
+  const SettlementDetail(this.settlement, {super.key});
 
   @override
-  _SettlementDetailState createState() => _SettlementDetailState();
+  SettlementDetailState createState() => SettlementDetailState();
 }
 
-class _SettlementDetailState extends State<SettlementDetail> {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+class SettlementDetailState extends State<SettlementDetail> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   void initState() {
@@ -274,31 +274,31 @@ class Basics extends StatelessWidget {
       elevation: 4,
       child: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text('${settlement.email}'),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text('${settlement.countryName}'),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Population'),
-              SizedBox(
+              const Text('Population'),
+              const SizedBox(
                 width: 12,
               ),
               Text(
-                '${getFormattedNumber(settlement.population, context)}',
+                getFormattedNumber(settlement.population!, context),
                 style: Styles.blackBoldMedium,
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],

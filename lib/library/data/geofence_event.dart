@@ -1,9 +1,31 @@
-import 'package:meta/meta.dart';
+import 'package:hive/hive.dart';
 import 'package:geo_monitor/library/data/user.dart';
 
+part 'geofence_event.g.dart';
+
+@HiveType(typeId: 3)
 class GeofenceEvent {
-  String? status, geofenceEventId, date, projectPositionId, projectName, userId;
+  @HiveField(0)
+  String? status;
+
+  @HiveField(1)
+  String? geofenceEventId;
+
+  @HiveField(2)
+  String? date;
+
+  @HiveField(3)
+  String? projectPositionId;
+
+  @HiveField(4)
+  String? projectName;
+
+  @HiveField(5)
+  String? userId;
+
+  @HiveField(6)
   User? user;
+
   GeofenceEvent(
       {required this.status,
         required this.user,

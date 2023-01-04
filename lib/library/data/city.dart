@@ -1,7 +1,23 @@
 import 'package:geo_monitor/library/data/position.dart';
+import 'package:hive/hive.dart';
 
+part 'city.g.dart';
+
+@HiveType(typeId: 7)
 class City {
-  String? name, countryId, countryName, provinceName, cityId, created;
+  @HiveField(0)
+  String? name;
+  @HiveField(1)
+  String? countryId;
+  @HiveField(2)
+  String? countryName;
+  @HiveField(3)
+  String? provinceName;
+  @HiveField(4)
+  String? cityId;
+  @HiveField(5)
+  String? created;
+  @HiveField(6)
   Position? position;
 
   City(

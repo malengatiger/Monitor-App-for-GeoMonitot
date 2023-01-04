@@ -1,24 +1,46 @@
 import 'package:geo_monitor/library/data/monitor_report.dart';
+import 'package:geo_monitor/library/data/photo.dart';
 import 'package:geo_monitor/library/data/project_position.dart';
 import 'package:geo_monitor/library/data/ratingContent.dart';
+import 'package:geo_monitor/library/data/video.dart';
+import 'package:hive/hive.dart';
 
-import '../functions.dart';
 import 'city.dart';
 import 'community.dart';
-import 'photo.dart' as ph;
 
+part 'project.g.dart';
+
+@HiveType(typeId: 5)
 class Project {
-  String? _id, name, projectId, description, organizationId, created;
+  @HiveField(0)
+  String? name;
+  @HiveField(1)
+  String? projectId;
+  @HiveField(2)
+  String? description;
+  @HiveField(3)
+  String? organizationId;
+  @HiveField(4)
+  String? created;
+  @HiveField(5)
   String? organizationName;
+  @HiveField(6)
   List<City>? nearestCities;
-
+  @HiveField(7)
   List<ProjectPosition>? projectPositions;
-  List<ph.Photo>? photos;
-  List<ph.Video>? videos;
+  @HiveField(8)
+  List<Photo>? photos;
+  @HiveField(9)
+  List<Video>? videos;
+  @HiveField(10)
   List<RatingContent>? ratings;
+  @HiveField(11)
   List<Community>? communities;
+  @HiveField(12)
   List<MonitorReport>? monitorReports;
+  @HiveField(13)
   double? monitorMaxDistanceInMetres;
+
   Project(
       {required this.name,
       required this.description,
@@ -36,70 +58,70 @@ class Project {
       required this.projectId});
 
   Project.fromJson(Map data) {
-    this.name = data['name'];
+    name = data['name'];
 
-    this.projectId = data['projectId'];
-    this.description = data['description'];
-    this.organizationId = data['organizationId'];
-    this.created = data['created'];
-    this.organizationName = data['organizationName'];
+    projectId = data['projectId'];
+    description = data['description'];
+    organizationId = data['organizationId'];
+    created = data['created'];
+    organizationName = data['organizationName'];
     // //pp('Project.fromJson 😑 😑 😑 log 1 ...');
-    this.monitorMaxDistanceInMetres = data['monitorMaxDistanceInMetres'];
+    monitorMaxDistanceInMetres = data['monitorMaxDistanceInMetres'];
 
     //pp('Project.fromJson 😑 😑 😑 log 2 ...');
-    this.monitorReports = [];
+    monitorReports = [];
     if (data['monitorReports'] != null) {
       List list = data['monitorReports'];
-      list.forEach((m) {
-        this.monitorReports!.add(MonitorReport.fromJson(m));
-      });
+      for (var m in list) {
+        monitorReports!.add(MonitorReport.fromJson(m));
+      }
     }
-    this.communities = [];
+    communities = [];
     if (data['communities'] != null) {
       List list = data['communities'];
-      list.forEach((m) {
-        this.communities!.add(Community.fromJson(m));
-      });
+      for (var m in list) {
+        communities!.add(Community.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 log 3 ...');
-    this.nearestCities = [];
+    nearestCities = [];
     if (data['nearestCities'] != null) {
       List list = data['nearestCities'];
-      list.forEach((m) {
-        this.nearestCities!.add(City.fromJson(m));
-      });
+      for (var m in list) {
+        nearestCities!.add(City.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 log 4 ...');
-    this.projectPositions = [];
+    projectPositions = [];
     if (data['projectPositions'] != null) {
       List list = data['projectPositions'];
-      list.forEach((m) {
-        this.projectPositions!.add(ProjectPosition.fromJson(m));
-      });
+      for (var m in list) {
+        projectPositions!.add(ProjectPosition.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 log 5 ...');
-    this.photos = [];
+    photos = [];
     if (data['photos'] != null) {
       List list = data['photos'];
-      list.forEach((m) {
-        this.photos!.add(ph.Photo.fromJson(m));
-      });
+      for (var m in list) {
+        photos!.add(Photo.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 log 6 ...');
-    this.videos = [];
+    videos = [];
     if (data['videos'] != null) {
       List list = data['videos'];
-      list.forEach((m) {
-        this.videos!.add(ph.Video.fromJson(m));
-      });
+      for (var m in list) {
+        videos!.add(Video.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 log 7 ...');
-    this.ratings = [];
+    ratings = [];
     if (data['ratings'] != null) {
       List list = data['ratings'];
-      list.forEach((m) {
-        this.ratings!.add(RatingContent.fromJson(m));
-      });
+      for (var m in list) {
+        ratings!.add(RatingContent.fromJson(m));
+      }
     }
     //pp('Project.fromJson 😑 😑 😑 logs end ...');
   }

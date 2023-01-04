@@ -10,6 +10,10 @@ import 'package:geo_monitor/library/data/section.dart';
 import 'package:geo_monitor/library/data/user.dart' as ar;
 import 'package:geo_monitor/library/data/user.dart';
 
+import '../data/condition.dart';
+import '../data/org_message.dart';
+import '../data/video.dart';
+
 abstract class LocalDatabase {
   Future<int> addCities({required List<City> cities});
   Future<int> addCity({required City city});

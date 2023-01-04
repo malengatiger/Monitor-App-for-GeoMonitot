@@ -1,6 +1,5 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
 import 'package:geo_monitor/library/data/project.dart';
 import 'package:geo_monitor/library/data/project_position.dart';
@@ -11,6 +10,8 @@ import 'package:geo_monitor/library/ui/camera/field_camera.dart';
 import 'package:geo_monitor/library/ui/media/media_house.dart';
 import 'package:geo_monitor/library/ui/project_location/project_location_main.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../../hive_util.dart';
 
 class ProjectMonitorMobile extends StatefulWidget {
   final Project project;
@@ -197,22 +198,22 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   // ignore: missing_return
   Future<ProjectPosition?> _findNearestProjectPosition() async {
     var bags = <BagX>[];
-    var positions = await LocalMongo.getProjectPositions(widget.project.projectId!);
+    var positions = await hiveUtil.getProjectPositions(widget.project.projectId!);
     if (positions.isEmpty) {
       _navigateToProjectLocation();
     } else {
       if (positions.length == 1) {
         return positions.first;
       }
-      positions.forEach((pos) async {
+      for (var pos in positions)  {
         var distance = await locationBloc.getDistanceFromCurrentPosition(
             latitude: pos.position!.coordinates[1],
             longitude: pos.position!.coordinates[0]);
         bags.add(BagX(distance, pos));
-      });
+      }
       bags.sort((a, b) => a.distance.compareTo(b.distance));
-      return bags.first.position;
     }
+    return bags.first.position;
   }
 
   bool isWithinDistance = false;

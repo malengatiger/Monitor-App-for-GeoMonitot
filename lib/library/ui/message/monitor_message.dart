@@ -6,6 +6,7 @@ import 'package:geo_monitor/library/data/project.dart';
 import 'package:geo_monitor/library/data/user.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../data/org_message.dart';
 import '../../functions.dart';
 import '../../snack.dart';
 
@@ -13,19 +14,19 @@ class MonitorMessage extends StatefulWidget {
   final Project project;
   final User user;
 
-  MonitorMessage({
+  const MonitorMessage({
     required this.project,
     required this.user,
   });
 
   @override
-  _MonitorMessageState createState() => _MonitorMessageState();
+  MonitorMessageState createState() => MonitorMessageState();
 }
 
-class _MonitorMessageState extends State<MonitorMessage> {
+class MonitorMessageState extends State<MonitorMessage> {
   String frequency = MONITOR_TWICE_A_DAY;
   bool isBusy = false;
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   void _onRadioButtonSelected(String selected) {
     pp('MessageMobile :  🥦 🥦 🥦 _onRadioButtonSelected: 🍊 $selected 🍊');
     setState(() {
@@ -34,11 +35,11 @@ class _MonitorMessageState extends State<MonitorMessage> {
   }
 
   void _sendMessage() async {
-    if (frequency == null) {
-      // AppSnackbar.showErrorSnackbar(
-      //     scaffoldKey: widget.key, message: 'Please select frequency');
-      return;
-    }
+    // if (frequency == null) {
+    //   // AppSnackbar.showErrorSnackbar(
+    //   //     scaffoldKey: widget.key, message: 'Please select frequency');
+    //   return;
+    // }
 
     setState(() {
       isBusy = true;

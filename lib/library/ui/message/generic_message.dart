@@ -5,6 +5,7 @@ import 'package:geo_monitor/library/data/project.dart';
 import 'package:geo_monitor/library/data/user.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../data/org_message.dart';
 import '../../functions.dart';
 import '../../snack.dart';
 
@@ -12,16 +13,16 @@ class GenericMessage extends StatefulWidget {
   final Project? project;
   final User user;
 
-  GenericMessage({
+  const GenericMessage({
     this.project,
     required this.user,
   });
 
   @override
-  _GenericMessageState createState() => _GenericMessageState();
+  GenericMessageState createState() => GenericMessageState();
 }
 
-class _GenericMessageState extends State<GenericMessage> {
+class GenericMessageState extends State<GenericMessage> {
   String frequency = MONITOR_TWICE_A_DAY;
   bool isBusy = false;
   var _key = GlobalKey<ScaffoldState>();

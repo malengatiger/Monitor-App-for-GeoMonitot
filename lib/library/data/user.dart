@@ -1,19 +1,35 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 import 'package:geo_monitor/library/data/position.dart';
 
+part 'user.g.dart';
+
+@HiveType(typeId: 11)
 class User {
-  String? name,
-      userId,
-      email,
-      gender,
-      cellphone,
-      created,
-      userType,
-      organizationName,
-      fcmRegistration,
-      countryId,
-      organizationId;
+  @HiveField(0)
+  String? name;
+  @HiveField(1)
+  String? userId;
+  @HiveField(2)
+  String? email;
+  @HiveField(3)
+  String? gender;
+  @HiveField(4)
+  String? cellphone;
+  @HiveField(5)
+  String? created;
+  @HiveField(6)
+  String? userType;
+  @HiveField(7)
+  String? organizationName;
+  @HiveField(8)
+  String? fcmRegistration;
+  @HiveField(9)
+  String? countryId;
+  @HiveField(10)
+  String? organizationId;
+  @HiveField(11)
   Position? position;
 
   User(
@@ -85,56 +101,7 @@ const labels = [
   'Whenever Necessary'
 ];
 
-class OrgMessage {
-  String? name, userId, message, created, organizationId, projectId;
-  String? projectName, adminId, adminName;
-  String? frequency, result, orgMessageId;
 
-  OrgMessage(
-      {required this.name,
-      required this.message,
-      required this.userId,
-      required this.orgMessageId,
-      required this.created,
-      required this.projectId,
-      required this.projectName,
-      required this.adminId,
-      required this.adminName,
-      required this.frequency,
-      required this.organizationId});
-
-  OrgMessage.fromJson(Map data) {
-   name = data['name'];
-   userId = data['userId'];
-   orgMessageId = data['orgMessageId'];
-   message = data['message'];
-   created = data['created'];
-   organizationId = data['organizationId'];
-   projectId = data['projectId'];
-   projectName = data['projectName'];
-   adminId = data['adminId'];
-   adminName = data['adminName'];
-   frequency = data['frequency'];
-   result = data['result'];
-  }
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {
-      'name': name,
-      'userId': userId,
-      'orgMessageId': orgMessageId,
-      'message': message,
-      'created': created,
-      'organizationId': organizationId,
-      'projectId': projectId,
-      'projectName': projectName,
-      'adminId': adminId,
-      'adminName': adminName,
-      'frequency': frequency,
-      'result': result,
-    };
-    return map;
-  }
-}
 
 class UserType {
   static const String fieldMonitor = 'FIELD_MONITOR';

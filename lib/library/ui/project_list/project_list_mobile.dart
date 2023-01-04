@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/bloc/fcm_bloc.dart';
 import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
@@ -20,18 +19,19 @@ import 'package:geo_monitor/library/ui/project_monitor/project_monitor_main.dart
 import 'package:geo_monitor/library/ui/project_monitor/project_monitor_mobile.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../hive_util.dart';
 import '../../snack.dart';
 
 class ProjectListMobile extends StatefulWidget {
   final mon.User user;
 
-  ProjectListMobile(this.user);
+  const ProjectListMobile(this.user, {super.key});
 
   @override
-  _ProjectListMobileState createState() => _ProjectListMobileState();
+  ProjectListMobileState createState() => ProjectListMobileState();
 }
 
-class _ProjectListMobileState extends State<ProjectListMobile>
+class ProjectListMobileState extends State<ProjectListMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var projects = <Project>[];
@@ -168,28 +168,33 @@ class _ProjectListMobileState extends State<ProjectListMobile>
             child: MediaListMain(p)));
   }
 
-  void _navigateToOrgMap() {
+  Future<void> _navigateToOrgMap() async {
     pp('_navigateToOrgMap: ');
 
+    var org = await hiveUtil.getOrganizationById(organizationId: widget.user.organizationId!);
+    if (mounted) {
       Navigator.push(
           context,
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
               duration: const Duration(milliseconds: 1000),
-              child: OrganizationMapMobile()));
+              child: OrganizationMapMobile(organization: org!,)));
+    }
 
   }
   void _navigateToProjectMap(Project p) async {
     pp('_navigateToProjectMap: ');
-    var pos = await LocalMongo.getProjectPositions(p.projectId!);
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(milliseconds: 1000),
-            child: ProjectMapMobile(project: p, projectPositions: pos,)));
+    var pos = await hiveUtil.getProjectPositions(p.projectId!);
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(milliseconds: 1000),
+              child: ProjectMapMobile(project: p, projectPositions: pos,)));
+    }
 
   }
 

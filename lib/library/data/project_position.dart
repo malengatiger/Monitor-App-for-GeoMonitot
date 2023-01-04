@@ -1,14 +1,33 @@
+import 'package:geo_monitor/library/data/position.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 import 'package:geo_monitor/library/data/position.dart' as ar;
 
 import '../functions.dart';
 import 'city.dart';
 
+part 'project_position.g.dart';
+
+@HiveType(typeId: 6)
 class ProjectPosition {
-  String? projectName, projectId, caption, created, projectPositionId, organizationId;
+  @HiveField(0)
+  String? projectName;
+  @HiveField(1)
+  String? projectId;
+  @HiveField(2)
+  String? caption;
+  @HiveField(3)
+  String? created;
+  @HiveField(4)
+  String? projectPositionId;
+  @HiveField(5)
+  String? organizationId;
+  @HiveField(6)
   ar.Position? position;
+  @HiveField(7)
   Placemark? placemark;
+  @HiveField(8)
   List<City>? nearestCities;
 
   ProjectPosition(

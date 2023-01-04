@@ -4,15 +4,18 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart' as fb;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/data/photo.dart';
 import 'package:geo_monitor/library/data/project.dart';
 import 'package:geo_monitor/library/data/user.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../data/condition.dart';
+import '../data/org_message.dart';
+import '../data/video.dart';
 import '../functions.dart';
 import '../generic_functions.dart';
+import '../hive_util.dart';
 
 FCMBloc fcmBloc = FCMBloc();
 const mm = '🔵 🔵 🔵 🔵 🔵 🔵 FCMBloc: ';
@@ -145,42 +148,42 @@ class FCMBloc {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache USER  🍎  🍎 ");
       var m = jsonDecode(data['user']);
       var user = User.fromJson(m);
-      await LocalMongo.addUser(user: user);
+      await hiveUtil.addUser(user: user);
       _userController.sink.add(user);
     }
     if (data['project'] != null) {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PROJECT  🍎  🍎");
       var m = jsonDecode(data['project']);
       var project = Project.fromJson(m);
-      await LocalMongo.addProject(project: project);
+      await hiveUtil.addProject(project: project);
       _projectController.sink.add(project);
     }
     if (data['photo'] != null) {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PHOTO  🍎  🍎");
       var m = jsonDecode(data['photo']);
       var photo = Photo.fromJson(m);
-      await LocalMongo.addPhoto(photo: photo);
+      await hiveUtil.addPhoto(photo: photo);
       _photoController.sink.add(photo);
     }
     if (data['video'] != null) {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache VIDEO  🍎  🍎");
       var m = jsonDecode(data['video']);
       var video = Video.fromJson(m);
-      await LocalMongo.addVideo(video: video);
+      await hiveUtil.addVideo(video: video);
       _videoController.sink.add(video);
     }
     if (data['condition'] != null) {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache CONDITION  🍎  🍎");
       var m = jsonDecode(data['condition']);
       var condition = Condition.fromJson(m);
-      await LocalMongo.addCondition(condition: condition);
+      await hiveUtil.addCondition(condition: condition);
       _conditionController.sink.add(condition);
     }
     if (data['message'] != null) {
       pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache ORG MESSAGE  🍎  🍎");
       var m = jsonDecode(data['message']);
       var msg = OrgMessage.fromJson(m);
-      await LocalMongo.addOrgMessage(message: msg);
+      await hiveUtil.addOrgMessage(message: msg);
       if (user!.userId != msg.adminId) {
         _messageController.sink.add(msg);
       }
@@ -207,37 +210,37 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
     if (data['user'] != null) {
       var m = jsonDecode(data['user']);
       var user = User.fromJson(m);
-      LocalMongo.addUser(user: user);
+      hiveUtil.addUser(user: user);
     }
     if (data['project'] != null) {
       pp("$mm myBackgroundMessageHandler   🦠 🦠 🦠 ........................... cache PROJECT  🍎  🍎");
       var m = jsonDecode(data['project']);
       var project = Project.fromJson(m);
-      LocalMongo.addProject(project: project);
+      hiveUtil.addProject(project: project);
     }
     if (data['photo'] != null) {
       pp("$mm myBackgroundMessageHandler   🦠 🦠 🦠 ........................... cache PHOTO  🍎  🍎");
       var m = jsonDecode(data['photo']);
       var photo = Photo.fromJson(m);
-      LocalMongo.addPhoto(photo: photo);
+      hiveUtil.addPhoto(photo: photo);
     }
     if (data['video'] != null) {
       pp("$mm myBackgroundMessageHandler   🦠 🦠 🦠 ........................... cache VIDEO  🍎  🍎");
       var m = jsonDecode(data['video']);
       var video = Video.fromJson(m);
-      LocalMongo.addVideo(video: video);
+      hiveUtil.addVideo(video: video);
     }
     if (data['condition'] != null) {
       pp("$mm myBackgroundMessageHandler   🦠 🦠 🦠 ........................... cache CONDITION  🍎  🍎");
       var m = jsonDecode(data['condition']);
       var condition = Condition.fromJson(m);
-      LocalMongo.addCondition(condition: condition);
+      hiveUtil.addCondition(condition: condition);
     }
     if (data['message'] != null) {
       pp("$mm myBackgroundMessageHandler  🦠 🦠 🦠 ........................... cache ORG MESSAGE  🍎  🍎");
       var m = jsonDecode(data['message']);
       var msg = OrgMessage.fromJson(m);
-      LocalMongo.addOrgMessage(message: msg);
+      hiveUtil.addOrgMessage(message: msg);
     }
 
 }

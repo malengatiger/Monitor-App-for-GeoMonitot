@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geo_monitor/library/hive_util.dart';
 import 'package:geo_monitor/library/ui/signin.dart';
 import 'package:geo_monitor/ui/intro/intro_main.dart';
 
@@ -25,9 +26,16 @@ Future<void> main() async {
 
   // await SharedPrefs.deleteConfig();
 
-  firebaseApp = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform);
-  p('$heartBlue Firebase App has been initialized: ${firebaseApp.name}');
+  try {
+    firebaseApp = await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    p('$heartBlue Firebase App has been initialized: ${firebaseApp.name}');
+
+    hiveUtil.initialize();
+
+  } catch (e) {
+    p('$redDot problem with Firebase? or Hive? : $e');
+  }
 
   await dotenv.load(fileName: ".env");
   p('$heartBlue DotEnv has been loaded');

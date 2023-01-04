@@ -2,7 +2,9 @@ import 'package:meta/meta.dart';
 
 class UserCount {
   String? userId;
-  int photos = 0, videos = 0, projects = 0;
+  int photos = 0;
+  int videos = 0;
+  int projects = 0;
 
   UserCount(
       {required this.userId,

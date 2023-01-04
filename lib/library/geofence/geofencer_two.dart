@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:geofence_service/geofence_service.dart';
 import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/data/geofence_event.dart';
 import 'package:geo_monitor/library/data/project_position.dart';
@@ -10,6 +9,8 @@ import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/functions.dart';
 import 'package:geo_monitor/library/location/loc_bloc.dart';
 import 'package:uuid/uuid.dart';
+
+import '../hive_util.dart';
 
 final GeofencerTwo geofencerTwo = GeofencerTwo();
 
@@ -41,15 +42,8 @@ class GeofencerTwo {
       required double latitude,
       required double longitude,
       required double radiusInKM}) async {
-    var list = await LocalMongo.getOrganizationProjectPositionsByLocation(
-        organizationId: organizationId,
-        latitude: latitude,
-        longitude: longitude,
-        radiusInKM: radiusInKM);
+      var list = await DataAPI.getOrganizationProjectPositions(organizationId);
 
-    if (list.isEmpty) {
-      list = await DataAPI.getOrganizationProjectPositions(organizationId);
-    }
     pp('\n\n$mm _getProjectPositionsByLocation: found ${list.length}\n\n');
     return list;
   }
@@ -57,7 +51,7 @@ class GeofencerTwo {
   final _geofenceList = <Geofence>[];
   Future buildGeofences({double? radiusInKM}) async {
     if (_user == null) {
-      pp('\n\n$mm buildGeofence');
+      pp('\n\n$mm buildGeofence ...');
       return;
     }
     var bloc = LocationBloc();
@@ -106,7 +100,7 @@ class GeofencerTwo {
       required GeofenceStatus geofenceStatus,
       required Location location}) async {
 
-    var projectPosition = await LocalMongo.getProjectPosition(geofence.id);
+    var projectPosition = await hiveUtil.getProjectPosition(geofence.id);
     if (projectPosition == null) {
       return;
     }

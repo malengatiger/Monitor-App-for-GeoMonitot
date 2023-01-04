@@ -20,8 +20,11 @@ import 'package:geo_monitor/library/data/section.dart';
 import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/functions.dart';
 
+import '../data/condition.dart';
+import '../data/org_message.dart';
+import '../data/video.dart';
 import '../generic_functions.dart' as gen;
-import 'local_mongo.dart';
+import '../hive_util.dart';
 
 class DataAPI {
   static Map<String, String> headers = {
@@ -36,16 +39,16 @@ class DataAPI {
   static Future<String?> getUrl() async {
     if (url == null) {
       pp('🐤🐤🐤🐤 Getting url via .env settings: ${url ?? 'NO URL YET'}');
-      String? status = dot.dotenv.env['status'];
+      String? status = dot.dotenv.env['CURRENT_STATUS'];
       pp('🐤🐤🐤🐤 DataAPI: getUrl: Status from .env: $status');
       if (status == 'dev') {
         isDevelopmentStatus = true;
-        url = dot.dotenv.env['devURL'];
+        url = dot.dotenv.env['DEV_URL'];
         pp(' 🌎 🌎 🌎 DataAPI: Status of the app is  DEVELOPMENT 🌎 🌎 🌎 $url');
         return url!;
       } else {
         isDevelopmentStatus = false;
-        url = dot.dotenv.env['prodURL'];
+        url = dot.dotenv.env['PROD_URL'];
         pp(' 🌎 🌎 🌎 DataAPI: Status of the app is PRODUCTION 🌎 🌎 🌎 $url');
         return url!;
       }
@@ -63,7 +66,7 @@ class DataAPI {
       var result =
           await _callWebAPIPost('${mURL!}addFieldMonitorSchedule', bag);
       var s = FieldMonitorSchedule.fromJson(result);
-      await LocalMongo.addFieldMonitorSchedule(schedule: s);
+      await hiveUtil.addFieldMonitorSchedule(schedule: s);
       return s;
     } catch (e) {
       pp(e);
@@ -81,7 +84,7 @@ class DataAPI {
       var result =
       await _callWebAPIPost('${mURL!}addGeofenceEvent', bag);
       var s = GeofenceEvent.fromJson(result);
-      await LocalMongo.addGeofenceEvent(geofenceEvent: s);
+      await hiveUtil.addGeofenceEvent(geofenceEvent: s);
       return s;
     } catch (e) {
       pp(e);
@@ -101,7 +104,7 @@ class DataAPI {
         mList.add(FieldMonitorSchedule.fromJson(element));
       }
       pp('🌿 🌿 🌿 getProjectFieldMonitorSchedules returned: 🌿 ${mList.length}');
-      await LocalMongo.addFieldMonitorSchedules(schedules: mList);
+      await hiveUtil.addFieldMonitorSchedules(schedules: mList);
       return mList;
     } catch (e) {
       pp(e);
@@ -120,7 +123,7 @@ class DataAPI {
         mList.add(FieldMonitorSchedule.fromJson(element));
       }
       pp('🌿 🌿 🌿 getMonitorFieldMonitorSchedules returned: 🌿 ${mList.length}');
-      await LocalMongo.addFieldMonitorSchedules(schedules: mList);
+      await hiveUtil.addFieldMonitorSchedules(schedules: mList);
       return mList;
     } catch (e) {
       pp(e);
@@ -139,7 +142,7 @@ class DataAPI {
         mList.add(FieldMonitorSchedule.fromJson(element));
       }
       pp('🌿 🌿 🌿 getOrgFieldMonitorSchedules returned: 🌿 ${mList.length}');
-      await LocalMongo.addFieldMonitorSchedules(schedules: mList);
+      await hiveUtil.addFieldMonitorSchedules(schedules: mList);
       return mList;
     } catch (e) {
       pp(e);
@@ -154,7 +157,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addUser', bag);
       var u = User.fromJson(result);
-      await LocalMongo.addUser(user: u);
+      await hiveUtil.addUser(user: u);
       return u;
     } catch (e) {
       pp(e);
@@ -210,7 +213,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}findProjectById', bag);
       var p = Project.fromJson(result);
-      await LocalMongo.addProject(project: p);
+      await hiveUtil.addProject(project: p);
       return p;
     } catch (e) {
       pp(e);
@@ -231,7 +234,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(ProjectPosition.fromJson(m));
       });
-      await LocalMongo.addProjectPositions(positions: list);
+      await hiveUtil.addProjectPositions(positions: list);
       return list;
     } catch (e) {
       pp(e);
@@ -249,7 +252,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(ProjectPosition.fromJson(m));
       });
-      await LocalMongo.addProjectPositions(positions: list);
+      await hiveUtil.addProjectPositions(positions: list);
       return list;
     } catch (e) {
       pp(e);
@@ -267,7 +270,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(Photo.fromJson(m));
       });
-      await LocalMongo.addPhotos(photos: list);
+      await hiveUtil.addPhotos(photos: list);
       return list;
     } catch (e) {
       pp(e);
@@ -285,7 +288,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(Photo.fromJson(m));
       });
-      await LocalMongo.addPhotos(photos: list);
+      await hiveUtil.addPhotos(photos: list);
       return list;
     } catch (e) {
       pp(e);
@@ -303,7 +306,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(Video.fromJson(m));
       });
-      await LocalMongo.addVideos(videos: list);
+      await hiveUtil.addVideos(videos: list);
       return list;
     } catch (e) {
       pp(e);
@@ -321,7 +324,7 @@ class DataAPI {
       result.forEach((m) {
         list.add(Video.fromJson(m));
       });
-      await LocalMongo.addVideos(videos: list);
+      await hiveUtil.addVideos(videos: list);
       return list;
     } catch (e) {
       pp(e);
@@ -341,7 +344,7 @@ class DataAPI {
       for (var m in result) {
         list.add(User.fromJson(m));
       }
-      await LocalMongo.addUsers(users: list);
+      await hiveUtil.addUsers(users: list);
       pp('$mm findUsersByOrganization: 🍏 returning objects for: ${list.length} users');
       return list;
     } catch (e) {
@@ -365,7 +368,7 @@ class DataAPI {
         list.add(Project.fromJson(m));
       }
       pp('$mm ${list.length} project objects built .... about to cache in local mongo');
-      await LocalMongo.addProjects(projects: list);
+      await hiveUtil.addProjects(projects: list);
       return list;
     } catch (e) {
       pp('Houston, 😈😈😈😈😈 we have a problem! 😈😈😈😈😈 $e');
@@ -387,7 +390,7 @@ class DataAPI {
       for (var m in result) {
         list.add(Photo.fromJson(m));
       }
-      await LocalMongo.addPhotos(photos: list);
+      await hiveUtil.addPhotos(photos: list);
       return list;
     } catch (e) {
       pp('Houston, 😈😈😈😈😈 we have a problem! 😈😈😈😈😈');
@@ -408,7 +411,7 @@ class DataAPI {
       for (var m in result) {
         list.add(Video.fromJson(m));
       }
-      await LocalMongo.addVideos(videos: list);
+      await hiveUtil.addVideos(videos: list);
       return list;
     } catch (e) {
       pp('Houston, 😈😈😈😈😈 we have a problem! 😈😈😈😈😈');
@@ -430,7 +433,7 @@ class DataAPI {
       }
 
       for (var b in list) {
-        await LocalMongo.addGeofenceEvent(geofenceEvent: b);
+        await hiveUtil.addGeofenceEvent(geofenceEvent: b);
       }
       return list;
     } catch (e) {
@@ -452,7 +455,7 @@ class DataAPI {
       }
 
       for (var b in list) {
-        await LocalMongo.addGeofenceEvent(geofenceEvent: b);
+        await hiveUtil.addGeofenceEvent(geofenceEvent: b);
       }
       return list;
     } catch (e) {
@@ -477,7 +480,7 @@ class DataAPI {
       for (var m in result) {
         list.add(Project.fromJson(m));
       }
-      await LocalMongo.addProjects(projects: list);
+      await hiveUtil.addProjects(projects: list);
       return list;
     } catch (e) {
       pp(e);
@@ -501,7 +504,7 @@ class DataAPI {
         list.add(City.fromJson(m));
       }
       pp('$mm findCitiesByLocation: 🍏 found: ${list.length} cities');
-      await LocalMongo.addCities(cities: list);
+      await hiveUtil.addCities(cities: list);
       return list;
     } catch (e) {
       pp(e);
@@ -546,7 +549,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addCommunity', bag);
       var c = Community.fromJson(result);
-      await LocalMongo.addCommunity(community: c);
+      await hiveUtil.addCommunity(community: c);
       return c;
     } catch (e) {
       pp(e);
@@ -560,7 +563,7 @@ class DataAPI {
   //   try {
   //     var result = await _callWebAPIPost(mURL! + 'addGeofenceEvent', bag);
   //     var c = GeofenceEvent.fromJson(result);
-  //     await LocalMongo.addGeofenceEvent(geofenceEvent: c);
+  //     await hiveUtil.addGeofenceEvent(geofenceEvent: c);
   //     return c;
   //   } catch (e) {
   //     pp(e);
@@ -618,7 +621,7 @@ class DataAPI {
       communityList.add(Community.fromJson(m));
     }
     pp('🍏 🍏 🍏 findCommunitiesByCountry found ${communityList.length}');
-    await LocalMongo.addCommunities(communities: communityList);
+    await hiveUtil.addCommunities(communities: communityList);
     return communityList;
   }
 
@@ -628,7 +631,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addProject', bag);
       var p = Project.fromJson(result);
-      await LocalMongo.addProject(project: p);
+      await hiveUtil.addProject(project: p);
       return p;
     } catch (e) {
       pp(e);
@@ -642,7 +645,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}updateProject', bag);
       var p = Project.fromJson(result);
-      await LocalMongo.addProject(project: p);
+      await hiveUtil.addProject(project: p);
       return p;
     } catch (e) {
       pp(e);
@@ -660,7 +663,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addSettlementToProject', bag);
       var proj = Project.fromJson(result);
-      await LocalMongo.addProject(project: proj);
+      await hiveUtil.addProject(project: proj);
       return proj;
     } catch (e) {
       pp(e);
@@ -676,7 +679,7 @@ class DataAPI {
       var result = await _callWebAPIPost('${mURL!}addProjectPosition', bag);
 
       var pp = ProjectPosition.fromJson(result);
-      await LocalMongo.addProjectPosition(projectPosition: pp);
+      await hiveUtil.addProjectPosition(projectPosition: pp);
       return pp;
     } catch (e) {
       pp(e);
@@ -688,7 +691,7 @@ class DataAPI {
     String? mURL = await getUrl();
     try {
       var result = await _callWebAPIPost('${mURL!}addPhoto', photo.toJson());
-      await LocalMongo.addPhoto(photo: photo);
+      await hiveUtil.addPhoto(photo: photo);
       return result;
     } catch (e) {
       pp(e);
@@ -702,7 +705,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addVideo', video.toJson());
       pp(result);
-      await LocalMongo.addVideo(video: video);
+      await hiveUtil.addVideo(video: video);
       return result;
     } catch (e) {
       pp(e);
@@ -717,7 +720,7 @@ class DataAPI {
       var result =
           await _callWebAPIPost('${mURL!}addCondition', condition.toJson());
       pp(result);
-      await LocalMongo.addCondition(condition: condition);
+      await hiveUtil.addCondition(condition: condition);
       return result;
     } catch (e) {
       pp(e);
@@ -745,7 +748,7 @@ class DataAPI {
       var result = await _callWebAPIPost('${mURL!}addSettlementPhoto', bag);
 
       var photo = Photo.fromJson(result);
-      await LocalMongo.addPhoto(photo: photo);
+      await hiveUtil.addPhoto(photo: photo);
       return photo;
     } catch (e) {
       pp(e);
@@ -772,7 +775,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addProjectVideo', bag);
       var video = Video.fromJson(result);
-      await LocalMongo.addVideo(video: video);
+      await hiveUtil.addVideo(video: video);
       return video;
     } catch (e) {
       pp(e);
@@ -829,7 +832,7 @@ class DataAPI {
       for (var m in result) {
         list.add(Project.fromJson(m));
       }
-      await LocalMongo.addProjects(projects: list);
+      await hiveUtil.addProjects(projects: list);
       return list;
     } catch (e) {
       pp(e);
@@ -845,7 +848,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}addOrganization', bag);
       var o = Organization.fromJson(result);
-      await LocalMongo.addOrganization(organization: o);
+      await hiveUtil.addOrganization(organization: o);
       return o;
     } catch (e) {
       pp(e);
@@ -861,7 +864,7 @@ class DataAPI {
     try {
       var result = await _callWebAPIPost('${mURL!}sendMessage', bag);
       var m = OrgMessage.fromJson(result);
-      await LocalMongo.addOrgMessage(message: m);
+      await hiveUtil.addOrgMessage(message: m);
       return m;
     } catch (e) {
       pp(e);

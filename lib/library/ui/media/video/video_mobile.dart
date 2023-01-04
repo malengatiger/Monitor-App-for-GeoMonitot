@@ -5,16 +5,18 @@ import 'package:geo_monitor/library/data/photo.dart';
 import 'package:geo_monitor/library/functions.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../data/video.dart';
+
 class VideoMobile extends StatefulWidget {
   final Video video;
 
-  VideoMobile(this.video);
+  const VideoMobile(this.video, {super.key});
 
   @override
-  _VideoMobileState createState() => _VideoMobileState();
+  VideoMobileState createState() => VideoMobileState();
 }
 
-class _VideoMobileState extends State<VideoMobile>
+class VideoMobileState extends State<VideoMobile>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
   ChewieController? chewieController;

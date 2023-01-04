@@ -5,6 +5,8 @@ import 'package:geo_monitor/library/ui/media/video/video_mobile.dart';
 import 'package:geo_monitor/library/ui/media/video/video_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../../../data/video.dart';
+
 class VideoMain extends StatelessWidget {
   final Video video;
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:geo_monitor/library/api/local_mongo.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/bloc/fcm_bloc.dart';
 import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
@@ -13,6 +12,7 @@ import 'package:geo_monitor/library/ui/schedule/scheduler_main.dart';
 import 'package:geo_monitor/library/users/report/user_rpt_main.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../hive_util.dart';
 import '../../snack.dart';
 import '../edit/user_edit_main.dart';
 
@@ -324,10 +324,12 @@ class _UserListMobileState extends State<UserListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: UserEditMain(user)));
 
-    _users = await LocalMongo.getUsers();
+    if (user != null) {
+      _users = await hiveUtil.getUsers(organizationId: user.organizationId!);
+    }
     setState(() {
 
     });

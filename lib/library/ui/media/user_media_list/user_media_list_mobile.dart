@@ -9,6 +9,7 @@ import 'package:geo_monitor/library/ui/media/full_photo/full_photo_main.dart';
 import 'package:geo_monitor/library/ui/media/video/video_main.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../../data/video.dart';
 import '../../../functions.dart';
 import '../../../snack.dart';
 
@@ -18,10 +19,10 @@ class UserMediaListMobile extends StatefulWidget {
   UserMediaListMobile(this.user);
 
   @override
-  _UserMediaListMobileState createState() => _UserMediaListMobileState();
+  UserMediaListMobileState createState() => UserMediaListMobileState();
 }
 
-class _UserMediaListMobileState extends State<UserMediaListMobile>
+class UserMediaListMobileState extends State<UserMediaListMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   StreamSubscription<List<Photo>>? photoStreamSubscription;
