@@ -12,11 +12,11 @@ class Content {
       this.created});
 
   Content.fromJson(Map data) {
-    this.url = data['url'];
-    this.userId = data['userId'];
-    this.created = data['created'];
+    url = data['url'];
+    userId = data['userId'];
+    created = data['created'];
     if (data['position'] != null) {
-      this.position = Position.fromJson(data['position']);
+      position = Position.fromJson(data['position']);
     }
   }
   

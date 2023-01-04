@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geo_monitor/library/data/city.dart';
 import 'package:geo_monitor/library/data/community.dart';
 import 'package:geo_monitor/library/data/field_monitor_schedule.dart';

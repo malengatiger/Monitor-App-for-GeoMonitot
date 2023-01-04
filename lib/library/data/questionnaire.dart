@@ -1,8 +1,5 @@
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/question.dart';
 import 'package:geo_monitor/library/data/section.dart';
 
-import 'content.dart';
 
 class Questionnaire {
   late String questionnaireId,
@@ -28,27 +25,25 @@ class Questionnaire {
        required this.sections});
 
   Questionnaire.fromJson(Map data) {
-    this.title = data['title'];
-    this.organizationId = data['organizationId'];
-    this.sections = [];
+    title = data['title'];
+    organizationId = data['organizationId'];
+    sections = [];
     if (data['sections'] != null) {
       List list = data['sections'];
-      list.forEach((m) {
-        this.sections!.add(Section.fromJson(m));
-      });
+      for (var m in list) {
+        sections.add(Section.fromJson(m));
+      }
     }
-    this.description = data['description'];
-    this.organizationName = data['organizationName'];
-    this.countryId = data['countryId'];
-    this.created = data['created'];
-    this.countryName = data['countryName'];
+    description = data['description'];
+    organizationName = data['organizationName'];
+    countryId = data['countryId'];
+    created = data['created'];
+    countryName = data['countryName'];
   }
   Map<String, dynamic> toJson() {
     List mSecs = [];
-    if (sections != null) {
-      sections!.forEach((s) {
-        mSecs.add(s.toJson());
-      });
+    for (var s in sections) {
+      mSecs.add(s.toJson());
     }
 
     Map<String, dynamic> map = {

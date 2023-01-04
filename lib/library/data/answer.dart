@@ -13,11 +13,11 @@ class Answer {
       required this.videoUrls});
 
   Answer.fromJson(Map data) {
-    this.text = data['text'];
-    this.aNumber = data['aNumber'];
-    this.photoUrls = data['photoUrls'];
-    this.videoUrls = data['videoUrls'];
-    this.created = data['created'];
+    text = data['text'];
+    aNumber = data['aNumber'];
+    photoUrls = data['photoUrls'];
+    videoUrls = data['videoUrls'];
+    created = data['created'];
   }
   Map<String, dynamic> toJson() {
     List mPhotos = [];
@@ -38,7 +38,6 @@ class Answer {
       'created': created,
       'photoUrls': mPhotos,
       'videoUrls': mVideos,
-      'created': created,
     };
     return map;
   }

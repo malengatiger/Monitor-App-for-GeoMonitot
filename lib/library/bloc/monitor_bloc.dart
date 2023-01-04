@@ -26,33 +26,33 @@ class MonitorBloc {
   User? _user;
 
   User get user => _user!;
-  StreamController<List<Community>> _reportController =
+  final StreamController<List<Community>> _reportController =
       StreamController.broadcast();
-  StreamController<List<User>> _userController = StreamController.broadcast();
-  StreamController<List<Community>> _communityController =
+  final StreamController<List<User>> _userController = StreamController.broadcast();
+  final StreamController<List<Community>> _communityController =
       StreamController.broadcast();
-  StreamController<List<Questionnaire>> _questController =
+  final StreamController<List<Questionnaire>> _questController =
       StreamController.broadcast();
-  StreamController<List<Project>> _projController =
+  final StreamController<List<Project>> _projController =
       StreamController.broadcast();
-  StreamController<List<Photo>> _photoController = StreamController.broadcast();
-  StreamController<List<Video>> _videoController = StreamController.broadcast();
+  final StreamController<List<Photo>> _photoController = StreamController.broadcast();
+  final StreamController<List<Video>> _videoController = StreamController.broadcast();
 
-  StreamController<List<Photo>> _projectPhotoController =
+  final StreamController<List<Photo>> _projectPhotoController =
       StreamController.broadcast();
-  StreamController<List<Video>> _projectVideoController =
-      StreamController.broadcast();
-
-  StreamController<List<ProjectPosition>> _projPositionsController =
-      StreamController.broadcast();
-  StreamController<List<FieldMonitorSchedule>> _fieldMonitorScheduleController =
-      StreamController.broadcast();
-  StreamController<List<Country>> _countryController =
+  final StreamController<List<Video>> _projectVideoController =
       StreamController.broadcast();
 
-  StreamController<Questionnaire> _activeQuestionnaireController =
+  final StreamController<List<ProjectPosition>> _projPositionsController =
       StreamController.broadcast();
-  StreamController<User> _activeUserController = StreamController.broadcast();
+  final StreamController<List<FieldMonitorSchedule>> _fieldMonitorScheduleController =
+      StreamController.broadcast();
+  final StreamController<List<Country>> _countryController =
+      StreamController.broadcast();
+
+  final StreamController<Questionnaire> _activeQuestionnaireController =
+      StreamController.broadcast();
+  final StreamController<User> _activeUserController = StreamController.broadcast();
 
   Stream<List<Photo>> get projectPhotoStream => _projectPhotoController.stream;
 
@@ -83,28 +83,23 @@ class MonitorBloc {
 
   Stream<List<Video>> get videoStream => _videoController.stream;
 
-  List<Community> _communities = [];
-  List<Questionnaire> _questionnaires = [];
   List<Project> _projects = [];
   List<ProjectPosition> _projectPositions = [];
   List<Photo> _photos = [];
   List<Video> _videos = [];
   List<User> _users = [];
-  List<Country> _countries = [];
   List<FieldMonitorSchedule> _schedules = [];
 
   Future<List<Project>> getProjectsWithinRadius(
       {double radiusInKM = 100.5, bool checkUserOrg = true}) async {
     Position pos;
     try {
-      if (_user == null) {
-        _user = await Prefs.getUser();
-      }
+      _user ??= await Prefs.getUser();
       pos = await locationBloc.getLocation();
       pp('💜 💜 💜 MonitorBloc: current location: 💜 latitude: ${pos.latitude} longitude: ${pos.longitude}');
     } catch (e) {
       pp('MonitorBloc: Location is fucked!');
-      throw e;
+      rethrow;
     }
     var projects = await DataAPI.findProjectsByLocation(
         latitude: pos.latitude,
@@ -115,18 +110,18 @@ class MonitorBloc {
 
     pp('🍏 🍏 🍏 MonitorBloc: Projects within radius of  🍏 $radiusInKM  🍏 kilometres; '
         'found: 💜 ${projects.length} projects');
-    projects.forEach((project) {
+    for (var project in projects) {
       pp('😡 😡 😡 ALL PROJECT found in radius: ${project.name} 🍏 ${project.organizationName}  🍏 ${project.organizationId}');
       if (project.organizationId == _user!.organizationId) {
         userProjects.add(project);
       }
-    });
+    }
 
     pp('💜 💜 💜 MonitorBloc: User Org Projects within radius of $radiusInKM kilometres; '
         'found: 💜 ${userProjects.length} projects in organization, filtered out non-org projects found in radius');
-    userProjects.forEach((proj) {
+    for (var proj in userProjects) {
       pp('💜 💜 💜 user PROJECT: ${proj.name} 🍏 ${proj.organizationName}  🍏 ${proj.organizationId}');
-    });
+    }
     if (checkUserOrg) {
       return userProjects;
     } else {
@@ -137,9 +132,7 @@ class MonitorBloc {
   Future<List<Project>> getOrganizationProjects(
       {required String organizationId, required bool forceRefresh}) async {
     try {
-      if (_user == null) {
-        _user = await Prefs.getUser();
-      }
+      _user ??= await Prefs.getUser();
       pp(
           '💜 💜 💜 💜 MonitorBloc: getOrganizationProjects: for organizationId: $organizationId ; '
               'user: 💜 ${user.name} user.organizationId: ${user
@@ -155,10 +148,10 @@ class MonitorBloc {
       _projController.sink.add(_projects);
       pp('💜 💜 💜 💜 MonitorBloc: OrganizationProjects found: 💜 ${_projects
           .length} projects ; organizationId: $organizationId💜');
-      _projects.forEach((project) {
+      for (var project in _projects) {
         pp('💜 💜 💜 💜 Org PROJECT: ${project.name} 🍏 ${project
             .organizationName}  🍏 ${project.organizationId}');
-      });
+      }
     } catch (e) {
       pp('$mm $e');
     }
@@ -167,9 +160,7 @@ class MonitorBloc {
   }
 
   Future refreshOrgDashboardData({required bool forceRefresh}) async {
-    if (_user == null) {
-      _user = await Prefs.getUser();
-    }
+    _user ??= await Prefs.getUser();
     pp('$mm MonitorBloc:refreshDashboardData .... forceRefresh: $forceRefresh 💜 💜 💜 💜 💜 💜');
     await getOrganizationUsers(
         organizationId: _user!.organizationId!, forceRefresh: forceRefresh);
@@ -199,9 +190,9 @@ class MonitorBloc {
     pp('$mm getOrganizationUsers found: 💜 ${_users.length} users. adding to stream ... ');
     _userController.sink.add(_users);
 
-    _users.forEach((element) {
+    for (var element in _users) {
       pp('$mm 😲 😡 USER:  🍏 ${element.name} 🍏 ${element.organizationName}');
-    });
+    }
 
     return _users;
   }
@@ -282,8 +273,7 @@ class MonitorBloc {
     _schedules.sort((a, b) => b.date!.compareTo(a.date!));
     _fieldMonitorScheduleController.sink.add(_schedules);
     pp('🔵 🔵 🔵  MonitorBloc: getMonitorFieldMonitorSchedules found: 💜 ${_schedules.length} schedules ');
-
-    _schedules.forEach((element) {});
+    
     return _schedules;
   }
 
@@ -322,7 +312,7 @@ class MonitorBloc {
       pp('💜 💜 💜 MonitorBloc: getOrganizationPhotos found: 💜 ${_photos.length} photos 💜 ');
     } catch (e) {
       pp('😈😈😈😈😈 MonitorBloc: getOrganizationPhotos FAILED: 😈😈😈😈😈 $e');
-      throw e;
+      rethrow;
     }
 
     return _photos;
@@ -345,7 +335,7 @@ class MonitorBloc {
       pp('💜 💜 💜 MonitorBloc: getOrganizationVideos found: 💜 ${_videos.length} videos ');
     } catch (e) {
       pp('💜 💜 💜 MonitorBloc: getOrganizationVideos FAILED');
-      throw e;
+      rethrow;
     }
 
     return _videos;
@@ -428,7 +418,7 @@ class MonitorBloc {
       await getOrganizationProjectPositions(organizationId: organizationId, forceRefresh: forceRefresh);
     } catch (e) {
       pp('We seem fucked! ');
-      throw e;
+      rethrow;
     }
   }
 

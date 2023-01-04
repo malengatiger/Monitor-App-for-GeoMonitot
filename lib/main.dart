@@ -1,6 +1,46 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:geo_monitor/library/ui/signin.dart';
+import 'package:geo_monitor/ui/intro/intro_main.dart';
+
+import 'library/data/user.dart';
+import 'library/emojis.dart';
+import 'library/firebase_options.dart';
+import 'library/generic_functions.dart';
+
+late FirebaseApp firebaseApp;
+// final getIt = GetIt.instance;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    if (kReleaseMode) exit(1);
+  };
+
+  // await SharedPrefs.deleteConfig();
+
+  firebaseApp = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform);
+  p('$heartBlue Firebase App has been initialized: ${firebaseApp.name}');
+
+  await dotenv.load(fileName: ".env");
+  p('$heartBlue DotEnv has been loaded');
+
+  // setup();
+  p('${Emoji.brocolli} Checking for current user : FirebaseAuth');
+  var user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    p('${Emoji.redDot}${Emoji.redDot} Ding Dong! new Firebase user, for now sign in anonymously - check that we dont create user every time $appleGreen  $appleGreen');
+    //await DataService.signInAnonymously();
+  } else {
+    p('$blueDot User already exists. $blueDot Cool!');
+  }
   runApp(const MyApp());
 }
 
@@ -11,7 +51,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'GeoMonitor',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,7 +64,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.pink,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const IntroMain(),
     );
   }
 }

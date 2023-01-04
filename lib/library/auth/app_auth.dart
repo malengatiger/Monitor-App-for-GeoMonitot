@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
 import 'package:geo_monitor/library/api/data_api.dart';
 import 'package:geo_monitor/library/api/sharedprefs.dart';
 import 'package:geo_monitor/library/data/user.dart' as mon;
 
+import '../data/country.dart';
 import '../functions.dart';
 
 class AppAuth {
@@ -93,43 +93,51 @@ class AppAuth {
     return token;
   }
 
+  static const locks = '🔐🔐🔐🔐';
   static Future signIn(String email, String password, String type) async {
-    pp('🔐 🔐 🔐 🔐 Auth: signing in $email 🌸 $password  🔐 🔐 🔐 🔐');
+    pp('$locks Auth: signing in $email 🌸 $password  $locks');
 
     //var token = await _getAdminAuthenticationToken();
     _auth = FirebaseAuth.instance;
     var fbUser = await _auth!
         .signInWithEmailAndPassword(email: email, password: password)
         .whenComplete(() => () {
-              pp('🔐 🔐 🔐 🔐 signInWithEmailAndPassword.whenComplete ..... 🔐 🔐 🔐 🔐');
+              pp('$locks signInWithEmailAndPassword.whenComplete ..... $locks');
             })
         .catchError((e) {
-      pp('👿👿👿 Firebase sign in failed, 👿 message below');
+      pp('👿👿👿 Firebase sign in failed, 👿 message: $e');
       pp(e);
       throw e;
     });
-    pp('🔐 🔐 🔐 🔐 Firebase auth user to be checked ......... ');
+    pp('$locks Firebase auth user to be checked ......... ');
 
-    pp('🔐 🔐 🔐 🔐 Auth finding user by email $email 🔐 🔐 🔐 🔐 ${fbUser.user!.email} -  ${fbUser.user!.displayName} ');
+    pp('$locks Auth finding user by email $email $locks ${fbUser.user!.email} -  ${fbUser.user!.displayName} ');
     var user = await DataAPI.findUserByEmail(fbUser.user!.email!);
     if (user == null) {
       pp('👎🏽 👎🏽 👎🏽 User not registered yet 👿');
       throw Exception("User not found on Firebase auth 👿 👿 👿 ");
-    }
-    if (user.userType != type) {
-      pp('👎🏽 👎🏽 👎🏽 There is a fuck up somewhere, user type ${user.userType} is WRONG! 👿 The app is the wrong one!! 👿 👿 👿 ');
-      throw Exception("Incorrect SignIn. The app is the wrong one 👎🏽 👎🏽");
     } else {
-      pp('🐤🐤🐤🐤 User found on database. Yeah! 🐤 🐤 🐤');
+      pp('$locks User found on database. Yeah! 🐤 🐤 🐤 ${user.toJson()}');
     }
-    pp('🐤🐤🐤🐤 about to cache the user on the device ...');
+    pp('$locks about to cache the user on the device ...');
     await Prefs.saveUser(user);
     var countries = await DataAPI.getCountries();
+
     if (countries.isNotEmpty) {
       pp("🥏 🥏 🥏 First country found in list: ${countries.elementAt(0).name}");
-      await Prefs.saveCountry(countries.elementAt(0));
+      Country? c;
+      for (var country in countries) {
+        if (country.countryId == user.countryId) {
+          c = country;
+          break;
+        }
+      }
+
+      if (c != null) {
+        await Prefs.saveCountry(c);
+      }
     } else {
-      pp('👿 👿 Country not found');
+      pp('👿👿 Countries not found');
     }
     return user;
   }

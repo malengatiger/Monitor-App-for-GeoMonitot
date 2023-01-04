@@ -45,7 +45,7 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
       titleController.text = widget.questionnaire!.title;
       descController.text = widget.questionnaire!.description;
       sectionsController.text = '${widget.questionnaire!.sections.length}';
-      title = widget.questionnaire!.title!;
+      title = widget.questionnaire!.title;
       description = widget.questionnaire!.description;
       numberOfSections = widget.questionnaire!.sections.length;
       questionnaire = widget.questionnaire;
@@ -280,17 +280,17 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
       }
     } else {
       print('⛱⛱ sections exist, ⛱ templates may not be necessary');
-      if (numberOfSections - questionnaire!.sections!.length > 0) {
-        var number = numberOfSections - questionnaire!.sections!.length;
+      if (numberOfSections - questionnaire!.sections.length > 0) {
+        var number = numberOfSections - questionnaire!.sections.length;
         print('⛱⛱ sections exist, ⛱ but extra $number templates are necessary');
         for (var i = 0; i < number; i++) {
           var sec = Section(
-            sectionNumber: '${i + 1 + questionnaire!.sections!.length}',
-            title: 'Section ${i + 1 + questionnaire!.sections!.length} Title',
+            sectionNumber: '${i + 1 + questionnaire!.sections.length}',
+            title: 'Section ${i + 1 + questionnaire!.sections.length} Title',
               sectionId: const Uuid().v4().toString(),
               description: 'Description of Section ${i+1}'
           );
-          questionnaire!.sections!.add(sec);
+          questionnaire!.sections.add(sec);
         }
       }
     }

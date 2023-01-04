@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "_flutterfire_internals",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/_flutterfire_internals-1.0.2",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/_flutterfire_internals-1.0.12",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -27,9 +27,9 @@
     },
     {
       "name": "autocomplete_textfield",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/autocomplete_textfield-1.9.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/autocomplete_textfield-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "1.19"
+      "languageVersion": "2.12"
     },
     {
       "name": "boolean_selector",
@@ -57,13 +57,13 @@
     },
     {
       "name": "camera",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera-0.9.8+1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera-0.10.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera_android-0.9.8+3",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera_android-0.10.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -81,7 +81,7 @@
     },
     {
       "name": "camera_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera_web-0.2.1+6",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/camera_web-0.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -102,18 +102,6 @@
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/clock-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "cloud_firestore_platform_interface",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_platform_interface-5.7.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
-    },
-    {
-      "name": "cloud_firestore_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-2.8.10",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
     },
     {
       "name": "collection",
@@ -176,8 +164,20 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "desktop_webview_auth",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/desktop_webview_auth-0.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "dots_indicator",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/dots_indicator-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "email_validator",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/email_validator-2.1.17",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -201,25 +201,25 @@
     },
     {
       "name": "firebase_auth",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-3.11.2",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-4.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_auth_platform_interface",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.10.1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_platform_interface-6.11.7",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_auth_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-4.6.1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-5.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_core",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.24.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -231,45 +231,75 @@
     },
     {
       "name": "firebase_core_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.7.3",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_dynamic_links",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_dynamic_links-5.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_dynamic_links_platform_interface",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_dynamic_links_platform_interface-0.2.3+26",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_messaging",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-11.4.4",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-14.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_messaging_platform_interface",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-3.5.4",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-4.2.10",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_messaging_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_web-2.4.4",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_web-3.2.11",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_storage",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-10.3.11",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-11.0.10",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_storage_platform_interface",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_platform_interface-4.1.19",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_platform_interface-4.1.26",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "firebase_storage_web",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-3.3.9",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-3.3.19",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_ui_auth",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_ui_auth-1.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_ui_localizations",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_ui_localizations-1.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "firebase_ui_oauth",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_ui_oauth-1.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "fl_location",
@@ -344,6 +374,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_localizations",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/packages/flutter_localizations",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7",
       "packageUri": "lib/",
@@ -351,9 +387,15 @@
     },
     {
       "name": "flutter_staggered_grid_view",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_staggered_grid_view-0.4.1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_staggered_grid_view-0.6.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_svg",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_svg-1.1.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_test",
@@ -399,15 +441,15 @@
     },
     {
       "name": "geolocator",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-8.2.1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-9.0.2",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.15"
     },
     {
       "name": "geolocator_android",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-3.2.1",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator_android-4.1.4",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.15"
     },
     {
       "name": "geolocator_apple",
@@ -453,13 +495,13 @@
     },
     {
       "name": "google_fonts",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/google_fonts-2.3.3",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/google_fonts-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "google_maps_flutter",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.2.2",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -525,13 +567,13 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image-3.3.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image-4.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
     {
       "name": "image_size_getter",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image_size_getter-1.1.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image_size_getter-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -543,7 +585,7 @@
     },
     {
       "name": "introduction_screen",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/introduction_screen-2.1.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/introduction_screen-3.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -585,7 +627,7 @@
     },
     {
       "name": "material_design_icons_flutter",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/material_design_icons_flutter-5.0.6996",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/material_design_icons_flutter-6.0.7096",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -634,6 +676,18 @@
     {
       "name": "path",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_drawing",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/path_drawing-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "path_parsing",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/path_parsing-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -687,15 +741,33 @@
     },
     {
       "name": "permission_handler",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.3.0",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-10.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_android-10.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_apple-9.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "permission_handler_platform_interface",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_platform_interface-3.9.0",
       "packageUri": "lib/",
       "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler_windows-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "petitparser",
@@ -933,9 +1005,9 @@
     },
     {
       "name": "video_thumbnail",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/video_thumbnail-0.4.6",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/video_thumbnail-0.5.3",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.16"
     },
     {
       "name": "wakelock",
@@ -992,7 +1064,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-03T21:24:45.288413Z",
+  "generated": "2023-01-04T12:07:52.788734Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
-import 'functions.dart';
 
 ///Utility class to provide snackbars
 class AppSnackbar {

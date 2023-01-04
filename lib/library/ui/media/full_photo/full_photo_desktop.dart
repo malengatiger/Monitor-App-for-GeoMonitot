@@ -6,13 +6,13 @@ class FullPhotoDesktop extends StatefulWidget {
   final Photo photo;
   final Project project;
 
-  FullPhotoDesktop(this.photo, this.project);
+  const FullPhotoDesktop(this.photo, this.project, {super.key});
 
   @override
-  _FullPhotoDesktopState createState() => _FullPhotoDesktopState();
+  FullPhotoDesktopState createState() => FullPhotoDesktopState();
 }
 
-class _FullPhotoDesktopState extends State<FullPhotoDesktop>
+class FullPhotoDesktopState extends State<FullPhotoDesktop>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

@@ -1,0 +1,5 @@
+flutterfire configure
+npm install -g firebase-tools
+brew update
+brew install node
+curl -sL https://firebase.tools | bash

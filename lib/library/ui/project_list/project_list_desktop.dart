@@ -4,13 +4,13 @@ import 'package:geo_monitor/library/data/user.dart' as mon;
 class ProjectListDesktop extends StatefulWidget {
   final mon.User user;
 
-  ProjectListDesktop(this.user);
+  const ProjectListDesktop(this.user, {super.key});
 
   @override
-  _ProjectListDesktopState createState() => _ProjectListDesktopState();
+  ProjectListDesktopState createState() => ProjectListDesktopState();
 }
 
-class _ProjectListDesktopState extends State<ProjectListDesktop>
+class ProjectListDesktopState extends State<ProjectListDesktop>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

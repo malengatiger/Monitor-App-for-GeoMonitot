@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_size_getter/file_input.dart';
 import 'package:image_size_getter/image_size_getter.dart';
@@ -22,11 +21,11 @@ import 'data_api.dart';
 final StorageBloc storageBloc = StorageBloc();
 
 class StorageBloc {
-  FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  Random rand = new Random(new DateTime.now().millisecondsSinceEpoch);
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  Random rand = Random(DateTime.now().millisecondsSinceEpoch);
   static const mm = '☕️ ☕️ ☕️ ☕️ ☕️ ☕️ StorageBloc: 💚 ';
-  List<StorageMediaBag> _mediaBags = [];
-  StreamController<List<StorageMediaBag>> _mediaStreamController = StreamController.broadcast();
+  final List<StorageMediaBag> _mediaBags = [];
+  final StreamController<List<StorageMediaBag>> _mediaStreamController = StreamController.broadcast();
   Stream<List<StorageMediaBag>> get mediaStream => _mediaStreamController.stream;
 
   User? _user;
@@ -47,10 +46,8 @@ class StorageBloc {
       required String projectPositionId,
       required Position projectPosition,
       required bool isVideo}) async {
-    rand = new Random(new DateTime.now().millisecondsSinceEpoch);
-    var name = 'media@${project.projectId}@' +
-        DateTime.now().toUtc().toIso8601String() +
-        '.${isVideo ? 'mp4' : 'jpg'}';
+    rand =  Random( DateTime.now().millisecondsSinceEpoch);
+    var name = 'media@${project.projectId}@${DateTime.now().toUtc().toIso8601String()}.${isVideo ? 'mp4' : 'jpg'}';
     try {
       pp('$mm️ uploadPhoto ☕️ file path: ${file.path}');
       var firebaseStorageRef = FirebaseStorage.instance.ref().child(storageName).child(name);
@@ -61,8 +58,8 @@ class StorageBloc {
       uploadTask.whenComplete(() => null).then((snapShot) async {
         var totalByteCount = snapShot.totalBytes;
         var bytesTransferred = snapShot.bytesTransferred;
-        var bt = (bytesTransferred / 1024).toStringAsFixed(2) + ' KB';
-        var tot = (totalByteCount / 1024).toStringAsFixed(2) + ' KB';
+        var bt = '${(bytesTransferred / 1024).toStringAsFixed(2)} KB';
+        var tot = '${(totalByteCount / 1024).toStringAsFixed(2)} KB';
         pp('$mm uploadTask: 💚 💚 '
             'photo upload complete '
             ' 🧩 $bt of $tot 🧩 transferred.'
@@ -98,8 +95,8 @@ class StorageBloc {
     uploadTask.snapshotEvents.listen((event) {
       var totalByteCount = event.totalBytes;
       var bytesTransferred = event.bytesTransferred;
-      var bt = (bytesTransferred / 1024).toStringAsFixed(2) + ' KB';
-      var tot = (totalByteCount / 1024).toStringAsFixed(2) + ' KB';
+      var bt = '${(bytesTransferred / 1024).toStringAsFixed(2)} KB';
+      var tot = '${(totalByteCount / 1024).toStringAsFixed(2)} KB';
       pp('☕️☕️☕️ .uploadPhoto:  💚 progress ******* 🧩 $bt KB of $tot KB 🧩 transferred');
       listener.onFileProgress(event.totalBytes, event.bytesTransferred);
     });
@@ -115,8 +112,8 @@ class StorageBloc {
       required bool isVideo,
       required String projectPositionId,
       required String fileUrl}) async {
-    rand = new Random(new DateTime.now().millisecondsSinceEpoch);
-    var name = 'thumb@${project.projectId}@' + DateTime.now().toUtc().toIso8601String() + '.$type';
+    rand =  Random( DateTime.now().millisecondsSinceEpoch);
+    var name = 'thumb@${project.projectId}@${DateTime.now().toUtc().toIso8601String()}.$type';
     String thumbnailUrl;
     final size = ImageSizeGetter.getSize(FileInput(file));
     pp('$mm uploadThumbnail:  💚 image height: ${size.height} width: ${size.width}');
@@ -138,8 +135,8 @@ class StorageBloc {
       uploadTask.whenComplete(() => null).then((snap) async {
         var totalByteCount = snap.totalBytes;
         var bytesTransferred = snap.bytesTransferred;
-        var bt = (bytesTransferred / 1024).toStringAsFixed(2) + ' KB';
-        var tot = (totalByteCount / 1024).toStringAsFixed(2) + ' KB';
+        var bt = '${(bytesTransferred / 1024).toStringAsFixed(2)} KB';
+        var tot = '${(totalByteCount / 1024).toStringAsFixed(2)} KB';
 
         pp('$mm uploadTask: 🥦 🥦 🥦 🥦 '
             'thumbnail upload complete '
@@ -212,8 +209,8 @@ class StorageBloc {
     uploadTask.snapshotEvents.listen((event) {
       var totalByteCount = event.totalBytes;
       var bytesTransferred = event.bytesTransferred;
-      var bt = (bytesTransferred / 1024).toStringAsFixed(2) + ' KB';
-      var tot = (totalByteCount / 1024).toStringAsFixed(2) + ' KB';
+      var bt = '${(bytesTransferred / 1024).toStringAsFixed(2)} KB';
+      var tot = '${(totalByteCount / 1024).toStringAsFixed(2)} KB';
       pp('☕️☕️☕️ .uploadThumbnail:  🥦 progress ******* 🍓 $bt KB of $tot KB 🍓 transferred');
       listener.onThumbnailProgress(event.totalBytes, event.bytesTransferred);
     });
@@ -235,7 +232,7 @@ class StorageBloc {
         latitude: projectPosition.coordinates[1], longitude: projectPosition.coordinates[0]);
 
     pp('🎽 🎽 🎽 🎽 StorageBloc: _writePhoto : 🎽 🎽 adding photo ..... 😡😡 distance: $distance 😡😡');
-    var u = Uuid();
+    var u = const Uuid();
 
     var photo = Photo(
         url: fileUrl,
@@ -272,7 +269,7 @@ class StorageBloc {
         latitude: projectPosition.coordinates[1], longitude: projectPosition.coordinates[0]);
 
     pp('🎽 🎽 🎽 🎽 StorageBloc: _writeVideo : 🎽 🎽 adding video ..... 😡😡 distance: $distance 😡😡');
-    var u = Uuid();
+    var u = const Uuid();
     var video = Video(
         url: fileUrl,
         caption: 'tbd',

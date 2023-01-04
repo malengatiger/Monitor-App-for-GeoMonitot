@@ -257,11 +257,11 @@ class LocalMongo {
   List<FieldMonitorSchedule> filterSchedulesByProject(
       List<FieldMonitorSchedule> mList, String projectId) {
     List<FieldMonitorSchedule> list = [];
-    mList.forEach((element) {
+    for (var element in mList) {
       if (element.projectId == projectId) {
         list.add(element);
       }
-    });
+    }
     return list;
   }
 
@@ -426,12 +426,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<FieldMonitorSchedule> schedules = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = FieldMonitorSchedule.fromJson(json.decode(r));
       if (x.fieldMonitorId == userId) {
         schedules.add(x);
       }
-    });
+    }
     return schedules;
   }
 
@@ -444,12 +444,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<FieldMonitorSchedule> schedules = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = FieldMonitorSchedule.fromJson(json.decode(r));
       if (x.organizationId == organizationId) {
         schedules.add(x);
       }
-    });
+    }
     return schedules;
   }
 
@@ -462,12 +462,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<GeofenceEvent> events = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = GeofenceEvent.fromJson(json.decode(r));
       if (x.userId == userId) {
         events.add(x);
       }
-    });
+    }
     return events;
   }
   static Future<List<GeofenceEvent>> getGeofenceEventsByProjectPosition(
@@ -479,12 +479,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<GeofenceEvent> events = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = GeofenceEvent.fromJson(json.decode(r));
       if (x.projectPositionId == projectPositionId) {
         events.add(x);
       }
-    });
+    }
     return events;
   }
 
@@ -496,10 +496,10 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Photo> schedules = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = Photo.fromJson(json.decode(r));
       schedules.add(x);
-    });
+    }
     return schedules;
   }
 
@@ -512,45 +512,45 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<FieldMonitorSchedule> schedules = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = FieldMonitorSchedule.fromJson(json.decode(r));
       if (x.projectId == projectId) {
         schedules.add(x);
       }
-    });
+    }
     return schedules;
   }
 
   static Future<List<Photo>> getProjectPhotos(String projectId) async {
     var list = await getPhotos();
     List<Photo> mList = [];
-    list.forEach((element) {
+    for (var element in list) {
       if (element.projectId == projectId) {
         mList.add(element);
       }
-    });
+    }
     return mList;
   }
 
   static Future<List<Video>> getProjectVideos(String projectId) async {
     var list = await getVideos();
     List<Video> mList = [];
-    list.forEach((element) {
+    for (var element in list) {
       if (element.projectId == projectId) {
         mList.add(element);
       }
-    });
+    }
     return mList;
   }
 
   static Future<List<Photo>> getUserPhotos(String userId) async {
     var list = await getPhotos();
     List<Photo> mList = [];
-    list.forEach((element) {
+    for (var element in list) {
       if (element.userId == userId) {
         mList.add(element);
       }
-    });
+    }
     return mList;
   }
 
@@ -562,9 +562,9 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<User> users = [];
-    result.forEach((r) {
+    for (var r in result) {
       users.add(User.fromJson(json.decode(r)));
-    });
+    }
     return users;
   }
 
@@ -576,9 +576,9 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Video> videos = [];
-    result.forEach((r) {
+    for (var r in result) {
       videos.add(Video.fromJson(json.decode(r)));
-    });
+    }
 
     return videos;
   }
@@ -680,12 +680,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Project> projects = [];
-    result.forEach((r) {
+    for (var r in result) {
       var p = Project.fromJson(json.decode(r));
       if (p.organizationId == organizationId) {
         projects.add(p);
       }
-    });
+    }
     pp('$mm .... getProjects ..... found:  🌼 ${projects.length}  🌼');
     return projects;
   }
@@ -797,9 +797,9 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Community> comms = [];
-    result.forEach((r) {
+    for (var r in result) {
       comms.add(Community.fromJson(json.decode(r)));
-    });
+    }
     pp('$mm .... getCommunities ..... found:  🌼 ${comms.length}  🌼');
     return comms;
   }
@@ -812,9 +812,9 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Organization> orgs = [];
-    result.forEach((r) {
+    for (var r in result) {
       orgs.add(Organization.fromJson(json.decode(r)));
-    });
+    }
     pp('$mm .... getOrganizations ..... found:  🌼 ${orgs.length}  🌼');
     return orgs;
   }
@@ -848,11 +848,11 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<ProjectPosition> positions = [];
-    result.forEach((r) {
+    for (var r in result) {
       var mJson = jsonDecode(r);
       var projPos = ProjectPosition.fromJson(mJson);
       positions.add(projPos);
-    });
+    }
     pp('$mm .... getOrganizationProjectPositions ..... 🌺 found:  🌼 ${positions.length}  🌼');
     return positions;
   }
@@ -866,13 +866,13 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<ProjectPosition> positions = [];
-    result.forEach((r) {
+    for (var r in result) {
       var mJson = jsonDecode(r);
       var projPos = ProjectPosition.fromJson(mJson);
       if (projPos.projectId == projectId) {
         positions.add(projPos);
       }
-    });
+    }
     pp('$mm .... getProjectPositions ..... 🌺 found:  🌼 ${positions.length}  🌼');
     return positions;
   }
@@ -887,13 +887,13 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     ProjectPosition? position;
-    result.forEach((r) {
+    for (var r in result) {
       var mJson = jsonDecode(r);
       var projPos = ProjectPosition.fromJson(mJson);
       if (projPos.projectPositionId == projectPositionId) {
         position = projPos;
       }
-    });
+    }
     pp('$mm .... getProjectPosition ..... 🌺 found:  🌼 ${position == null? 'Not Found' : position!.projectPositionId}  🌼');
     return position;
   }
@@ -902,11 +902,11 @@ class LocalMongo {
 
     var positions = <ProjectPosition>[];
     var list  = await getProjectPositionsByLocation(latitude: latitude, longitude: longitude, radiusInKM: radiusInKM);
-    list.forEach((element) {
+    for (var element in list) {
       if (element.organizationId == organizationId) {
         positions.add(element);
       }
-    });
+    }
     return positions;
   }
   static Future<List<ProjectPosition>> getProjectPositionsByLocation({required double  latitude, required double longitude, required double radiusInKM}) async {
@@ -928,9 +928,9 @@ class LocalMongo {
     });
     List<ProjectPosition> positions = [];
     List result = await (MobMongo.query(carrier));
-    result.forEach((m) {
+    for (var m in result) {
       positions.add(ProjectPosition.fromJson(json.decode(m)));
-    });
+    }
     // Map<String?, ProjectPosition> map = Map();
     // result.forEach((element) {
     //   map[element.landmarkID] = element;
@@ -949,12 +949,12 @@ class LocalMongo {
     );
     List result = await (MobMongo.getAll(carrier));
     List<Video> videos = [];
-    result.forEach((r) {
+    for (var r in result) {
       var x = Video.fromJson(json.decode(r));
       if (x.projectId == userId) {
         videos.add(r);
       }
-    });
+    }
     pp('$mm .... getUserVideos ..... found:  🌼 ${videos.length}  🌼');
     return videos;
   }

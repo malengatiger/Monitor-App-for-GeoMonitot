@@ -12,25 +12,27 @@ import 'package:geo_monitor/library/data/user.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../functions.dart';
+import '../generic_functions.dart';
 
 FCMBloc fcmBloc = FCMBloc();
 const mm = '🔵 🔵 🔵 🔵 🔵 🔵 FCMBloc: ';
 
 Future<void> firebaseMessagingBackgroundHandler(
     fb.RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  p("Handling a background message: ${message.messageId}");
 }
 
 class FCMBloc {
   fb.FirebaseMessaging messaging = fb.FirebaseMessaging.instance;
 
-  StreamController<User> _userController = StreamController.broadcast();
-  StreamController<Project> _projectController = StreamController.broadcast();
-  StreamController<Photo> _photoController = StreamController.broadcast();
-  StreamController<Video> _videoController = StreamController.broadcast();
-  StreamController<Condition> _conditionController =
+  final StreamController<User> _userController = StreamController.broadcast();
+  final StreamController<Project> _projectController =
       StreamController.broadcast();
-  StreamController<OrgMessage> _messageController =
+  final StreamController<Photo> _photoController = StreamController.broadcast();
+  final StreamController<Video> _videoController = StreamController.broadcast();
+  final StreamController<Condition> _conditionController =
+      StreamController.broadcast();
+  final StreamController<OrgMessage> _messageController =
       StreamController.broadcast();
 
   Stream<User> get userStream => _userController.stream;
@@ -105,7 +107,7 @@ class FCMBloc {
       sound: true,
     );
 
-    print('User granted permission: ${settings.authorizationStatus}');
+    p('User granted permission: ${settings.authorizationStatus}');
   }
 
   // Future listenForMessages() async {
@@ -138,54 +140,52 @@ class FCMBloc {
 
   Future processFCMMessage(fb.RemoteMessage message) async {
     Map data = message.data;
-    if (data != null) {
-      if (data['user'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache USER  🍎  🍎 ");
-        var m = jsonDecode(data['user']);
-        var user = User.fromJson(m);
-        await LocalMongo.addUser(user: user);
-        _userController.sink.add(user);
-      }
-      if (data['project'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PROJECT  🍎  🍎");
-        var m = jsonDecode(data['project']);
-        var project = Project.fromJson(m);
-        await LocalMongo.addProject(project: project);
-        _projectController.sink.add(project);
-      }
-      if (data['photo'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PHOTO  🍎  🍎");
-        var m = jsonDecode(data['photo']);
-        var photo = Photo.fromJson(m);
-        await LocalMongo.addPhoto(photo: photo);
-        _photoController.sink.add(photo);
-      }
-      if (data['video'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache VIDEO  🍎  🍎");
-        var m = jsonDecode(data['video']);
-        var video = Video.fromJson(m);
-        await LocalMongo.addVideo(video: video);
-        _videoController.sink.add(video);
-      }
-      if (data['condition'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache CONDITION  🍎  🍎");
-        var m = jsonDecode(data['condition']);
-        var condition = Condition.fromJson(m);
-        await LocalMongo.addCondition(condition: condition);
-        _conditionController.sink.add(condition);
-      }
-      if (data['message'] != null) {
-        pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache ORG MESSAGE  🍎  🍎");
-        var m = jsonDecode(data['message']);
-        var msg = OrgMessage.fromJson(m);
-        await LocalMongo.addOrgMessage(message: msg);
-        if (user!.userId != msg.adminId) {
-          _messageController.sink.add(msg);
-        }
-      }
-    } else {
-      pp('👿 👿 👿 No data structure found in FCM message  👿  wtf?  👿 $message');
+
+    if (data['user'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache USER  🍎  🍎 ");
+      var m = jsonDecode(data['user']);
+      var user = User.fromJson(m);
+      await LocalMongo.addUser(user: user);
+      _userController.sink.add(user);
     }
+    if (data['project'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PROJECT  🍎  🍎");
+      var m = jsonDecode(data['project']);
+      var project = Project.fromJson(m);
+      await LocalMongo.addProject(project: project);
+      _projectController.sink.add(project);
+    }
+    if (data['photo'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache PHOTO  🍎  🍎");
+      var m = jsonDecode(data['photo']);
+      var photo = Photo.fromJson(m);
+      await LocalMongo.addPhoto(photo: photo);
+      _photoController.sink.add(photo);
+    }
+    if (data['video'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache VIDEO  🍎  🍎");
+      var m = jsonDecode(data['video']);
+      var video = Video.fromJson(m);
+      await LocalMongo.addVideo(video: video);
+      _videoController.sink.add(video);
+    }
+    if (data['condition'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache CONDITION  🍎  🍎");
+      var m = jsonDecode(data['condition']);
+      var condition = Condition.fromJson(m);
+      await LocalMongo.addCondition(condition: condition);
+      _conditionController.sink.add(condition);
+    }
+    if (data['message'] != null) {
+      pp("$mm processFCMMessage  🔵 🔵 🔵 ........................... cache ORG MESSAGE  🍎  🍎");
+      var m = jsonDecode(data['message']);
+      var msg = OrgMessage.fromJson(m);
+      await LocalMongo.addOrgMessage(message: msg);
+      if (user!.userId != msg.adminId) {
+        _messageController.sink.add(msg);
+      }
+    }
+
     return null;
   }
 
@@ -202,7 +202,7 @@ class FCMBloc {
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   pp("$mm  🦠 🦠 🦠 🦠 🦠 myBackgroundMessageHandler   🦠 🦠 🦠 🦠 🦠 ........................... $message");
   Map data = message['data'];
-  if (data != null) {
+
     pp("$mm myBackgroundMessageHandler   🦠 🦠 🦠........................... cache USER  🍎  🍎 string data: $data");
     if (data['user'] != null) {
       var m = jsonDecode(data['user']);
@@ -239,7 +239,5 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
       var msg = OrgMessage.fromJson(m);
       LocalMongo.addOrgMessage(message: msg);
     }
-  } else {
-    pp('👿 👿 👿 No data structure found in FCM message  👿  wtf?  👿');
-  }
+
 }

@@ -44,7 +44,7 @@ class Prefs {
       return null;
     }
     var jx = json.decode(string);
-    var user = new User.fromJson(jx);
+    var user = User.fromJson(jx);
     pp("🌽 🌽 🌽 Prefs.getUser 🧩  ${user.name} retrieved");
     return user;
   }
@@ -67,7 +67,7 @@ class Prefs {
       return null;
     }
     var jx = json.decode(string);
-    var cntry = new Country.fromJson(jx);
+    var cntry = Country.fromJson(jx);
     pp("🌽 🌽 🌽 Prefs.getCountry 🧩  ${cntry.name} retrieved");
     prettyPrint(cntry.toJson(), " 🏈 Saved Country retrieved from Prefs   🏈");
     return cntry;
@@ -93,7 +93,7 @@ class Prefs {
       return null;
     }
     var jx = json.decode(string);
-    var cntry = new Questionnaire.fromJson(jx);
+    var cntry = Questionnaire.fromJson(jx);
     pp("🌽 🌽 🌽 Prefs.questionnaire 🧩  ${cntry.title} retrieved");
     prettyPrint(
         cntry.toJson(), " 🏈 Saved questionnaire retrieved from Prefs   🏈");
@@ -120,7 +120,7 @@ class Prefs {
       return null;
     }
     var jx = json.decode(string);
-    var cntry = new Project.fromJson(jx);
+    var cntry = Project.fromJson(jx);
     pp("🌽 🌽 🌽 Prefs.project 🧩  ${cntry.name} retrieved");
     prettyPrint(cntry.toJson(), " 🏈 Saved project retrieved from Prefs   🏈");
     return cntry;
@@ -185,9 +185,7 @@ class Prefs {
   static Future<int> getPageLimit() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? pageLimit = prefs.getInt("pageLimit");
-    if (pageLimit == null) {
-      pageLimit = 10;
-    }
+    pageLimit ??= 10;
     pp("=================== SharedPrefs pageLimit: $pageLimit");
     return pageLimit;
   }
@@ -202,9 +200,7 @@ class Prefs {
   static Future<DateTime> getRefreshDate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? ms = prefs.getInt("refresh");
-    if (ms == null) {
-      ms = DateTime.now().subtract(Duration(days: 365)).millisecondsSinceEpoch;
-    }
+    ms ??= DateTime.now().subtract(const Duration(days: 365)).millisecondsSinceEpoch;
     var date = DateTime.fromMillisecondsSinceEpoch(ms);
     pp('SharedPrefs.getRefreshDate ${date.toIso8601String()}');
     return date;

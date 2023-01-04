@@ -5,12 +5,14 @@ import 'package:geo_monitor/library/data/position.dart';
 class User {
   String? name,
       userId,
-      email, gender,
+      email,
+      gender,
       cellphone,
       created,
       userType,
       organizationName,
       fcmRegistration,
+      countryId,
       organizationId;
   Position? position;
 
@@ -20,31 +22,35 @@ class User {
       required this.userId,
       required this.cellphone,
       required this.created,
-      required this.userType, required this.gender,
+      required this.userType,
+      required this.gender,
       required this.organizationName,
       required this.organizationId,
+      required this.countryId,
       this.position,
       this.fcmRegistration});
 
   User.fromJson(Map data) {
-    this.name = data['name'];
-    this.userId = data['userId'];
-    this.gender = data['gender'];
-    this.fcmRegistration = data['fcmRegistration'];
-    this.email = data['email'];
-    this.cellphone = data['cellphone'];
-    this.created = data['created'];
-    this.userType = data['userType'];
-    this.organizationId = data['organizationId'];
-    this.organizationName = data['organizationName'];
+    name = data['name'];
+    userId = data['userId'];
+    countryId = data['countryId'];
+    gender = data['gender'];
+    fcmRegistration = data['fcmRegistration'];
+    email = data['email'];
+    cellphone = data['cellphone'];
+    created = data['created'];
+    userType = data['userType'];
+    organizationId = data['organizationId'];
+    organizationName = data['organizationName'];
     if (data['position'] != null) {
-      this.position = Position.fromJson(data['position']);
+      position = Position.fromJson(data['position']);
     }
   }
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'name': name,
       'userId': userId,
+      'countryId': countryId,
       'gender': gender,
       'fcmRegistration': fcmRegistration,
       'email': email,
@@ -88,7 +94,7 @@ class OrgMessage {
       {required this.name,
       required this.message,
       required this.userId,
-        required this.orgMessageId,
+      required this.orgMessageId,
       required this.created,
       required this.projectId,
       required this.projectName,
@@ -98,18 +104,18 @@ class OrgMessage {
       required this.organizationId});
 
   OrgMessage.fromJson(Map data) {
-    this.name = data['name'];
-    this.userId = data['userId'];
-    this.orgMessageId = data['orgMessageId'];
-    this.message = data['message'];
-    this.created = data['created'];
-    this.organizationId = data['organizationId'];
-    this.projectId = data['projectId'];
-    this.projectName = data['projectName'];
-    this.adminId = data['adminId'];
-    this.adminName = data['adminName'];
-    this.frequency = data['frequency'];
-    this.result = data['result'];
+   name = data['name'];
+   userId = data['userId'];
+   orgMessageId = data['orgMessageId'];
+   message = data['message'];
+   created = data['created'];
+   organizationId = data['organizationId'];
+   projectId = data['projectId'];
+   projectName = data['projectName'];
+   adminId = data['adminId'];
+   adminName = data['adminName'];
+   frequency = data['frequency'];
+   result = data['result'];
   }
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
@@ -128,4 +134,12 @@ class OrgMessage {
     };
     return map;
   }
+}
+
+class UserType {
+  static const String fieldMonitor = 'FIELD_MONITOR';
+  static const String orgAdministrator = 'ORG_ADMINISTRATOR';
+  static const String orgExecutive = 'ORG_EXECUTIVE';
+  static const String networkAdministrator = 'NETWORK_ADMINISTRATOR';
+  static const String orgOwner = 'ORG_OWNER';
 }

@@ -1,6 +1,4 @@
 import 'package:geo_monitor/library/data/position.dart';
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/position.dart';
 
 class City {
   String? name, countryId, countryName, provinceName, cityId, created;
@@ -15,15 +13,15 @@ class City {
       required this.created});
 
   City.fromJson(Map data) {
-    this.name = data['name'];
-    this.countryId = data['countryId'];
-    this.countryName = data['countryName'];
-    this.provinceName = data['provinceName'];
-    this.countryName = data['countryName'];
-    this.created = data['created'];
-    this.cityId = data['cityId'];
+    name = data['name'];
+    countryId = data['countryId'];
+    countryName = data['countryName'];
+    provinceName = data['provinceName'];
+    countryName = data['countryName'];
+    created = data['created'];
+    cityId = data['cityId'];
     if (data['position'] != null) {
-      this.position = Position.fromJson( data['position']);
+      position = Position.fromJson( data['position']);
     }
 
   }

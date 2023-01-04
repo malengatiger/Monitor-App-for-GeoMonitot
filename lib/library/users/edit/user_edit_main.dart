@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:geo_monitor/library/api/data_api.dart';
 import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/users/edit/user_edit_desktop.dart';
 import 'package:geo_monitor/library/users/edit/user_edit_mobile.dart';
 import 'package:geo_monitor/library/users/edit/user_edit_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../../data/country.dart';
+
 class UserEditMain extends StatelessWidget {
   final User? user;
 
-  UserEditMain(this.user);
+  const UserEditMain(this.user, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,3 +22,52 @@ class UserEditMain extends StatelessWidget {
     );
   }
 }
+
+
+class CountryChooser extends StatefulWidget {
+  const CountryChooser({Key? key, required this.onSelected}) : super(key: key);
+  final Function(Country) onSelected;
+
+  @override
+  State<CountryChooser> createState() => _CountryChooserState();
+}
+
+class _CountryChooserState extends State<CountryChooser> {
+  List<Country> countries = <Country>[];
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+  void _getData() async {
+    setState(() {
+      loading = true;
+    });
+    countries = await DataAPI.getCountries();
+    _buildDropDown();
+    setState(() {
+      loading = false;
+    });
+  }
+  var list = <DropdownMenuItem>[];
+  void _buildDropDown() {
+    for (var entry in countries) {
+      list.add(DropdownMenuItem<Country>(
+        value: entry,
+        child: Text(entry.name!),
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return  DropdownButton(items: list, onChanged: onChanged);
+  }
+
+  void onChanged(value) {
+    widget.onSelected(value);
+  }
+}
+

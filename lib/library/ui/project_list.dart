@@ -88,7 +88,7 @@ class _ProjectListState extends State<ProjectList> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
             ],
@@ -97,12 +97,10 @@ class _ProjectListState extends State<ProjectList> {
       ),
       backgroundColor: Colors.brown[100],
       body: isBusy
-          ? Center(
-              child: Container(
-                child: CircularProgressIndicator(
-                  strokeWidth: 24,
-                  backgroundColor: Colors.yellow,
-                ),
+          ? const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 24,
+                backgroundColor: Colors.yellow,
               ),
             )
           : ListView.builder(
@@ -128,29 +126,27 @@ class _ProjectListState extends State<ProjectList> {
                                   Icons.apps,
                                   color: getRandomColor(),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 Expanded(
-                                    child: Container(
-                                        child: Text(p.name!,
-                                            style: Styles.blackBoldMedium,
-                                            overflow: TextOverflow.clip))),
+                                    child: Text(p.name!,
+                                        style: Styles.blackBoldMedium,
+                                        overflow: TextOverflow.clip)),
                               ],
                             ),
                             Row(
                               children: <Widget>[
-                                SizedBox(
+                                const SizedBox(
                                   width: 32,
                                 ),
                                 Expanded(
-                                    child: Container(
-                                        child: Text(p.description!,
-                                            style: Styles.blackSmall,
-                                            overflow: TextOverflow.clip))),
+                                    child: Text(p.description!,
+                                        style: Styles.blackSmall,
+                                        overflow: TextOverflow.clip)),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             )
                           ],

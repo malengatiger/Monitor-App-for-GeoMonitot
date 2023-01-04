@@ -25,10 +25,10 @@ class _FieldMonitorMapTabletState extends State<FieldMonitorMapTablet>
   Completer<GoogleMapController> _mapController = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   var random = Random(DateTime.now().millisecondsSinceEpoch);
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   bool busy = false;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -68,7 +68,7 @@ class _FieldMonitorMapTabletState extends State<FieldMonitorMapTablet>
     );
     markers[markerId] = marker;
 
-    final CameraPosition _first = CameraPosition(
+    final CameraPosition first = CameraPosition(
       target: LatLng(
         latitude,
         longitude,
@@ -76,7 +76,7 @@ class _FieldMonitorMapTabletState extends State<FieldMonitorMapTablet>
       zoom: 14.4746,
     );
     googleMapController = await _mapController.future;
-    googleMapController!.animateCamera(CameraUpdate.newCameraPosition(_first));
+    googleMapController!.animateCamera(CameraUpdate.newCameraPosition(first));
   }
 
   void _onMarkerTapped() {
@@ -124,6 +124,7 @@ class _FieldMonitorMapTabletState extends State<FieldMonitorMapTablet>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(40),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -132,13 +133,12 @@ class _FieldMonitorMapTabletState extends State<FieldMonitorMapTablet>
                       'Locate the FieldMonitor at their Home base. This enables you to match projects with monitors during the onboarding process ',
                       style: Styles.whiteSmall,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     )
                   ],
                 ),
-              ),
-              preferredSize: Size.fromHeight(40)),
+              )),
         ),
         body: Stack(
           children: [

@@ -319,7 +319,7 @@ class ProjectDetailState extends State<ProjectDetail> {
   void _onRefresh() async {
     try {
       debugPrint('✳️ ✳️ ✳️ ......  refresh project');
-      project = await adminBloc.findProjectById(project!.projectId!);
+      project = await adminBloc.findProjectById(project.projectId!);
       debugPrint('✳️ ✳️ ✳️ ......  refresh project done, set state ...');
       setState(() {});
     } catch (e) {

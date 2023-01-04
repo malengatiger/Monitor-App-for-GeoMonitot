@@ -68,7 +68,7 @@ class GeofencerTwo {
         organizationId: _user!.organizationId!,
         latitude: loc.latitude,
         longitude: loc.longitude,
-        radiusInKM: radiusInKM == null ? defaultRadiusInKM : radiusInKM);
+        radiusInKM: radiusInKM ?? defaultRadiusInKM);
 
     for (var pos in list) {
       await addGeofence(projectPosition: pos);
@@ -116,7 +116,7 @@ class GeofencerTwo {
         status: geofenceStatus.toString(),
         userId: _user!.userId,
         user: _user,
-        geofenceEventId: Uuid().v4(),
+        geofenceEventId: const Uuid().v4(),
         projectPositionId: geofence.id,
         projectName: projectPosition.projectName,
         date: DateTime.now().toIso8601String());
@@ -155,7 +155,7 @@ class GeofencerTwo {
     pp('$mm added Geofence .... 👽👽👽👽👽 id: ${fence.id} 👽👽 _geofenceList now has ${_geofenceList.length} fences 🍎 ');
   }
 
-  StreamController<GeofenceEvent> _geofenceStreamController = StreamController.broadcast();
+  final StreamController<GeofenceEvent> _geofenceStreamController = StreamController.broadcast();
   Stream<GeofenceEvent> get geofenceStream => _geofenceStreamController.stream;
 
   var defaultRadiusInKM = 100.0;

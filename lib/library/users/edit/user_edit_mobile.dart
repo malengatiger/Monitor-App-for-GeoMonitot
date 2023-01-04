@@ -8,16 +8,19 @@ import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/functions.dart';
 
 import 'package:geo_monitor/library/generic_functions.dart';
+import 'package:geo_monitor/library/users/edit/user_edit_main.dart';
+
+import '../../data/country.dart';
 
 class UserEditMobile extends StatefulWidget {
   final ar.User? user;
   const UserEditMobile(this.user);
 
   @override
-  _UserEditMobileState createState() => _UserEditMobileState();
+  UserEditMobileState createState() => UserEditMobileState();
 }
 
-class _UserEditMobileState extends State<UserEditMobile>
+class UserEditMobileState extends State<UserEditMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var nameController = TextEditingController();
@@ -28,6 +31,7 @@ class _UserEditMobileState extends State<UserEditMobile>
   final _formKey = GlobalKey<FormState>();
   var _key = GlobalKey<ScaffoldState>();
   var isBusy = false;
+  Country? country;
 
   @override
   void initState() {
@@ -61,16 +65,35 @@ class _UserEditMobileState extends State<UserEditMobile>
     if (_formKey.currentState!.validate()) {
       //todo - validate
       if (type == null) {
-        showToast(context: context, message: 'Please select user type', duration: Duration(seconds: 2), backgroundColor: Colors.pink, textStyle: Styles.whiteSmall);
+        showToast(
+            context: context,
+            message: 'Please select user type',
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.pink,
+            textStyle: Styles.whiteSmall);
         return;
       }
       if (gender == null) {
-        showToast(context: context, message: 'Please select user gender', duration: Duration(seconds: 2),  backgroundColor: Colors.pink, textStyle: Styles.whiteSmall);
+        showToast(
+            context: context,
+            message: 'Please select user gender',
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.pink,
+            textStyle: Styles.whiteSmall);
         return;
       }
       setState(() {
         isBusy = true;
       });
+      if (country == null) {
+        showToast(
+            context: context,
+            message: 'Please select country',
+            duration: const Duration(seconds: 2),
+            backgroundColor: Colors.pink,
+            textStyle: Styles.whiteSmall);
+        return;
+      }
       try {
         if (widget.user == null) {
           var user = ar.User(
@@ -79,6 +102,7 @@ class _UserEditMobileState extends State<UserEditMobile>
               cellphone: cellphoneController.text,
               organizationId: admin!.organizationId!,
               organizationName: admin!.organizationName,
+              countryId: country!.countryId,
               userType: type,
               gender: gender,
               created: DateTime.now().toIso8601String(),
@@ -94,16 +118,22 @@ class _UserEditMobileState extends State<UserEditMobile>
             pp('🍎 🍎 🍎 🍎 UserEditMobile: 🍎 A user has been created:  🍎 ${mUser.toJson()}');
             gender = null;
             type = null;
-            showToast(message: 'User created: ${user.name}', context: context,
-                backgroundColor: Colors.teal, textStyle: Styles.whiteSmall, duration: Duration(seconds: 5));
+            showToast(
+                message: 'User created: ${user.name}',
+                context: context,
+                backgroundColor: Colors.teal,
+                textStyle: Styles.whiteSmall,
+                duration: const Duration(seconds: 5));
+
             await monitorBloc.getOrganizationUsers(
                 organizationId: user.organizationId!, forceRefresh: true);
-            Navigator.pop(context);
+            if (mounted) {
+              Navigator.pop(context);
+            }
           } catch (e) {
             pp(e);
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User Create failed: $e')));
-
+            ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('User Create failed: $e')));
           }
         } else {
           widget.user!.name = nameController.text;
@@ -115,16 +145,20 @@ class _UserEditMobileState extends State<UserEditMobile>
           try {
             await adminBloc.updateUser(widget.user!);
             var list = await monitorBloc.getOrganizationUsers(
-                organizationId: widget.user!.organizationId!, forceRefresh: true);
-            Navigator.pop(context, list);
+                organizationId: widget.user!.organizationId!,
+                forceRefresh: true);
+            if (mounted) {
+              Navigator.pop(context, list);
+            }
           } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Update failed: $e')));
-
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text('Update failed: $e')));
           }
         }
       } catch (e) {
         pp(e);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('$e')));
       }
       setState(() {
         isBusy = false;
@@ -163,41 +197,44 @@ class _UserEditMobileState extends State<UserEditMobile>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
             child: Column(
               children: [
                 Text(
-                  widget.user == null ? 'New Monitor User' : 'Edit Monitor User',
+                  widget.user == null
+                      ? 'New Monitor User'
+                      : 'Edit Monitor User',
                   style: Styles.blackBoldMedium,
                 ),
                 admin == null
                     ? Container()
-                    : SizedBox(
+                    : const SizedBox(
                         height: 8,
                       ),
                 Text(
                   admin == null ? '' : admin!.organizationName!,
                   style: Styles.whiteSmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 )
               ],
             ),
-            preferredSize: Size.fromHeight(100),
           ),
         ),
         backgroundColor: Colors.brown[100],
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
-            child: Card(elevation: 4,
+            child: Card(
+              elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       TextFormField(
@@ -217,7 +254,7 @@ class _UserEditMobileState extends State<UserEditMobile>
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       TextFormField(
@@ -237,7 +274,7 @@ class _UserEditMobileState extends State<UserEditMobile>
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       TextFormField(
@@ -258,7 +295,7 @@ class _UserEditMobileState extends State<UserEditMobile>
                         },
                       ),
 
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       Container(
@@ -281,7 +318,6 @@ class _UserEditMobileState extends State<UserEditMobile>
                               onChanged: _handleGenderValueChange,
                             ),
                             Text('Female', style: Styles.blackTiny),
-
                           ],
                         ),
                       ),
@@ -289,7 +325,7 @@ class _UserEditMobileState extends State<UserEditMobile>
                       //   gender == null ? '' : gender!,
                       //   style: Styles.greyLabelSmall,
                       // ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       ),
                       Container(
@@ -324,15 +360,19 @@ class _UserEditMobileState extends State<UserEditMobile>
                           ],
                         ),
                       ),
-                      // Text(
-                      //   type == null ? '' : type!,
-                      //   style: Styles.greyLabelSmall,
-                      // ),
-                      SizedBox(
+                      const SizedBox(
+                        height: 28,
+                      ),
+                      CountryChooser(onSelected: (c) {
+                        setState(() {
+                          country = c;
+                        });
+                      }),
+                      const SizedBox(
                         height: 28,
                       ),
                       isBusy
-                          ? Container(
+                          ? const SizedBox(
                               width: 48,
                               height: 48,
                               child: CircularProgressIndicator(
@@ -341,6 +381,7 @@ class _UserEditMobileState extends State<UserEditMobile>
                               ),
                             )
                           : ElevatedButton(
+                              onPressed: _submit,
                               child: Padding(
                                 padding: const EdgeInsets.all(12.0),
                                 child: Text(
@@ -348,9 +389,8 @@ class _UserEditMobileState extends State<UserEditMobile>
                                   style: Styles.whiteSmall,
                                 ),
                               ),
-                              onPressed: _submit,
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                     ],
@@ -366,6 +406,7 @@ class _UserEditMobileState extends State<UserEditMobile>
 
   String? type;
   String? gender;
+
   void _handleGenderValueChange(Object? value) {
     pp('🌸 🌸 🌸 🌸 🌸 _handleGenderValueChange: 🌸 $value');
     setState(() {

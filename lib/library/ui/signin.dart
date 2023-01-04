@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
 import 'package:geo_monitor/library/auth/app_auth.dart';
+import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/functions.dart';
-
 
 class SignIn extends StatefulWidget {
   final String type;
 
-  const SignIn(this.type);
+  const SignIn(this.type, {super.key});
+
   @override
-  _SignInState createState() => _SignInState();
+  SignInState createState() => SignInState();
 }
 
-class _SignInState extends State<SignIn> implements SnackBarListener {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+class SignInState extends State<SignIn> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool isBusy = false;
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
           child: Column(
             children: [
               Text(widget.type, style: Styles.whiteBoldMedium),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               )
             ],
@@ -40,7 +41,7 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
       backgroundColor: Colors.brown[100],
       body: isBusy
           ? Center(
-              child: Container(
+              child: SizedBox(
                 height: 60,
                 width: 60,
                 child: CircularProgressIndicator(
@@ -59,25 +60,25 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
                         children: <Widget>[
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           Text(
                             'Sign in',
                             style: Styles.blackBoldLarge,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           TextField(
                             onChanged: _onEmailChanged,
                             keyboardType: TextInputType.emailAddress,
                             controller: emailCntr,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter  email address',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 12,
                           ),
                           TextField(
@@ -85,11 +86,11 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
                             keyboardType: TextInputType.text,
                             obscureText: true,
                             controller: pswdCntr,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Enter password',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 60,
                           ),
                           ElevatedButton(
@@ -104,7 +105,7 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 60,
                           ),
                         ],
@@ -126,13 +127,33 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
     _checkStatus();
   }
 
+  //user: ORG_ADMINISTRATOR 🍎  org.qaf@monitor.com 🔵  Nicole Seleka
+  //user: FIELD_MONITOR 🍎  monitor.zyp@monitor.com 🔵  Mmaphefo De sousa
+  //user: EXECUTIVE 🍎  exec.uat@monitor.com 🔵  Andre Motau
   void _checkStatus() async {
-    var status = dot.dotenv.env['status'];
-    pp('🥦🥦 Checking status ..... 🥦🥦 $status 🌸 🌸 🌸');
+    var status = dot.dotenv.env['CURRENT_STATUS'];
+    pp('🥦🥦 Checking status ..... 🥦🥦 status: $status 🌸 🌸 🌸');
     if (status == 'dev') {
-      emailCntr.text = 'monitor.yue@monitor.com';
       pswdCntr.text = 'pass123';
+      switch (widget.type) {
+        case UserType.fieldMonitor:
+          emailCntr.text = 'monitor.zyp@monitor.com';
+          break;
+        case UserType.orgExecutive:
+          emailCntr.text = 'exec.uat@monitor.com';
+          break;
+        case UserType.orgAdministrator:
+          emailCntr.text = 'org.qaf@monitor.com';
+          break;
+        default:
+          emailCntr.text = 'org.qaf@monitor.com';
+          break;
+
+          break;
+      }
     }
+
+
     setState(() {});
   }
 
@@ -146,7 +167,8 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
     email = emailCntr.text;
     password = pswdCntr.text;
     if (email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Credentials missing or invalid')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Credentials missing or invalid')));
       return;
     }
     setState(() {
@@ -154,24 +176,20 @@ class _SignInState extends State<SignIn> implements SnackBarListener {
     });
     try {
       var user = await AppAuth.signIn(email, password, widget.type);
+      if (!mounted) return;
       Navigator.pop(context, user);
+      //do I want to gp to dashboard??
     } catch (e) {
       setState(() {
         isBusy = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sign in failed: $e')));
-
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Sign in failed: $e')));
     }
   }
 
   void _onPasswordChanged(String value) {
     password = value;
     pp(password);
-  }
-
-  @override
-  onActionPressed(int action) {
-    // TODO: implement onActionPressed
-    return null;
   }
 }

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 List<String> logs = [];
 bool isBusy = false;
 List<Color> _colors = [];
-Random _rand = Random(new DateTime.now().millisecondsSinceEpoch);
+Random _rand = Random(DateTime.now().millisecondsSinceEpoch);
 Color getRandomColor() {
   _colors.clear();
   _colors.add(Colors.blue);
@@ -66,7 +66,7 @@ Color getRandomPastelColor() {
   _colors.add(Colors.cyan.shade50);
 
   _rand =
-      Random(new DateTime.now().millisecondsSinceEpoch * _rand.nextInt(10000));
+      Random(DateTime.now().millisecondsSinceEpoch * _rand.nextInt(10000));
   int index = _rand.nextInt(_colors.length - 1);
   return _colors.elementAt(index);
 }
@@ -79,366 +79,366 @@ class Styles {
   static const large = 32.0;
   static const reallyLarge = 52.0;
 
-  static TextStyle greyLabelTiny = TextStyle(
+  static TextStyle greyLabelTiny = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: tiny,
     color: Colors.grey,
   );
-  static TextStyle greyLabelSmall = TextStyle(
+  static TextStyle greyLabelSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.grey,
   );
 
-  static TextStyle greyLabelMedium = TextStyle(
+  static TextStyle greyLabelMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.grey,
   );
-  static TextStyle greyLabelLarge = TextStyle(
+  static TextStyle greyLabelLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.grey,
   );
-  static TextStyle yellowBoldSmall = TextStyle(
+  static TextStyle yellowBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.yellow,
   );
-  static TextStyle yellowBoldMedium = TextStyle(
+  static TextStyle yellowBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.yellow,
   );
-  static TextStyle yellowMedium = TextStyle(
+  static TextStyle yellowMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.yellow,
   );
-  static TextStyle yellowBoldLarge = TextStyle(
+  static TextStyle yellowBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.yellow,
   );
-  static TextStyle yellowBoldReallyLarge = TextStyle(
+  static TextStyle yellowBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.yellow,
   );
-  static TextStyle yellowLarge = TextStyle(
+  static TextStyle yellowLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.yellow,
   );
-  static TextStyle yellowReallyLarge = TextStyle(
+  static TextStyle yellowReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.yellow,
   );
   /////
-  static TextStyle blackBoldSmall = TextStyle(
+  static TextStyle blackBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.black,
   );
-  static TextStyle blackSmall = TextStyle(
+  static TextStyle blackSmall = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: small,
     color: Colors.black,
   );
-  static TextStyle blackTiny = TextStyle(
+  static TextStyle blackTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: tiny,
     color: Colors.black,
   );
-  static TextStyle blackReallyTiny = TextStyle(
+  static TextStyle blackReallyTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyTiny,
     color: Colors.black,
   );
-  static TextStyle blackBoldMedium = TextStyle(
+  static TextStyle blackBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.black,
   );
-  static TextStyle blackMedium = TextStyle(
+  static TextStyle blackMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.black,
   );
-  static TextStyle blackBoldLarge = TextStyle(
+  static TextStyle blackBoldLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: large,
     color: Colors.black,
   );
-  static TextStyle blackBoldDash = TextStyle(
+  static TextStyle blackBoldDash = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: 48,
     color: Colors.black,
   );
-  static TextStyle blackBoldReallyLarge = TextStyle(
+  static TextStyle blackBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.black,
   );
-  static TextStyle blackLarge = TextStyle(
+  static TextStyle blackLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.black,
   );
-  static TextStyle blackReallyLarge = TextStyle(
+  static TextStyle blackReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.black,
   );
 
   ////////
-  static TextStyle pinkBoldSmall = TextStyle(
+  static TextStyle pinkBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.pink,
   );
-  static TextStyle pinkTiny = TextStyle(
+  static TextStyle pinkTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: tiny,
     color: Colors.pink,
   );
-  static TextStyle pinkBoldMedium = TextStyle(
+  static TextStyle pinkBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.pink,
   );
-  static TextStyle pinkMedium = TextStyle(
+  static TextStyle pinkMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.pink,
   );
-  static TextStyle pinkBoldLarge = TextStyle(
+  static TextStyle pinkBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.pink,
   );
-  static TextStyle pinkBoldReallyLarge = TextStyle(
+  static TextStyle pinkBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.pink,
   );
-  static TextStyle pinkLarge = TextStyle(
+  static TextStyle pinkLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.pink,
   );
-  static TextStyle pinkReallyLarge = TextStyle(
+  static TextStyle pinkReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.pink,
   );
   /////////
-  static TextStyle purpleBoldSmall = TextStyle(
+  static TextStyle purpleBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.purple,
   );
-  static TextStyle purpleTiny = TextStyle(
+  static TextStyle purpleTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: tiny,
     color: Colors.purple,
   );
-  static TextStyle purpleBoldMedium = TextStyle(
+  static TextStyle purpleBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.purple,
   );
-  static TextStyle purpleMedium = TextStyle(
+  static TextStyle purpleMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.purple,
   );
-  static TextStyle purpleSmall = TextStyle(
+  static TextStyle purpleSmall = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: small,
     color: Colors.purple,
   );
-  static TextStyle purpleBoldLarge = TextStyle(
+  static TextStyle purpleBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.purple,
   );
-  static TextStyle purpleBoldReallyLarge = TextStyle(
+  static TextStyle purpleBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.purple,
   );
-  static TextStyle purpleLarge = TextStyle(
+  static TextStyle purpleLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.purple,
   );
-  static TextStyle purpleReallyLarge = TextStyle(
+  static TextStyle purpleReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.purple,
   );
   ///////
-  static TextStyle blueBoldSmall = TextStyle(
+  static TextStyle blueBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.blue,
   );
-  static TextStyle blueSmall = TextStyle(
+  static TextStyle blueSmall = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: small,
     color: Colors.blue,
   );
-  static TextStyle blueTiny = TextStyle(
+  static TextStyle blueTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: tiny,
     color: Colors.blue,
   );
-  static TextStyle blueBoldMedium = TextStyle(
+  static TextStyle blueBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.blue,
   );
-  static TextStyle blueMedium = TextStyle(
+  static TextStyle blueMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.blue,
   );
-  static TextStyle blueBoldLarge = TextStyle(
+  static TextStyle blueBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.blue,
   );
-  static TextStyle blueBoldReallyLarge = TextStyle(
+  static TextStyle blueBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.blue,
   );
-  static TextStyle blueLarge = TextStyle(
+  static TextStyle blueLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.blue,
   );
-  static TextStyle blueReallyLarge = TextStyle(
+  static TextStyle blueReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.blue,
   );
   ////
-  static TextStyle brownBoldSmall = TextStyle(
+  static TextStyle brownBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.brown,
   );
-  static TextStyle brownBoldMedium = TextStyle(
+  static TextStyle brownBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.brown,
   );
-  static TextStyle brownMedium = TextStyle(
+  static TextStyle brownMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.brown,
   );
-  static TextStyle brownBoldLarge = TextStyle(
+  static TextStyle brownBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.brown,
   );
-  static TextStyle brownBoldReallyLarge = TextStyle(
+  static TextStyle brownBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.brown,
   );
-  static TextStyle brownLarge = TextStyle(
+  static TextStyle brownLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.brown,
   );
-  static TextStyle brownReallyLarge = TextStyle(
+  static TextStyle brownReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.brown,
   );
   ///////
-  static TextStyle whiteBoldSmall = TextStyle(
+  static TextStyle whiteBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.white,
   );
-  static TextStyle whiteBoldMedium = TextStyle(
+  static TextStyle whiteBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.white,
   );
-  static TextStyle whiteMedium = TextStyle(
+  static TextStyle whiteMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.white,
   );
-  static TextStyle whiteSmall = TextStyle(
+  static TextStyle whiteSmall = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: small,
     color: Colors.white,
   );
-  static TextStyle whiteTiny = TextStyle(
+  static TextStyle whiteTiny = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: tiny,
     color: Colors.white,
   );
-  static TextStyle whiteBoldLarge = TextStyle(
+  static TextStyle whiteBoldLarge = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: large,
     color: Colors.white,
   );
-  static TextStyle whiteBoldReallyLarge = TextStyle(
+  static TextStyle whiteBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.white,
   );
-  static TextStyle whiteLarge = TextStyle(
+  static TextStyle whiteLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.white,
   );
-  static TextStyle whiteReallyLarge = TextStyle(
+  static TextStyle whiteReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.white,
   );
   /////
-  static TextStyle tealBoldSmall = TextStyle(
+  static TextStyle tealBoldSmall = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: small,
     color: Colors.teal,
   );
-  static TextStyle tealBoldMedium = TextStyle(
+  static TextStyle tealBoldMedium = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: medium,
     color: Colors.teal,
   );
-  static TextStyle tealMedium = TextStyle(
+  static TextStyle tealMedium = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: medium,
     color: Colors.teal,
   );
-  static TextStyle tealBoldLarge = TextStyle(
+  static TextStyle tealBoldLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: large,
     color: Colors.teal,
   );
-  static TextStyle tealBoldReallyLarge = TextStyle(
+  static TextStyle tealBoldReallyLarge = const TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: reallyLarge,
     color: Colors.teal,
   );
-  static TextStyle tealLarge = TextStyle(
+  static TextStyle tealLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: large,
     color: Colors.teal,
   );
-  static TextStyle tealReallyLarge = TextStyle(
+  static TextStyle tealReallyLarge = const TextStyle(
     fontWeight: FontWeight.normal,
     fontSize: reallyLarge,
     color: Colors.teal,
@@ -481,7 +481,7 @@ String getFormattedDateLongWithTime(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('EEEE, dd MMMM yyyy HH:mm', myLocale.toString());
+  var format = DateFormat('EEEE, dd MMMM yyyy HH:mm', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -500,7 +500,7 @@ String getFormattedDateShortWithTime(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('dd MMMM yyyy HH:mm:ss', myLocale.toString());
+  var format = DateFormat('dd MMMM yyyy HH:mm:ss', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -520,7 +520,7 @@ String getFormattedDateLong(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('EEEE, dd MMMM yyyy', myLocale.toString());
+  var format = DateFormat('EEEE, dd MMMM yyyy', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -540,7 +540,7 @@ String getFormattedDateShort(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('dd MMMM yyyy', myLocale.toString());
+  var format = DateFormat('dd MMMM yyyy', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -560,7 +560,7 @@ String getFormattedDateShortest(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('dd-MM-yyyy', myLocale.toString());
+  var format = DateFormat('dd-MM-yyyy', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -580,7 +580,7 @@ String getFormattedDateShortestWithTime(String date, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
 
   initializeDateFormatting();
-  var format = new DateFormat('dd-MM-yyyy HH:mm', myLocale.toString());
+  var format = DateFormat('dd-MM-yyyy HH:mm', myLocale.toString());
   try {
     if (date.contains('GMT')) {
       var mDate = getLocalDateFromGMT(date, context);
@@ -693,7 +693,7 @@ int getMonth(String mth) {
 
 String getUTCDate() {
   initializeDateFormatting();
-  String now = new DateTime.now().toUtc().toIso8601String();
+  String now = DateTime.now().toUtc().toIso8601String();
   return now;
 }
 
@@ -706,7 +706,7 @@ String getUTC(DateTime date) {
 String getFormattedDate(String date) {
   try {
     DateTime d = DateTime.parse(date);
-    var format = new DateFormat.yMMMd();
+    var format = DateFormat.yMMMd();
     return format.format(d);
   } catch (e) {
     return date;
@@ -716,11 +716,11 @@ String getFormattedDate(String date) {
 String getFormattedDateHour(String date) {
   try {
     DateTime d = DateTime.parse(date);
-    var format = new DateFormat.Hm();
+    var format = DateFormat.Hm();
     return format.format(d.toUtc());
   } catch (e) {
     DateTime d = DateTime.now();
-    var format = new DateFormat.Hm();
+    var format = DateFormat.Hm();
     return format.format(d);
   }
 }
@@ -728,17 +728,17 @@ String getFormattedDateHour(String date) {
 String getFormattedDateHourMinSec(String date) {
   try {
     DateTime d = DateTime.parse(date);
-    var format = new DateFormat.Hms();
+    var format = DateFormat.Hms();
     return format.format(d.toUtc());
   } catch (e) {
     DateTime d = DateTime.now();
-    var format = new DateFormat.Hm();
+    var format = DateFormat.Hm();
     return format.format(d);
   }
 }
 
 String? getFormattedDateHourMinuteSecond() {
-  var format = new DateFormat.Hms();
+  var format = DateFormat.Hms();
   try {
     DateTime d = DateTime.now();
     return format.format(d.toUtc());
@@ -748,16 +748,16 @@ String? getFormattedDateHourMinuteSecond() {
 
 String getFormattedNumber(int number, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
-  var val = myLocale.languageCode + '_' + myLocale.countryCode!;
-  final oCcy = new NumberFormat("###,###,###,###,###", val);
+  var val = '${myLocale.languageCode}_${myLocale.countryCode!}';
+  final oCcy = NumberFormat("###,###,###,###,###", val);
 
   return oCcy.format(number);
 }
 
 String getFormattedDouble(double number, BuildContext context) {
   Locale myLocale = Localizations.localeOf(context);
-  var val = myLocale.languageCode + '_' + myLocale.countryCode!;
-  final oCcy = new NumberFormat("###,###,###,###,##0.0", val);
+  var val = '${myLocale.languageCode}_${myLocale.countryCode!}';
+  final oCcy = NumberFormat("###,###,###,###,##0.0", val);
 
   return oCcy.format(number);
 }
@@ -765,9 +765,9 @@ String getFormattedDouble(double number, BuildContext context) {
 String getFormattedAmount(String amount, BuildContext context) {
   assert(amount != null);
   Locale myLocale = Localizations.localeOf(context);
-  var val = myLocale.languageCode + '_' + myLocale.countryCode!;
+  var val = '${myLocale.languageCode}_${myLocale.countryCode!}';
   //pp('getFormattedAmount ----------- locale is  $val');
-  final oCcy = new NumberFormat("#,##0.00", val);
+  final oCcy =  NumberFormat("#,##0.00", val);
   try {
     double m = double.parse(amount);
     return oCcy.format(m);

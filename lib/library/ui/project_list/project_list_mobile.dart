@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -12,7 +11,6 @@ import 'package:geo_monitor/library/data/user.dart';
 import 'package:geo_monitor/library/data/user.dart' as mon;
 import 'package:geo_monitor/library/functions.dart';
 import 'package:geo_monitor/library/ui/maps/org_map_mobile.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_main.dart';
 import 'package:geo_monitor/library/ui/maps/project_map_mobile.dart';
 import 'package:geo_monitor/library/ui/media/list/media_list_main.dart';
 import 'package:geo_monitor/library/ui/project_edit/project_edit_main.dart';
@@ -136,7 +134,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
-              duration: Duration(milliseconds: 1500),
+              duration: const Duration(milliseconds: 1500),
               child: ProjectEditMobile(p)));
     }
     if (user!.userType! == ORG_ADMINISTRATOR) {
@@ -145,7 +143,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
-              duration: Duration(milliseconds: 1500),
+              duration: const Duration(milliseconds: 1500),
               child: ProjectEditMain(p)));
     }
   }
@@ -156,7 +154,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 1500),
             child: ProjectLocationMain(p)));
   }
 
@@ -166,7 +164,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 1500),
             child: MediaListMain(p)));
   }
 
@@ -178,7 +176,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
-              duration: Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 1000),
               child: OrganizationMapMobile()));
 
   }
@@ -190,7 +188,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 1000),
             child: ProjectMapMobile(project: p, projectPositions: pos,)));
 
   }
@@ -244,7 +242,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
     return menuItems;
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   List<IconButton> _getActions() {
     List<IconButton> list = [];
     // list.add(IconButton(
@@ -323,27 +321,29 @@ class _ProjectListMobileState extends State<ProjectListMobile>
                   ),
                   actions: _getActions(),
                   bottom: PreferredSize(
+                    preferredSize:
+                        Size.fromHeight(isProjectsByLocation ? 160 : 120),
                     child: Column(
                       children: [
                         Text(
                           user == null ? 'Unknown User' : user!.organizationName!,
                           style: Styles.blackBoldSmall,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         Text(
                           user == null ? '' : '${user!.name}',
                           style: Styles.whiteSmall,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 2,
                         ),
                         Text(
                           '$userTypeLabel',
                           style: Styles.blackTiny,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 2,
                         ),
                         Row(
@@ -357,17 +357,17 @@ class _ProjectListMobileState extends State<ProjectListMobile>
                                           activeTrackColor: Colors.pink[700],
                                           inactiveTrackColor: Colors.pink[100],
                                           trackShape:
-                                              RoundedRectSliderTrackShape(),
+                                              const RoundedRectSliderTrackShape(),
                                           trackHeight: 4.0,
-                                          thumbShape: RoundSliderThumbShape(
+                                          thumbShape: const RoundSliderThumbShape(
                                               enabledThumbRadius: 12.0),
                                           thumbColor: Colors.pinkAccent,
                                           overlayColor:
                                               Colors.pink.withAlpha(32),
-                                          overlayShape: RoundSliderOverlayShape(
+                                          overlayShape: const RoundSliderOverlayShape(
                                               overlayRadius: 28.0),
                                           tickMarkShape:
-                                              RoundSliderTickMarkShape(),
+                                              const RoundSliderTickMarkShape(),
                                           activeTickMarkColor: Colors.pink[700],
                                           inactiveTickMarkColor:
                                               Colors.pink[100],
@@ -375,7 +375,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
                                               PaddleSliderValueIndicatorShape(),
                                           valueIndicatorColor:
                                               Colors.pinkAccent,
-                                          valueIndicatorTextStyle: TextStyle(
+                                          valueIndicatorTextStyle: const TextStyle(
                                             color: Colors.white,
                                           ),
                                         ),
@@ -398,32 +398,30 @@ class _ProjectListMobileState extends State<ProjectListMobile>
                                     ],
                                   )
                                 : Container(),
-                            SizedBox(
+                            const SizedBox(
                               width: 24,
                             ),
                             Text(
                               'Projects',
                               style: Styles.blackTiny,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                             Text(
                               '${projects.length}',
                               style: Styles.whiteBoldSmall,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 24,
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       ],
                     ),
-                    preferredSize:
-                        Size.fromHeight(isProjectsByLocation ? 160 : 120),
                   ),
                 ),
                 backgroundColor: Colors.brown[100],
@@ -471,7 +469,7 @@ class _ProjectListMobileState extends State<ProjectListMobile>
 
                                       return FocusedMenuHolder(
                                         menuOffset: 20,
-                                        duration: Duration(milliseconds: 300),
+                                        duration: const Duration(milliseconds: 300),
                                         menuItems:
                                             getPopUpMenuItems(selectedProject),
                                         animateMenuItems: true,

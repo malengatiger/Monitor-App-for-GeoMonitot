@@ -13,6 +13,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'functions.dart';
 
+p(dynamic message) {
+  if (message is String) {
+    debugPrint(message);
+  } else {
+    if (kDebugMode) {
+      print(message);
+    }
+  }
+}
 
 const FREQUENCY_IN_SECONDS = 3;
 const TOPIC_GENERAL = 'generalTopic';
@@ -91,13 +100,13 @@ Future getCurrentPosition() async {
   int count = 0;
   try {
     var granted = await Geolocator.requestPermission();
-    var _currentPosition = await Geolocator.getCurrentPosition(
+    var currentPosition = await Geolocator.getCurrentPosition(
         forceAndroidLocationManager: true,
         desiredAccuracy: LocationAccuracy.best,
-        timeLimit: Duration(seconds: 10));
+        timeLimit: const Duration(seconds: 10));
 
-    pp('$mm .......... get current location .... found: ${_currentPosition.toJson()}');
-    return _currentPosition;
+    pp('$mm .......... get current location .... found: ${currentPosition.toJson()}');
+    return currentPosition;
   } catch (e) {
     pp('$mm .......... get current location fell down, count: $count :::::: $e ....');
     count++;
@@ -105,7 +114,7 @@ Future getCurrentPosition() async {
       return await getCurrentPosition();
     }
 
-    throw e;
+    rethrow;
   }
 }
 
@@ -160,7 +169,7 @@ Future<Uint8List> getBytesFromAsset(String path, int width) async {
 String stripHTMLTags(String string) {
   var s1 = string.replaceAll('<b>', '');
   var tag = '</b>';
-  var s2 = s1.replaceAll('$tag', ' ');
+  var s2 = s1.replaceAll(tag, ' ');
   var s3 = s2.replaceAll('<div style="font-size:0.9em">', '');
   var s4 = s3.replaceAll('</div>', ' ');
 
@@ -168,30 +177,30 @@ String stripHTMLTags(String string) {
 }
 
 bool get isInDebugMode {
-  bool _inDebugMode = false;
+  bool inDebugMode = false;
   if (kDebugMode) {
-    _inDebugMode = true;
+    inDebugMode = true;
   }
 
-  return _inDebugMode;
+  return inDebugMode;
 }
 
 bool get isInReleaseMode {
-  bool _inReleaseMode = false;
+  bool inReleaseMode = false;
 
   if (kReleaseMode) {
-    _inReleaseMode = true;
+    inReleaseMode = true;
   }
-  return _inReleaseMode;
+  return inReleaseMode;
 }
 
 bool get isInProfileMode {
-  bool _inProfileMode = false;
+  bool inProfileMode = false;
   if (kProfileMode) {
-    _inProfileMode = true;
+    inProfileMode = true;
   }
 
-  return _inProfileMode;
+  return inProfileMode;
 }
 
 var random = Random(DateTime.now().millisecondsSinceEpoch);
@@ -252,7 +261,7 @@ String getFakePhotoUrl() {
 }
 
 String prettyPrint(Map json) {
-  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  JsonEncoder encoder =  const JsonEncoder.withIndent('  ');
   String pretty = encoder.convert(json);
   pp('🍐 🍐 🍐 🍐 🍐 PrettyPrint: $pretty 🍐🍐');
   return pretty;
@@ -277,11 +286,11 @@ showCustomToast(
   Widget toastContainer = Container(
     width: 320,
     padding: EdgeInsets.symmetric(
-        horizontal: padding == null ? 12.0 : padding,
-        vertical: padding == null ? 12.0 : padding),
+        horizontal: padding ?? 12.0,
+        vertical: padding ?? 12.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(16.0),
-      color: backgroundColor == null ? Colors.white : backgroundColor,
+      color: backgroundColor ?? Colors.white,
     ),
     child: widget
   );
@@ -289,8 +298,8 @@ showCustomToast(
   try {
     fToast.showToast(
       child: toastContainer,
-      gravity: toastGravity == null ? ToastGravity.CENTER : toastGravity,
-      toastDuration: duration == null ? Duration(seconds: 3) : duration,
+      gravity: toastGravity ?? ToastGravity.CENTER,
+      toastDuration: duration ?? const Duration(seconds: 3),
     );
   } catch (e) {
     pp('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');
@@ -315,11 +324,11 @@ showToast(
   Widget toastContainer = Container(
     width: 320,
     padding: EdgeInsets.symmetric(
-        horizontal: padding == null ? 12.0 : padding,
-        vertical: padding == null ? 12.0 : padding),
+        horizontal: padding ?? 12.0,
+        vertical: padding ?? 12.0),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(16.0),
-      color: backgroundColor == null ? Colors.white : backgroundColor,
+      color: backgroundColor ?? Colors.white,
     ),
     child: Row(
       mainAxisSize: MainAxisSize.max,
@@ -327,9 +336,9 @@ showToast(
       children: [
         Expanded(
           child: Text(
-            '$message',
+            message,
             textAlign: TextAlign.center,
-            style: textStyle == null ? Styles.blackSmall : textStyle,
+            style: textStyle ?? Styles.blackSmall,
           ),
         ),
       ],
@@ -339,8 +348,8 @@ showToast(
   try {
     fToast.showToast(
       child: toastContainer,
-      gravity: toastGravity == null ? ToastGravity.CENTER : toastGravity,
-      toastDuration: duration == null ? Duration(seconds: 3) : duration,
+      gravity: toastGravity ?? ToastGravity.CENTER,
+      toastDuration: duration ?? const Duration(seconds: 3),
     );
   } catch (e) {
     pp('$mm 👿👿👿👿👿 we have a small TOAST problem, Boss! - 👿 $e');

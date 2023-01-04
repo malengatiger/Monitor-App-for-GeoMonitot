@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:geo_monitor/library/data/field_monitor_schedule.dart';
 import 'package:geo_monitor/library/data/photo.dart';
@@ -68,9 +67,9 @@ class LocalDBAPIx {
     await connectLocalDB();
     List<Project> mList = [];
     List list = projectBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       mList.add(Project.fromJson(element));
-    });
+    }
     return mList;
   }
 
@@ -78,9 +77,9 @@ class LocalDBAPIx {
     await connectLocalDB();
     List<Photo> mList = [];
     List list = photoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       mList.add(Photo.fromJson(element));
-    });
+    }
     pp('$mx LocalDBAPI: getPhotos: 🦠 ${list.length} 🦠');
     return mList;
   }
@@ -89,9 +88,9 @@ class LocalDBAPIx {
     await connectLocalDB();
     List<Video> mList = [];
     List list = videoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       mList.add(Video.fromJson(element));
-    });
+    }
     pp('$mx getVideos: 🦠 ${mList.length}');
     return mList;
   }
@@ -101,12 +100,12 @@ class LocalDBAPIx {
 
     List<Photo> mList = [];
     List list = photoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var photo = Photo.fromJson(element);
       if (photo.projectId == projectId) {
         mList.add(photo);
       }
-    });
+    }
 
     pp('$mx getProjectPhotos: 🦠 ${mList.length}');
     return mList;
@@ -116,12 +115,12 @@ class LocalDBAPIx {
     await connectLocalDB();
     List<Photo> mList = [];
     List list = photoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var photo = Photo.fromJson(element);
       if (photo.userId == userId) {
         mList.add(photo);
       }
-    });
+    }
     pp('$mx ...... getUserPhotos, AFTER filter: 🦠 ${mList.length}');
     return mList;
   }
@@ -131,12 +130,12 @@ class LocalDBAPIx {
 
     List<Video> mList = [];
     List list = videoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var vid = Video.fromJson(element);
       if (vid.projectId == projectId) {
         mList.add(vid);
       }
-    });
+    }
 
     pp('$mx getProjectVideos: 🦠 ${mList.length}');
     return mList;
@@ -148,12 +147,12 @@ class LocalDBAPIx {
 
     List<FieldMonitorSchedule> mList = [];
     List list = scheduleBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var sched = FieldMonitorSchedule.fromJson(element);
       if (sched.projectId == projectId) {
         mList.add(sched);
       }
-    });
+    }
 
     mList = filterSchedulesByProject(mList);
     pp('$mx getProjectMonitorSchedules: 🦠 schedules sorted by date ${mList.length}');
@@ -166,12 +165,12 @@ class LocalDBAPIx {
 
     List<FieldMonitorSchedule> mList = [];
     List list = scheduleBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var sched = FieldMonitorSchedule.fromJson(element);
       if (sched.fieldMonitorId == userId) {
         mList.add(sched);
       }
-    });
+    }
     pp('$mx getFieldMonitorSchedules: 🦠 filtered ${mList.length} schedules by projectId');
     mList = mList = filterSchedulesByProject(mList);
     pp('$mx getFieldMonitorSchedules: filtered: 🦠 ${mList.length}');
@@ -184,12 +183,12 @@ class LocalDBAPIx {
 
     List<FieldMonitorSchedule> mList = [];
     List list = scheduleBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var sched = FieldMonitorSchedule.fromJson(element);
       if (sched.organizationId == organizationId) {
         mList.add(sched);
       }
-    });
+    }
     mList = filterSchedulesByProject(mList);
     pp('$mx getOrganizationMonitorSchedules: 🦠 ${mList.length} schedules after filtering by project');
     return mList;
@@ -198,22 +197,22 @@ class LocalDBAPIx {
   static List<FieldMonitorSchedule> filterSchedulesByProject(
       List<FieldMonitorSchedule> mList) {
     pp('$mx filterSchedulesByProject: 🦠 filter ${mList.length} schedules by projectId');
-    mList.forEach((element) {
+    for (var element in mList) {
       pp('PreFilter: Schedule: ${element.toJson()}');
-    });
+    }
     //todo - filter latest by project
 
-    Map<String, FieldMonitorSchedule> map = Map();
+    Map<String, FieldMonitorSchedule> map = {};
     mList.sort((a, b) => b.date!.compareTo(a.date!));
-    mList.forEach((element) {
+    for (var element in mList) {
       if (!map.containsKey(element.projectId)) {
         map['${element.projectId}'] = element;
       }
-    });
+    }
     mList = map.values.toList();
-    mList.forEach((element) {
+    for (var element in mList) {
       pp('PostFilter: Schedule: ${element.toJson()}');
-    });
+    }
     return mList;
   }
 
@@ -222,12 +221,12 @@ class LocalDBAPIx {
 
     List<Video> mList = [];
     List list = videoBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var vid = Video.fromJson(element);
       if (vid.userId == userId) {
         mList.add(vid);
       }
-    });
+    }
     pp('$mx getUserVideos, AFTER filter: 🦠 ${mList.length}');
     return mList;
   }
@@ -237,12 +236,12 @@ class LocalDBAPIx {
     await connectLocalDB();
     List<ProjectPosition> mList = [];
     List list = projectPositionBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       var pos = ProjectPosition.fromJson(element);
       if (pos.projectId == projectId) {
         mList.add(pos);
       }
-    });
+    }
     pp('$mx getProjectPositions: 🦠 ${mList.length}');
     return mList;
   }
@@ -253,9 +252,9 @@ class LocalDBAPIx {
 
     List<User> mList = [];
     List list = userBox!.values.toList();
-    list.forEach((element) {
+    for (var element in list) {
       mList.add(User.fromJson(element));
-    });
+    }
     pp('$mx LocalDBAPI:getUsers: 🦠 ${mList.length}');
     return mList;
   }
@@ -275,9 +274,9 @@ class LocalDBAPIx {
   }
 
   static Future<int> addProjects({required List<Project> projects}) async {
-    projects.forEach((element) async {
+    for (var element in projects)  {
       await addProject(project: element);
-    });
+    }
     return 0;
   }
 
@@ -289,9 +288,9 @@ class LocalDBAPIx {
   }
 
   static Future<int> addPhotos({required List<Photo> photos}) async {
-    photos.forEach((element) async {
+    for (var element in photos)  {
       await addPhoto(photo: element);
-    });
+    }
     return 0;
   }
 
@@ -303,9 +302,9 @@ class LocalDBAPIx {
   }
 
   static Future<int> addVideos({required List<Video> videos}) async {
-    videos.forEach((element) async {
+    for (var element in videos)  {
       await addVideo(video: element);
-    });
+    }
     return 0;
   }
 
@@ -333,9 +332,9 @@ class LocalDBAPIx {
 
   static Future<int> addProjectPositions(
       {required List<ProjectPosition> positions}) async {
-    positions.forEach((element) async {
+    for (var element in positions)  {
       await addProjectPosition(projectPosition: element);
-    });
+    }
     return 0;
   }
 
@@ -352,15 +351,15 @@ class LocalDBAPIx {
   static Future<int> addFieldMonitorSchedules(
       {required List<FieldMonitorSchedule> schedules}) async {
     pp('LocalDBAPI:addFieldMonitorSchedules : ${schedules.length}');
-    schedules.forEach((element) async {
+    for (var element in schedules)  {
       await addFieldMonitorSchedule(schedule: element);
-    });
+    }
 
     var len = scheduleBox!.values.length;
     pp('$mx addFieldMonitorSchedule: 🌼 🔆 schedules cached: $len 🔵 🔵 ');
-    scheduleBox!.values.forEach((element) {
+    for (var element in scheduleBox!.values) {
       pp('Schedule: ${FieldMonitorSchedule.fromJson(element).toJson()}');
-    });
+    }
     return 0;
   }
 

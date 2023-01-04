@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
 import 'package:geo_monitor/library/data/user.dart' as mon;
 import 'package:geo_monitor/library/ui/project_list/project_list_desktop.dart';
 import 'package:geo_monitor/library/ui/project_list/project_list_mobile.dart';
@@ -11,13 +10,13 @@ import '../../functions.dart';
 class ProjectListMain extends StatefulWidget {
   final mon.User user;
 
-  ProjectListMain(this.user);
+  const ProjectListMain(this.user, {super.key});
 
   @override
-  _ProjectListMainState createState() => _ProjectListMainState();
+  ProjectListMainState createState() => ProjectListMainState();
 }
 
-class _ProjectListMainState extends State<ProjectListMain>
+class ProjectListMainState extends State<ProjectListMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
@@ -59,12 +58,10 @@ class _ProjectListMainState extends State<ProjectListMain>
                 ),
               ),
               backgroundColor: Colors.brown[100],
-              body: Center(
-                child: Container(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 8,
-                    backgroundColor: Colors.black,
-                  ),
+              body: const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 8,
+                  backgroundColor: Colors.black,
                 ),
               ),
             ),

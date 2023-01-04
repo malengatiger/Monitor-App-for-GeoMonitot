@@ -107,7 +107,6 @@ class Community {
       'communityId': communityId,
       'email': email,
       'countryName': countryName,
-      'communityId': communityId,
       'polygon': mPolygon,
       'population': population,
       'created': created,
