@@ -1,5 +1,6 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -68,7 +69,9 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
         key: _key,
         appBar: AppBar(
           title: Text(widget.project.organizationName!,
-              style: Styles.whiteBoldSmall),
+              style:  GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodySmall,
+            fontWeight: FontWeight.normal,)),
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -85,19 +88,25 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Text(widget.project.name!, style: Styles.blackBoldSmall),
+                  Text(widget.project.name!, style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                      fontWeight: FontWeight.normal, )),
                   const SizedBox(
                     height: 60,
                   ),
                   Text(
                     'The project should be monitored only when the device is within a radius of',
-                    style: Styles.whiteSmall,
+                    style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.bodySmall,
+                        fontWeight: FontWeight.normal,),
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   Text('${widget.project.monitorMaxDistanceInMetres}',
-                      style: Styles.blackBoldMedium),
+                      style: GoogleFonts.secularOne(
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                          fontWeight: FontWeight.w900, )),
                   const SizedBox(
                     height: 0,
                   ),
@@ -110,11 +119,12 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
             ),
           ),
         ),
-        backgroundColor: Colors.brown[100],
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Card(
             elevation: 2,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0)),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -172,12 +182,16 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                   ),
                   isWithinDistance
                       ? Text('We are ready to start creating photos and videos for ${widget.project.name}',
-                          style: Styles.greyLabelMedium)
+                      style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                          fontWeight: FontWeight.normal,))
                       : Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
-                          style: Styles.greyLabelMedium,
+                          style: GoogleFonts.lato(
+                              textStyle: Theme.of(context).textTheme.bodyMedium,
+                              fontWeight: FontWeight.normal, ),
                         ),
                       ),
                 ],
