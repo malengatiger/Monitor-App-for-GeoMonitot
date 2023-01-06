@@ -164,7 +164,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(milliseconds: 1500),
-            child: MediaListMain(p)));
+            child: MediaListMain(project: p)));
   }
 
   Future<void> _navigateToOrgMap() async {

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:test_router/library/data/data_bag.dart';
 import 'package:test_router/library/data/place_mark.dart';
 import 'package:test_router/library/data/position.dart';
 
@@ -50,6 +51,7 @@ class HiveUtil {
   CollectionBox<User>? _userBox;
   CollectionBox<MonitorReport>? _reportBox;
   CollectionBox<GeofenceEvent>? _geofenceEventBox;
+  CollectionBox<DataBag>? _dataBagBox;
 
   bool _isInitialized = false;
 
@@ -75,7 +77,8 @@ class HiveUtil {
             'messages',
             'users',
             'reports',
-            'geofenceEvents'
+            'geofenceEvents',
+            'dataBags'
           },
           // Names of your boxes
           path: file
@@ -140,6 +143,14 @@ class HiveUtil {
         Hive.registerAdapter(PlaceMarkAdapter());
         p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive PlaceMarkAdapter registered');
       }
+      if (!Hive.isAdapterRegistered(18)) {
+        Hive.registerAdapter(DataBagAdapter());
+        p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive DataBagAdapter registered');
+      }
+      if (!Hive.isAdapterRegistered(11)) {
+        Hive.registerAdapter(UserAdapter());
+        p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive UserAdapter registered');
+      }
 
       p('${Emoji.peach}${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive box collection created and types registered');
 
@@ -159,6 +170,9 @@ class HiveUtil {
         _orgMessageBox = await _boxCollection!.openBox<OrgMessage>('messages');
         _reportBox = await _boxCollection!.openBox<MonitorReport>('reports');
         _geofenceEventBox = await _boxCollection!.openBox<GeofenceEvent>('geofenceEvents');
+        _dataBagBox = await _boxCollection!.openBox<DataBag>('dataBags');
+        _userBox = await _boxCollection!.openBox<User>('users');
+
 
         _isInitialized = true;
         p('${Emoji.peach}${Emoji.peach}${Emoji.peach}${Emoji.peach}'
@@ -172,6 +186,25 @@ class HiveUtil {
   final mm = '${Emoji.appleRed}${Emoji.appleRed}${Emoji.appleRed}';
   var random = Random(DateTime.now().millisecondsSinceEpoch);
   //
+  Future addDataBag({required DataBag dataBag}) async {
+    pp('$mm .... addDataBag .....');
+    var key = '${dataBag.date}';
+    await _dataBagBox?.put(key, dataBag);
+
+    pp('$mm DataBag added to local cache: ${dataBag.date}');
+  }
+  Future<DataBag?> getLatestDataBag() async {
+    DataBag? bag;
+    var keys = await _dataBagBox?.getAllKeys();
+    if (keys != null) {
+      keys.sort((a, b) => b.compareTo(a));
+      if (keys.isNotEmpty) {
+        bag = await _dataBagBox?.get(keys.first);
+      }
+    }
+    return bag;
+  }
+
   Future addCondition({required Condition condition}) async {
     pp('$mm .... addCondition .....');
     var key = '${condition.conditionId}';
@@ -179,6 +212,7 @@ class HiveUtil {
 
     pp('$mm Condition added to local cache: ${condition.projectName}');
   }
+
 
   Future addFieldMonitorSchedules(
       {required List<FieldMonitorSchedule> schedules}) async {

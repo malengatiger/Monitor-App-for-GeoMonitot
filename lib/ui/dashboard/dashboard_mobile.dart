@@ -4,6 +4,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/data/field_monitor_schedule.dart';
+import 'package:test_router/library/data/project_position.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../library/api/sharedprefs.dart';
@@ -42,11 +44,14 @@ class DashboardMobileState extends State<DashboardMobile>
   var _users = <User>[];
   var _photos = <Photo>[];
   var _videos = <Video>[];
+  var _projectPositions = <ProjectPosition>[];
+  var _schedules = <FieldMonitorSchedule>[];
   User? user;
 
   late StreamSubscription<ConnectivityResult> subscription;
 
-  static const nn = '🎽 🎽 🎽 🎽 🎽 🎽 DashboardMobile:  🎽 🎽 🎽';
+  static const nn = '🎽🎽🎽🎽🎽🎽 DashboardMobile: 🎽';
+  static const mm = '🎽🎽🎽🎽🎽🎽 DashboardMobile: 🎽';
   bool networkAvailable = false;
   @override
   void initState() {
@@ -109,7 +114,7 @@ class DashboardMobileState extends State<DashboardMobile>
       if (mounted) {
         setState(() {
           _users = event;
-          pp('_DashboardMobileState: 🎽 🎽 🎽 users delivered by stream: ${_users.length} ...');
+          pp('$mm users delivered by stream: ${_users.length} ...');
         });
       }
     });
@@ -117,7 +122,7 @@ class DashboardMobileState extends State<DashboardMobile>
       if (mounted) {
         setState(() {
           _photos = event;
-          pp('_DashboardMobileState: 🎽 🎽 🎽 photos delivered by stream: ${_photos.length} ...');
+          pp('$mm photos delivered by stream: ${_photos.length} ...');
         });
       }
     });
@@ -125,7 +130,23 @@ class DashboardMobileState extends State<DashboardMobile>
       if (mounted) {
         setState(() {
           _videos = event;
-          pp('_DashboardMobileState: 🎽 🎽 🎽 videos delivered by stream: ${_videos.length} ...');
+          pp('$mm videos delivered by stream: ${_videos.length} ...');
+        });
+      }
+    });
+    monitorBloc.projectPositionsStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _projectPositions = event;
+          pp('$mm projectPositions delivered by stream: ${_projectPositions.length} ...');
+        });
+      }
+    });
+    monitorBloc.fieldMonitorScheduleStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _schedules = event;
+          pp('$mm fieldMonitorSchedules delivered by stream: ${_schedules.length} ...');
         });
       }
     });
@@ -173,7 +194,7 @@ class DashboardMobileState extends State<DashboardMobile>
       if (user != null) {
         switch (user!.userType) {
           case UserType.orgAdministrator:
-            monitorBloc.refreshOrgData(
+            monitorBloc.refreshOrganizationData(
                 organizationId: user!.organizationId!, forceRefresh: true);
             break;
           case UserType.fieldMonitor:
@@ -183,7 +204,7 @@ class DashboardMobileState extends State<DashboardMobile>
                 forceRefresh: forceRefresh);
             break;
           case UserType.orgExecutive:
-            monitorBloc.refreshOrgData(
+            monitorBloc.refreshOrganizationData(
                 organizationId: user!.organizationId!, forceRefresh: true);
             break;
         }
@@ -242,7 +263,95 @@ class DashboardMobileState extends State<DashboardMobile>
       pp('App is running on the Web 👿 👿 👿  firebase messaging is OFF 👿 👿 👿');
     }
   }
+  final _key = GlobalKey<ScaffoldState>();
 
+  void _handleBottomNav(int value) {
+    switch (value) {
+      case 0:
+        pp(' 🔆🔆🔆 Navigate to MonitorList');
+        _navigateToProjectList();
+        break;
+
+      case 1:
+        pp(' 🔆🔆🔆 Navigate to ScheduleList');
+        _navigateToScheduleList();
+        break;
+
+      case 2:
+        pp(' 🔆🔆🔆 Navigate to MessageSender');
+        _navigateToMessageSender();
+        break;
+    }
+  }
+
+  void _navigateToProjectList() {
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: const Duration(seconds: 1),
+            child: ProjectListMobile(widget.user)));
+  }
+
+  void _navigateToMessageSender() {
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: const Duration(seconds: 1),
+            child: MessageMain(user: user)));
+  }
+
+  void _navigateToMediaList() {
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: UserMediaListMain(user!)));
+    }
+  }
+
+  void _navigateToScheduleList() {
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: SchedulesListMain()));
+    }
+  }
+
+  void _navigateToIntro() {
+    pp('$mm _navigateToIntro to Intro ....');
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: IntroMobile(
+                user: widget.user,
+              )));
+    }
+  }
+
+  void _navigateToUserList() {
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: const Duration(seconds: 1),
+            child: UserListMain()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -434,6 +543,54 @@ class DashboardMobileState extends State<DashboardMobile>
                           ],
                         ),
                       ),
+                      Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Text(
+                                '${_projectPositions.length}',
+                                style: GoogleFonts.secularOne(
+                                    textStyle: Theme.of(context).textTheme.headline4,
+                                    fontWeight: FontWeight.w900)),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Project\nLocations',
+                              style: Styles.greyLabelSmall,
+                            )
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Text(
+                                '${_schedules.length}',
+                                style: GoogleFonts.secularOne(
+                                    textStyle: Theme.of(context).textTheme.headline4,
+                                    fontWeight: FontWeight.w900)),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Schedules',
+                              style: Styles.greyLabelSmall,
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -442,93 +599,5 @@ class DashboardMobileState extends State<DashboardMobile>
     ));
   }
 
-  final _key = GlobalKey<ScaffoldState>();
 
-  void _handleBottomNav(int value) {
-    switch (value) {
-      case 0:
-        pp(' 🔆🔆🔆 Navigate to MonitorList');
-        _navigateToProjectList();
-        break;
-
-      case 1:
-        pp(' 🔆🔆🔆 Navigate to ScheduleList');
-        _navigateToScheduleList();
-        break;
-
-      case 2:
-        pp(' 🔆🔆🔆 Navigate to MessageSender');
-        _navigateToMessageSender();
-        break;
-    }
-  }
-
-  void _navigateToProjectList() {
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(seconds: 1),
-            child: ProjectListMobile(widget.user)));
-  }
-
-  void _navigateToMessageSender() {
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(seconds: 1),
-            child: MessageMain(user: user)));
-  }
-
-  void _navigateToMediaList() {
-    if (mounted) {
-      Navigator.push(
-          context,
-          PageTransition(
-              type: PageTransitionType.scale,
-              alignment: Alignment.topLeft,
-              duration: const Duration(seconds: 1),
-              child: UserMediaListMain(user!)));
-    }
-  }
-
-  void _navigateToScheduleList() {
-    if (mounted) {
-      Navigator.push(
-          context,
-          PageTransition(
-              type: PageTransitionType.scale,
-              alignment: Alignment.topLeft,
-              duration: const Duration(seconds: 1),
-              child: SchedulesListMain()));
-    }
-  }
-
-  void _navigateToIntro() {
-    pp('$mm _navigateToIntro to Intro ....');
-    if (mounted) {
-      Navigator.push(
-          context,
-          PageTransition(
-              type: PageTransitionType.scale,
-              alignment: Alignment.topLeft,
-              duration: const Duration(seconds: 1),
-              child: IntroMobile(
-                user: widget.user,
-              )));
-    }
-  }
-
-  void _navigateToUserList() {
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(seconds: 1),
-            child: UserListMain()));
-  }
 }

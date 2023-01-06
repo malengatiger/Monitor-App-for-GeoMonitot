@@ -10,6 +10,7 @@ import '../data/community.dart';
 import '../data/condition.dart';
 import '../data/counters.dart';
 import '../data/country.dart';
+import '../data/data_bag.dart';
 import '../data/field_monitor_schedule.dart';
 import '../data/geofence_event.dart';
 import '../data/monitor_report.dart';
@@ -78,15 +79,13 @@ class DataAPI {
     }
   }
 
-
   static Future<GeofenceEvent> addGeofenceEvent(
       GeofenceEvent geofenceEvent) async {
     String? mURL = await getUrl();
     Map bag = geofenceEvent.toJson();
 
     try {
-      var result =
-      await _callWebAPIPost('${mURL!}addGeofenceEvent', bag);
+      var result = await _callWebAPIPost('${mURL!}addGeofenceEvent', bag);
       var s = GeofenceEvent.fromJson(result);
       await hiveUtil.addGeofenceEvent(geofenceEvent: s);
       return s;
@@ -95,7 +94,6 @@ class DataAPI {
       rethrow;
     }
   }
-
 
   static Future<List<FieldMonitorSchedule>> getProjectFieldMonitorSchedules(
       String projectId) async {
@@ -265,6 +263,53 @@ class DataAPI {
     }
   }
 
+  static Future<DataBag> getOrganizationData(String organizationId) async {
+    String? mURL = await getUrl();
+    var bag = DataBag(
+        photos: [],
+        videos: [],
+        fieldMonitorSchedules: [],
+        projects: [],
+        projectPositions: [],
+        users: [],
+        date: DateTime.now().toIso8601String());
+    try {
+      var result = await _sendHttpGET(
+          '${mURL!}getOrganizationData?organizationId=$organizationId');
+
+      bag = DataBag.fromJson(result);
+      await hiveUtil.addDataBag(dataBag: bag);
+
+      return bag;
+    } catch (e) {
+      pp(e);
+      rethrow;
+    }
+  }
+  static Future<DataBag> getUserData(String userId) async {
+    String? mURL = await getUrl();
+    var bag = DataBag(
+        photos: [],
+        videos: [],
+        fieldMonitorSchedules: [],
+        projects: [],
+        projectPositions: [],
+        users: [],
+        date: DateTime.now().toIso8601String());
+    try {
+      var result = await _sendHttpGET(
+          '${mURL!}getUserData?userId=$userId');
+
+      bag = DataBag.fromJson(result);
+      await hiveUtil.addDataBag(dataBag: bag);
+
+      return bag;
+    } catch (e) {
+      pp(e);
+      rethrow;
+    }
+  }
+
   static Future<List<ProjectPosition>> getProjectPositions(
       String projectId) async {
     String? mURL = await getUrl();
@@ -314,6 +359,29 @@ class DataAPI {
       });
       await hiveUtil.addPhotos(photos: list);
       return list;
+    } catch (e) {
+      pp(e);
+      rethrow;
+    }
+  }
+
+  static Future<DataBag> getProjectData(String projectId) async {
+    String? mURL = await getUrl();
+
+    var bag = DataBag(
+        photos: [],
+        videos: [],
+        fieldMonitorSchedules: [],
+        projects: [],
+        users: [],
+        projectPositions: [],
+        date: DateTime.now().toIso8601String());
+    try {
+      var result =
+          await _sendHttpGET('${mURL!}getProjectData?projectId=$projectId');
+      bag = DataBag.fromJson(result);
+      await hiveUtil.addDataBag(dataBag: bag);
+      return bag;
     } catch (e) {
       pp(e);
       rethrow;
@@ -466,6 +534,7 @@ class DataAPI {
       rethrow;
     }
   }
+
   static Future<List<GeofenceEvent>> getGeofenceEventsByUser(
       String userId) async {
     String? mURL = await getUrl();
@@ -967,19 +1036,18 @@ class DataAPI {
       mBag = json.encode(bag);
     }
     var start = DateTime.now();
-    var client =  http.Client();
+    var client = http.Client();
     var token = await AppAuth.getAuthToken();
     if (token != null) {
       pp('$xz http POST call: 😡 😡 😡 Firebase Auth Token: 💙️ Token is GOOD! 💙 ');
     }
     headers['Authorization'] = 'Bearer $token';
     try {
-      var resp = await client
-          .post(
-            Uri.parse(mUrl),
-            body: mBag,
-            headers: headers,
-          );
+      var resp = await client.post(
+        Uri.parse(mUrl),
+        body: mBag,
+        headers: headers,
+      );
       if (resp.statusCode == 200) {
         pp('$xz http POST call RESPONSE: 💙💙 statusCode: 👌👌👌 ${resp.statusCode} 👌👌👌 💙 for $mUrl');
       } else {
@@ -1006,30 +1074,30 @@ class DataAPI {
       pp("$xz Bad response format 👎");
       throw 'Bad response format';
     } on TimeoutException {
-      pp("$xz POST Request has timed out in $TIMEOUT_IN_SECONDS seconds 👎");
-      throw 'Request has timed out in $TIMEOUT_IN_SECONDS seconds';
+      pp("$xz POST Request has timed out in $timeOutInSeconds seconds 👎");
+      throw 'Request has timed out in $timeOutInSeconds seconds';
     }
   }
 
-  static const TIMEOUT_IN_SECONDS = 180;
+  static const timeOutInSeconds = 180;
 
   static const xz = '🌎 🌎 🌎 🌎 🌎 🌎 DataAPI: ';
   static Future _sendHttpGET(String mUrl) async {
     pp('$xz http GET call:  🔆 🔆 🔆 calling : 💙  $mUrl  💙');
     var start = DateTime.now();
-    var client =  http.Client();
+    var client = http.Client();
     var token = await AppAuth.getAuthToken();
     if (token != null) {
-      pp('$xz http GET call: 😡 😡 😡 Firebase Auth Token: 💙️ Token is GOOD! 💙 ');
+      pp('$xz http GET call: 😡😡😡 Firebase Auth Token: 💙️ Token is GOOD! 💙 ');
     }
+
     headers['Authorization'] = 'Bearer $token';
 
     try {
-      var resp = await client
-          .get(
-            Uri.parse(mUrl),
-            headers: headers,
-          );
+      var resp = await client.get(
+        Uri.parse(mUrl),
+        headers: headers,
+      );
       pp('$xz http GET call RESPONSE: .... : 💙 statusCode: 👌👌👌 ${resp.statusCode} 👌👌👌 💙 for $mUrl');
       var end = DateTime.now();
       pp('$xz http GET call: 🔆 elapsed time for http: ${end.difference(start).inSeconds} seconds 🔆 \n\n');
@@ -1046,8 +1114,8 @@ class DataAPI {
       pp("$xz Bad response format 👎");
       throw 'Bad response format';
     } on TimeoutException {
-      pp("$xz GET Request has timed out in $TIMEOUT_IN_SECONDS seconds 👎");
-      throw 'Request has timed out in $TIMEOUT_IN_SECONDS seconds';
+      pp("$xz GET Request has timed out in $timeOutInSeconds seconds 👎");
+      throw 'Request has timed out in $timeOutInSeconds seconds';
     }
   }
 

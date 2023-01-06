@@ -71,6 +71,7 @@ class MonitorReport {
     rating = data['rating'];
   }
   Map<String, dynamic> toJson() {
+    //todo - handle the photos and videos!!!
     Map<String, dynamic> map = {
       'projectId': projectId,
       'rating': rating,

@@ -36,6 +36,7 @@ class MediaListMobileState extends State<MediaListMobile>
   var _photos = <Photo>[];
   var _videos = <Video>[];
   User? user;
+  static const mm = '🔆🔆🔆 MediaListMobile 💜💜 ';
 
   @override
   void initState() {
@@ -45,11 +46,11 @@ class MediaListMobileState extends State<MediaListMobile>
   }
 
   void _listen() async {
-    pp('🔆 🔆 🔆 🔆 💜 💜 💜 Listening to streams from monitorBloc ....');
+    pp('$mm Listening to streams from monitorBloc ....');
     user = await Prefs.getUser();
 
     photoStreamSubscription = monitorBloc.projectPhotoStream.listen((value) {
-      pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Photos from stream controller: 💙 ${value.length}');
+      pp('$mm _MediaListMobileState: Photos from stream controller: 💙 ${value.length}');
       _photos = value;
       _processMedia();
       if (mounted) {
@@ -57,7 +58,7 @@ class MediaListMobileState extends State<MediaListMobile>
       }
     });
     videoStreamSubscription = monitorBloc.projectVideoStream.listen((value) {
-      pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Videos from stream controller: 🏈 ${value.length}');
+      pp('$mm _MediaListMobileState: Videos from stream controller: 🏈 ${value.length}');
       _videos = value;
       _processMedia();
       if (mounted) {
@@ -66,12 +67,12 @@ class MediaListMobileState extends State<MediaListMobile>
     });
 
     if (mounted) {
-      _refresh(false);
+      _refresh(true);
     }
   }
 
   Future<void> _refresh(bool forceRefresh) async {
-    pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: _refresh ...');
+    pp('$mm _MediaListMobileState: .......... _refresh ...');
     setState(() {
       isBusy = true;
     });
@@ -80,7 +81,7 @@ class MediaListMobileState extends State<MediaListMobile>
           projectId: widget.project.projectId!, forceRefresh: forceRefresh);
       _processMedia();
     } catch (e) {
-      print(e);
+      pp(e);
       AppSnackbar.showErrorSnackbar(
           scaffoldKey: _key, message: 'Data refresh failed: $e');
     }
@@ -306,10 +307,6 @@ class MediaListMobileState extends State<MediaListMobile>
             child: ProjectMonitorMobile(widget.project)));
   }
 
-  @override
-  onClose() {
-    ScaffoldMessenger.of(_key.currentState!.context).removeCurrentSnackBar();
-  }
 }
 
 class MediaBag {

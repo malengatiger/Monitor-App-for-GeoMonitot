@@ -9,9 +9,10 @@ import 'media_list_mobile.dart';
 import 'media_list_tablet.dart';
 
 class MediaListMain extends StatefulWidget {
-  final Project? project;
+  final Project project;
 
-  const MediaListMain(this.project, {super.key});
+  const MediaListMain({super.key, required this.project});
+
 
   @override
   MediaListMainState createState() => MediaListMainState();
@@ -33,15 +34,11 @@ class MediaListMainState extends State<MediaListMain>
     setState(() {
       isBusy = true;
     });
-    if (widget.project != null) {
+
       pp('MediaListMain: 💜 💜 💜 getting media for PROJECT: ${widget.project!.name!}');
       await monitorBloc.refreshProjectData(
           projectId: widget.project!.projectId!, forceRefresh: false);
-    } else {
-      var user = await Prefs.getUser();
-      pp('MediaListMain: 💜 💜 💜 getting media for ORGANIZATION: ${user!.organizationName!}');
-      await monitorBloc.refreshOrgDashboardData(forceRefresh: false);
-    }
+
     setState(() {
       isBusy = false;
     });
