@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart' as mon;
-import 'package:geo_monitor/library/ui/project_list/project_list_desktop.dart';
-import 'package:geo_monitor/library/ui/project_list/project_list_mobile.dart';
-import 'package:geo_monitor/library/ui/project_list/project_list_tablet.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../../data/user.dart' as mon;
 import '../../functions.dart';
+import 'project_list_desktop.dart';
+import 'project_list_mobile.dart';
+import 'project_list_tablet.dart';
 
 class ProjectListMain extends StatefulWidget {
   final mon.User user;

@@ -1,11 +1,10 @@
-import 'package:geo_monitor/library/data/video.dart';
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/position.dart';
-import 'package:geo_monitor/library/data/ratingContent.dart';
 
-import 'city.dart';
+import '../data/city.dart';
+import '../data/photo.dart';
+import '../data/ratingContent.dart';
+import '../data/position.dart';
+import '../data/video.dart';
 part 'community.g.dart';
 
 @HiveType(typeId: 13)

@@ -2,32 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/media/full_photo/full_photo_main.dart';
-import 'package:geo_monitor/library/ui/media/list/media_grid.dart';
-import 'package:geo_monitor/library/ui/media/video/video_main.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_main.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_mobile.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../../api/sharedprefs.dart';
+import '../../../bloc/monitor_bloc.dart';
+import '../../../data/user.dart';
 import '../../../data/video.dart';
 import '../../../functions.dart';
 import '../../../snack.dart';
+import '../../../data/photo.dart';
+import '../../../data/project.dart';
+import '../../project_monitor/project_monitor_mobile.dart';
+import '../full_photo/full_photo_main.dart';
+import '../video/video_main.dart';
+import 'media_grid.dart';
 
 class MediaListMobile extends StatefulWidget {
   final Project project;
 
-  MediaListMobile(this.project);
+  const MediaListMobile(this.project, {super.key});
 
   @override
-  _MediaListMobileState createState() => _MediaListMobileState();
+  MediaListMobileState createState() => MediaListMobileState();
 }
 
-class _MediaListMobileState extends State<MediaListMobile>
+class MediaListMobileState extends State<MediaListMobile>
     with SingleTickerProviderStateMixin
     implements MediaGridListener {
   late AnimationController _controller;
@@ -282,7 +282,7 @@ class _MediaListMobileState extends State<MediaListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.bottomRight,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               child: VideoMain(suitcase.video!)));
     } else {
       pp('MediaListMobile: 🦠 🦠 🦠 _onMediaTapped: show full image from 🍎 ${suitcase.photo!.url} 🍎');
@@ -291,7 +291,7 @@ class _MediaListMobileState extends State<MediaListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.bottomRight,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               child: FullPhotoMain(suitcase.photo!, widget.project)));
     }
   }
@@ -302,7 +302,7 @@ class _MediaListMobileState extends State<MediaListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 1500),
             child: ProjectMonitorMobile(widget.project)));
   }
 

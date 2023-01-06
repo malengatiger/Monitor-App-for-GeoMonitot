@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/interfaces.dart';
-import 'package:geo_monitor/library/data/position.dart';
 
+import '../data/interfaces.dart';
+import '../data/position.dart';
 class RatingContent {
   String? userId, created;
   String? comment;

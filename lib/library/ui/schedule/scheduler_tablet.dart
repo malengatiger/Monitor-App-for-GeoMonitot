@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
-
+import '../../data/user.dart';
 class SchedulerTablet extends StatefulWidget {
   final User user;
 
-  SchedulerTablet(this.user);
+  const SchedulerTablet(this.user, {super.key});
   @override
-  _SchedulerTabletState createState() => _SchedulerTabletState();
+  SchedulerTabletState createState() => SchedulerTabletState();
 }
 
-class _SchedulerTabletState extends State<SchedulerTablet>
+class SchedulerTabletState extends State<SchedulerTablet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

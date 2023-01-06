@@ -1,8 +1,4 @@
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/question.dart';
-import 'package:geo_monitor/library/data/section.dart';
-
-import 'content.dart';
+import '../data/section.dart';
 
 class QuestionnaireResponse {
   String? questionnaireId, userId, respondentId, questionnaireResponseId;

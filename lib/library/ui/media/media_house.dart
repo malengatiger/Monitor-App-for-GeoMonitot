@@ -1,45 +1,44 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/api/storage_bloc.dart';
-import 'package:geo_monitor/library/data/position.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
 
-import 'package:geo_monitor/library/ui/media/list/media_grid.dart';
-import 'package:geo_monitor/library/ui/media/video/video_main.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../api/sharedprefs.dart';
+import '../../api/storage_bloc.dart';
+import '../../data/position.dart';
+import '../../functions.dart';
 import 'full_photo/full_photo_main.dart';
+import 'list/media_grid.dart';
 import 'list/media_list_mobile.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../data/user.dart';
+import 'video/video_main.dart';
 
 /// Manage the process of creating media for the project
 class MediaHouse extends StatefulWidget {
   final Project project;
   final ProjectPosition projectPosition;
 
-  MediaHouse({required this.project, required this.projectPosition});
+  const MediaHouse({super.key, required this.project, required this.projectPosition});
 
   @override
-  _MediaHouseState createState() => _MediaHouseState();
+  MediaHouseState createState() => MediaHouseState();
 }
 
-class _MediaHouseState extends State<MediaHouse>
+class MediaHouseState extends State<MediaHouse>
     with SingleTickerProviderStateMixin
     implements StorageBlocListener, MediaGridListener {
   late AnimationController _controller;
   User? user;
   String? filePath;
-  var _imageChannel = MethodChannel('com.boha.image.channel');
-  var _videoChannel = MethodChannel('com.boha.video.channel');
+  final _imageChannel = const MethodChannel('com.boha.image.channel');
+  final _videoChannel = const MethodChannel('com.boha.video.channel');
   img.Image? thumbnail;
   File? imageFile;
   File? videoFile;
@@ -290,7 +289,7 @@ class _MediaHouseState extends State<MediaHouse>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.bottomRight,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               child: VideoMain(suitcase.video!)));
     } else {
       pp('$mm 🦠 🦠 🦠 _onMediaTapped: show full image from 🍎 ${suitcase.photo!.url} 🍎');
@@ -299,7 +298,7 @@ class _MediaHouseState extends State<MediaHouse>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.bottomRight,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               child: FullPhotoMain(suitcase.photo!, widget.project)));
     }
   }

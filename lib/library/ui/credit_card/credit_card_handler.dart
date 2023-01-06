@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/credit_card/credit_card_handler_desktop.dart';
-import 'package:geo_monitor/library/ui/credit_card/credit_card_handler_mobile.dart';
-import 'package:geo_monitor/library/ui/credit_card/credit_card_handler_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
+import '../../data/user.dart';
+import 'credit_card_handler_desktop.dart';
+import 'credit_card_handler_mobile.dart';
+import 'credit_card_handler_tablet.dart';
 
 class CreditCardHandlerMain extends StatefulWidget {
   final User user;
@@ -11,10 +12,10 @@ class CreditCardHandlerMain extends StatefulWidget {
   const CreditCardHandlerMain({Key? key, required this.user}) : super(key: key);
 
   @override
-  _CreditCardHandlerMainState createState() => _CreditCardHandlerMainState();
+  CreditCardHandlerMainState createState() => CreditCardHandlerMainState();
 }
 
-class _CreditCardHandlerMainState extends State<CreditCardHandlerMain>
+class CreditCardHandlerMainState extends State<CreditCardHandlerMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

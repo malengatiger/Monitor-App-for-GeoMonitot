@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/position.dart';
 import 'package:hive/hive.dart';
+import '../data/position.dart';
 
 part 'photo.g.dart';
 

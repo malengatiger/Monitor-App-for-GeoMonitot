@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/ui/media/full_photo/full_photo_desktop.dart';
-import 'package:geo_monitor/library/ui/media/full_photo/full_photo_mobile.dart';
-import 'package:geo_monitor/library/ui/media/full_photo/full_photo_tablet.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
+import '../../../data/photo.dart';
+import '../../../data/project.dart';
+import 'full_photo_desktop.dart';
+import 'full_photo_mobile.dart';
+import 'full_photo_tablet.dart';
 
 class FullPhotoMain extends StatelessWidget {
   final Photo photo;
   final Project project;
 
-  FullPhotoMain(this.photo, this.project);
+  const FullPhotoMain(this.photo, this.project, {super.key});
 
   @override
   Widget build(BuildContext context) {

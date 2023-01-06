@@ -1,25 +1,25 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-
+import '../api/sharedprefs.dart';
+import '../bloc/monitor_bloc.dart';
+import '../data/user.dart';
+import '../data/project_position.dart';
+import '../data/project.dart';
+import '../functions.dart';
 
 
 class MonitorMapMobile extends StatefulWidget {
+  const MonitorMapMobile({super.key});
+
   @override
-  _MonitorMapMobileState createState() => _MonitorMapMobileState();
+  MonitorMapMobileState createState() => MonitorMapMobileState();
 }
 
-class _MonitorMapMobileState extends State<MonitorMapMobile>
+class MonitorMapMobileState extends State<MonitorMapMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   List<ProjectPosition> projectPositions = [];
@@ -83,7 +83,7 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
       pp('💜 💜 💜 Project positions found: 🍎 ${projectPositions.length}');
       _addMarkers();
     } catch (e) {
-      print(e);
+      pp(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data refresh failed: $e')));
 
     }
@@ -92,10 +92,10 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
     });
   }
 
-  Completer<GoogleMapController> _mapController = Completer();
+  final Completer<GoogleMapController> _mapController = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -105,7 +105,7 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
   Future<void> _addMarkers() async {
     pp('💜 💜 💜 _addMarkers ....... 🍎 ${projectPositions.length}');
     markers.clear();
-    projectPositions.forEach((projectPosition) {
+    for (var projectPosition in projectPositions) {
       final MarkerId markerId =
           MarkerId('${projectPosition.projectId}_${random.nextInt(9999988)}');
       final Marker marker = Marker(
@@ -126,18 +126,18 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
         },
       );
       markers[markerId] = marker;
-    });
-    final CameraPosition _first = CameraPosition(
+    }
+    final CameraPosition first = CameraPosition(
       target: LatLng(
           projectPositions.elementAt(0).position!.coordinates.elementAt(1),
           projectPositions.elementAt(0).position!.coordinates.elementAt(0)),
       zoom: 14.4746,
     );
     googleMapController = await _mapController.future;
-    googleMapController!.animateCamera(CameraUpdate.newCameraPosition(_first));
+    googleMapController!.animateCamera(CameraUpdate.newCameraPosition(first));
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -152,51 +152,49 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
         DeviceOrientation.landscapeLeft,
       ]);
     }
-    return new Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           isBusy
               ? Scaffold(
                   key: _key,
                   appBar: AppBar(
-                    title: Text('Project Map'),
+                    title: const Text('Project Map'),
                     bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(200),
                       child: Column(
                         children: [
                           Text(
                             user == null ? '' : user!.name!,
                             style: Styles.whiteBoldSmall,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(user == null ? '' : user!.organizationName!,
                               style: Styles.blackBoldSmall),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                         ],
                       ),
-                      preferredSize: Size.fromHeight(200),
                     ),
                   ),
                   body: Center(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100,
-                          ),
-                          CircularProgressIndicator(
-                            strokeWidth: 8,
-                            backgroundColor: Colors.black,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text('Loading Project Data ...'),
-                        ],
-                      ),
+                    child: Column(
+                      children: const [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        CircularProgressIndicator(
+                          strokeWidth: 8,
+                          backgroundColor: Colors.black,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text('Loading Project Data ...'),
+                      ],
                     ),
                   ),
                 )
@@ -237,25 +235,25 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
                                   user == null ? '' : user!.organizationName!,
                                   style: Styles.blackBoldSmall,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 8,
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.cancel),
+                                  icon: const Icon(Icons.cancel),
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text('Projects', style: Styles.greyLabelSmall),
-                                SizedBox(
+                                const SizedBox(
                                   width: 20,
                                 ),
                                 Text(
@@ -264,7 +262,7 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                           ],
@@ -295,7 +293,5 @@ class _MonitorMapMobileState extends State<MonitorMapMobile>
     pp('💜 💜 💜 _onMarkerDragEnd ....... ${projectPosition.projectName} LatLng: $position');
   }
 
-  void _navigateToMedia() {
-    Navigator.pop(context);
-  }
+
 }

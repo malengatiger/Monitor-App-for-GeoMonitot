@@ -1,22 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/data/section.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/snack.dart';
-import 'package:geo_monitor/ui/questionnaire/section_editor.dart';
+
 import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';
+import '../../library/api/sharedprefs.dart';
+import '../../library/bloc/admin_bloc.dart';
+import '../../library/data/question.dart';
+import '../../library/data/questionnaire.dart';
+import '../../library/data/section.dart';
+import '../../library/data/user.dart';
+import '../../library/functions.dart';
+import '../../library/snack.dart';
+import 'section_editor.dart';
 
 class QuestionnaireEditor extends StatefulWidget {
   final Questionnaire? questionnaire;
 
-  const QuestionnaireEditor({this.questionnaire});
+  const QuestionnaireEditor({super.key, this.questionnaire});
 
   @override
   QuestionnaireEditorState createState() => QuestionnaireEditorState();
@@ -24,7 +25,7 @@ class QuestionnaireEditor extends StatefulWidget {
 
 class QuestionnaireEditorState extends State<QuestionnaireEditor>
      {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
@@ -34,9 +35,6 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
   bool showButton = false;
   late StreamSubscription<Questionnaire> subscription;
 
-  void _close() {
-    subscription.cancel();
-  }
 
   @override
   void initState() {
@@ -57,7 +55,7 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
   _subscribe() {
     subscription = adminBloc.activeQuestionnaireStream.listen((snapshot) {
       debugPrint(
-          '🛳 🛳 🛳 subscription listener fired, 🎽 active questionnaire arrived: ${snapshot}');
+          '🛳 🛳 🛳 subscription listener fired, 🎽 active questionnaire arrived: $snapshot');
       setState(() {
         questionnaire = snapshot;
       });
@@ -124,7 +122,7 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
       backgroundColor: Colors.brown[100],
       body: isBusy
           ? Center(
-              child: Container(
+              child: SizedBox(
                 height: 60,
                 width: 60,
                 child: CircularProgressIndicator(
@@ -143,12 +141,12 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
                       padding: const EdgeInsets.only(left: 16, right: 16),
                       child: Column(
                         children: <Widget>[
-                          SizedBox(
+                          const SizedBox(
                             height: 24,
                           ),
                           Text('Questionnaire Details',
                               style: Styles.blackBoldMedium),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           TextField(
@@ -156,12 +154,12 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             controller: titleController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Title',
                               hintText: 'Enter Questionnaire Title',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           TextField(
@@ -169,25 +167,25 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
                             keyboardType: TextInputType.multiline,
                             controller: descController,
                             maxLines: null,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Description',
                               hintText: 'Enter Questionnaire Description',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           TextField(
                             onChanged: _onSections,
                             controller: sectionsController,
                             keyboardType:
-                                TextInputType.numberWithOptions(signed: false),
-                            decoration: InputDecoration(
+                                const TextInputType.numberWithOptions(signed: false),
+                            decoration: const InputDecoration(
                               labelText: 'Number of Sections',
                               hintText: 'Number of Questionnaire Sections',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           ElevatedButton(
@@ -201,7 +199,7 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                         ],
@@ -279,10 +277,10 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
         questionnaire!.sections.add(sec);
       }
     } else {
-      print('⛱⛱ sections exist, ⛱ templates may not be necessary');
+      pp('⛱⛱ sections exist, ⛱ templates may not be necessary');
       if (numberOfSections - questionnaire!.sections.length > 0) {
         var number = numberOfSections - questionnaire!.sections.length;
-        print('⛱⛱ sections exist, ⛱ but extra $number templates are necessary');
+        pp('⛱⛱ sections exist, ⛱ but extra $number templates are necessary');
         for (var i = 0; i < number; i++) {
           var sec = Section(
             sectionNumber: '${i + 1 + questionnaire!.sections.length}',
@@ -301,14 +299,15 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
     await Prefs.saveQuestionnaire(questionnaire!);
     adminBloc.updateActiveQuestionnaire(questionnaire!);
 
-    // Navigator.of(context).push(route);
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: Duration(seconds: 1),
-            child: SectionEditor(questionnaire!)));
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: SectionEditor(questionnaire!)));
+    }
   }
 
   void _showErrorSnack(String s) {
@@ -316,10 +315,6 @@ class QuestionnaireEditorState extends State<QuestionnaireEditor>
         scaffoldKey: _key, message: s, actionLabel: 'Err', );
   }
 
-  @override
-  onActionPressed(int action) {
-    return null;
-  }
 
   void _writeQuestionnaireToDatabase() async {
     if (isBusy) return;

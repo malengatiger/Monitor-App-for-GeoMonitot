@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:geo_monitor/library/data/user.dart';
+import '../data/user.dart';
 
 part 'geofence_event.g.dart';
 

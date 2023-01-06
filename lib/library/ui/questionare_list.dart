@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
+import '../bloc/admin_bloc.dart';
+import '../data/user.dart';
+import '../data/questionnaire.dart';
+import '../functions.dart';
 
 class QuestionnaireList extends StatefulWidget {
   final QuestionnaireListener listener;
 
-  QuestionnaireList(this.listener);
+  const QuestionnaireList(this.listener, {super.key});
 
   @override
-  _QuestionnaireListState createState() => _QuestionnaireListState();
+  QuestionnaireListState createState() => QuestionnaireListState();
 }
 
-class _QuestionnaireListState extends State<QuestionnaireList> {
+class QuestionnaireListState extends State<QuestionnaireList> {
   List<Questionnaire> questionnaires = [];
   bool isBusy = false;
   User? user;
@@ -56,12 +57,12 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
               backgroundColor: Colors.purple[300],
               actions: [
                 IconButton(
-                  icon: Icon(Icons.refresh),
+                  icon: const Icon(Icons.refresh),
                   onPressed: _getData,
                 ),
               ],
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(160),
+                preferredSize: const Size.fromHeight(160),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -72,13 +73,12 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Expanded(
-                                child: Container(
-                                    child: Text(
+                                child: Text(
                               user == null ? '' : '${user!.organizationName}',
                               style: Styles.whiteBoldSmall,
                               overflow: TextOverflow.clip,
-                            ))),
-                            SizedBox(
+                            )),
+                            const SizedBox(
                               width: 16,
                             ),
                             Column(
@@ -87,7 +87,7 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
                                   '${questionnaires.length}',
                                   style: Styles.blackBoldLarge,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 4,
                                 ),
                                 Text(
@@ -96,13 +96,13 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 12,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                     ],
@@ -112,8 +112,8 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
             ),
             backgroundColor: Colors.brown[50],
             body: isBusy
-                ? Center(
-                    child: Container(
+                ? const Center(
+                    child: SizedBox(
                       height: 80,
                       width: 80,
                       child: CircularProgressIndicator(
@@ -144,35 +144,31 @@ class _QuestionnaireListState extends State<QuestionnaireList> {
                                         Icons.apps,
                                         color: getRandomColor(),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 8,
                                       ),
                                       Expanded(
-                                        child: Container(
-                                          child: Text(
-                                            '${questionnaires.elementAt(index).title}',
-                                            style: Styles.blackBoldSmall,
-                                            overflow: TextOverflow.clip,
-                                          ),
+                                        child: Text(
+                                          questionnaires.elementAt(index).title,
+                                          style: Styles.blackBoldSmall,
+                                          overflow: TextOverflow.clip,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 4,
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 32,
                                       ),
                                       Expanded(
-                                        child: Container(
-                                          child: Text(
-                                            '${questionnaires.elementAt(index).description}',
-                                            style: Styles.blackSmall,
-                                            overflow: TextOverflow.clip,
-                                          ),
+                                        child: Text(
+                                          questionnaires.elementAt(index).description,
+                                          style: Styles.blackSmall,
+                                          overflow: TextOverflow.clip,
                                         ),
                                       ),
                                     ],

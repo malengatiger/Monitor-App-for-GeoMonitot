@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/field_monitor_schedule.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
 
+import '../../api/data_api.dart';
+import '../../api/sharedprefs.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../data/project.dart';
+import '../../data/user.dart';
+import '../../data/field_monitor_schedule.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../functions.dart';
 
 class SchedulerMobile extends StatefulWidget {
   final User user;
@@ -25,7 +26,7 @@ class SchedulerMobileState extends State<SchedulerMobile>
   bool busy = false;
   User? _adminUser;
   List<Project> _projects = [];
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   static const mm = 'SchedulerMobile: 🍏 🍏 🍏 🍏 ';
   @override
   void initState() {
@@ -67,6 +68,7 @@ class SchedulerMobileState extends State<SchedulerMobile>
             appBar: AppBar(
               title: Text('FieldMonitor Schedule', style: Styles.whiteSmall),
               bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(100),
                   child: Column(
                     children: [
                       Text(
@@ -77,17 +79,16 @@ class SchedulerMobileState extends State<SchedulerMobile>
                         'FieldMonitor',
                         style: Styles.blackSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 48,
                       ),
                     ],
-                  ),
-                  preferredSize: Size.fromHeight(100)),
+                  )),
             ),
             backgroundColor: Colors.brown[100],
             body: busy
-                ? Center(
-                    child: Container(
+                ? const Center(
+                    child: SizedBox(
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(
@@ -100,31 +101,29 @@ class SchedulerMobileState extends State<SchedulerMobile>
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Container(
-                          child: ListView.builder(
-                              itemCount: _projects.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    _navigateToFrequencyEditor(
-                                        _projects.elementAt(index));
-                                  },
-                                  child: Card(
-                                    elevation: 2,
-                                    child: ListTile(
-                                      leading: Icon(
-                                        Icons.home,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                      title: Text(
-                                        _projects.elementAt(index).name!,
-                                        style: Styles.blackBoldSmall,
-                                      ),
+                        child: ListView.builder(
+                            itemCount: _projects.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  _navigateToFrequencyEditor(
+                                      _projects.elementAt(index));
+                                },
+                                child: Card(
+                                  elevation: 2,
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.home,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    title: Text(
+                                      _projects.elementAt(index).name!,
+                                      style: Styles.blackBoldSmall,
                                     ),
                                   ),
-                                );
-                              }),
-                        ),
+                                ),
+                              );
+                            }),
                       ),
                     ],
                   )));
@@ -137,7 +136,7 @@ class SchedulerMobileState extends State<SchedulerMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.bottomRight,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: FrequencyEditor(
               project: project,
               adminUser: _adminUser!,
@@ -146,7 +145,7 @@ class SchedulerMobileState extends State<SchedulerMobile>
     if (result is bool) {
       pp('$mm Yebo Yes!!! schedule has been written to database 🍎');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Scheduling for FieldMonitor saved')));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Scheduling for FieldMonitor saved')));
 
       }
     }
@@ -185,6 +184,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
           style: Styles.whiteSmall,
         ),
         bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
             child: Column(
               children: [
                 Text(
@@ -195,12 +195,11 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                   'FieldMonitor',
                   style: Styles.blackSmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 48,
                 ),
               ],
-            ),
-            preferredSize: Size.fromHeight(100)),
+            )),
       ),
       backgroundColor: Colors.brown[100],
       body: Padding(
@@ -210,8 +209,8 @@ class FrequencyEditorState extends State<FrequencyEditor> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: busy
-                ? Center(
-                    child: Container(
+                ? const Center(
+                    child: SizedBox(
                       width: 24,
                       height: 24,
                       child: CircularProgressIndicator(
@@ -223,21 +222,21 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                 : SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Text(
                           '${widget.project.name}',
                           style: Styles.blackBoldMedium,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Text(
                           'Project to be Monitored',
                           style: Styles.blackSmall,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 28,
                         ),
                         Padding(
@@ -248,7 +247,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                               controller: _perDayController,
                               keyboardType: TextInputType.number,
                               style: Styles.blackBoldMedium,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 icon: Icon(
                                   Icons.alarm,
                                   color: Colors.blue,
@@ -259,7 +258,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Padding(
@@ -270,7 +269,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                               controller: _perWeekController,
                               keyboardType: TextInputType.number,
                               style: Styles.blackBoldMedium,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 icon: Icon(
                                   Icons.alarm,
                                   color: Colors.blue,
@@ -281,7 +280,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Padding(
@@ -292,7 +291,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                               controller: _perMonthController,
                               keyboardType: TextInputType.number,
                               style: Styles.blackBoldMedium,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 icon: Icon(
                                   Icons.alarm,
                                   color: Colors.blue,
@@ -303,7 +302,7 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         ElevatedButton(
@@ -314,17 +313,16 @@ class FrequencyEditorState extends State<FrequencyEditor> {
                                   perMonth: _perMonthController.text);
                             },
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.pink,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                            child: const Padding(
+                              padding: EdgeInsets.all(12.0),
                               child: Text('Submit Schedule'),
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 48,
                         ),
                       ],
@@ -339,15 +337,15 @@ class FrequencyEditorState extends State<FrequencyEditor> {
   void _doSubmit({required String perDay, required String perWeek, required String perMonth}) async {
     pp('SchedulerMobile: ............. '
         '🍏 🍏 🍏 🍏 _doSubmit: ...perDay: $perDay perWeek: $perWeek perMonth: $perMonth');
-    Uuid uuid = Uuid();
+    Uuid uuid = const Uuid();
     String id = uuid.v4();
     setState(() {
       busy = true;
     });
     try {
-      int _perDay = int.parse(perDay);
-      int _perWeek = int.parse(perWeek);
-      int _perMonth = int.parse(perMonth);
+      int mPerDay = int.parse(perDay);
+      int mPerWeek = int.parse(perWeek);
+      int mPerMonth = int.parse(perMonth);
 
       var sc = FieldMonitorSchedule(
           fieldMonitorId: widget.fieldUser.userId,
@@ -355,9 +353,9 @@ class FrequencyEditorState extends State<FrequencyEditor> {
           projectId: widget.project.projectId,
           date: DateTime.now().toIso8601String(),
           organizationId: widget.project.organizationId,
-          perDay: _perDay,
-          perWeek: _perWeek,
-          perMonth: _perMonth,
+          perDay: mPerDay,
+          perWeek: mPerWeek,
+          perMonth: mPerMonth,
           organizationName: widget.project.organizationName,
           projectName: widget.project.name,
           fieldMonitorScheduleId: id, userId: '');

@@ -1,11 +1,9 @@
-import 'package:geo_monitor/library/data/position.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/position.dart' as ar;
 
-import '../functions.dart';
 import 'city.dart';
+import '../data/position.dart';
+import 'place_mark.dart';
 
 part 'project_position.g.dart';
 
@@ -24,9 +22,9 @@ class ProjectPosition {
   @HiveField(5)
   String? organizationId;
   @HiveField(6)
-  ar.Position? position;
+  Position? position;
   @HiveField(7)
-  Placemark? placemark;
+  PlaceMark? placemark;
   @HiveField(8)
   List<City>? nearestCities;
 
@@ -43,40 +41,40 @@ class ProjectPosition {
 
   ProjectPosition.fromJson(Map data) {
     //pp(' 💜 ProjectPosition.fromJson: log 0');
-    this.projectName = data['projectName'];
+    projectName = data['projectName'];
     //pp(' 💜 ProjectPosition.fromJson: log 1');
-    this.projectId = data['projectId'];
-    this.projectPositionId = data['projectPositionId'];
+    projectId = data['projectId'];
+    projectPositionId = data['projectPositionId'];
     //pp(' 💜 ProjectPosition.fromJson: log 2');
-    this.caption = data['caption'];
-    this.projectId = data['projectId'];
-    this.organizationId = data['organizationId'];
-    this.created = data['created'];
+    caption = data['caption'];
+    projectId = data['projectId'];
+    organizationId = data['organizationId'];
+    created = data['created'];
     //pp(' 💜 ProjectPosition.fromJson: log 3');
 
     if (data['position'] != null) {
-      this.position = ar.Position.fromJson(data['position']);
+      position = Position.fromJson(data['position']);
     }
     //pp(' 💜 ProjectPosition.fromJson: log 4');
     if (data['placemark'] != null) {
-      this.placemark = Placemark.fromMap(data['position']);
+      placemark = PlaceMark.fromJson(data['placemark']);
     }
     //pp(' 💜 ProjectPosition.fromJson: log 5');
-    this.nearestCities = [];
+    nearestCities = [];
     if (data['nearestCities'] != null) {
       List list = data['nearestCities'];
-      list.forEach((c) {
+      for (var c in list) {
         nearestCities!.add(City.fromJson(c));
-      });
+      }
     }
     //pp(' 💜 ProjectPosition.fromJson: log end');
   }
 
   Map<String, dynamic> toJson() {
     var list = [];
-    this.nearestCities!.forEach((c) {
+    for (var c in nearestCities!) {
       list.add(c.toJson());
-    });
+    }
     Map<String, dynamic> map = {
       'projectName': projectName,
       'projectId': projectId,

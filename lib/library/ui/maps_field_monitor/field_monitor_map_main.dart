@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/data/position.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
+import '../../api/data_api.dart';
+import '../../data/user.dart';
+import '../../data/position.dart';
+import '../../functions.dart';
+import '../../hive_util.dart';
 
 import 'field_monitor_map_desktop.dart';
 import 'field_monitor_map_mobile.dart';

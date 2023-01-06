@@ -1,12 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/user.dart' as mon;
 
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
 import '../data/country.dart';
 import '../functions.dart';
+import '../data/city.dart';
+import '../data/community.dart';
+import '../data/condition.dart';
+import '../data/field_monitor_schedule.dart';
+import '../data/monitor_report.dart';
+import '../data/org_message.dart';
+import '../data/organization.dart';
+import '../data/photo.dart';
+import '../data/project.dart';
+import '../data/project_position.dart';
+import '../data/section.dart';
+import '../data/user.dart' as mon;
+import '../data/video.dart';
 
 class AppAuth {
   static FirebaseAuth? _auth;
@@ -94,9 +106,8 @@ class AppAuth {
   }
 
   static const locks = '🔐🔐🔐🔐';
-  static Future signIn(String email, String password, String type) async {
+  static Future<mon.User?> signIn({required String email, required String password}) async {
     pp('$locks Auth: signing in $email 🌸 $password  $locks');
-
     //var token = await _getAdminAuthenticationToken();
     _auth = FirebaseAuth.instance;
     var fbUser = await _auth!

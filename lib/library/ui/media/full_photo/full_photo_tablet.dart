@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
+import '../../../data/photo.dart';
+import '../../../data/project.dart';
 
 class FullPhotoTablet extends StatefulWidget {
   final Photo photo;
   final Project project;
 
-  FullPhotoTablet(this.photo, this.project);
+  const FullPhotoTablet(this.photo, this.project, {super.key});
 
   @override
-  _FullPhotoTabletState createState() => _FullPhotoTabletState();
+  FullPhotoTabletState createState() => FullPhotoTabletState();
 }
 
-class _FullPhotoTabletState extends State<FullPhotoTablet>
+class FullPhotoTabletState extends State<FullPhotoTablet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

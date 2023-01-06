@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/project.dart';
-
+import '../../data/project.dart';
 class ProjectLocationDesktop extends StatefulWidget {
   final Project project;
 
-  ProjectLocationDesktop(this.project);
+  const ProjectLocationDesktop(this.project, {super.key});
 
   @override
-  _ProjectLocationDesktopState createState() => _ProjectLocationDesktopState();
+  ProjectLocationDesktopState createState() => ProjectLocationDesktopState();
 }
 
-class _ProjectLocationDesktopState extends State<ProjectLocationDesktop>
+class ProjectLocationDesktopState extends State<ProjectLocationDesktop>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

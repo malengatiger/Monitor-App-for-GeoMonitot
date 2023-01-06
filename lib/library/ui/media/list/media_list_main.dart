@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/media/list/media_list_desktop.dart';
-import 'package:geo_monitor/library/ui/media/list/media_list_mobile.dart';
-import 'package:geo_monitor/library/ui/media/list/media_list_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import '../../../api/sharedprefs.dart';
+import '../../../bloc/monitor_bloc.dart';
+import '../../../data/project.dart';
+import '../../../functions.dart';
+import 'media_list_desktop.dart';
+import 'media_list_mobile.dart';
+import 'media_list_tablet.dart';
 
 class MediaListMain extends StatefulWidget {
   final Project? project;
 
-  MediaListMain(this.project);
+  const MediaListMain(this.project, {super.key});
 
   @override
-  _MediaListMainState createState() => _MediaListMainState();
+  MediaListMainState createState() => MediaListMainState();
 }
 
-class _MediaListMainState extends State<MediaListMain>
+class MediaListMainState extends State<MediaListMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
@@ -64,8 +64,8 @@ class _MediaListMainState extends State<MediaListMain>
                   style: Styles.whiteSmall,
                 ),
               ),
-              body: Center(
-                child: Container(
+              body: const Center(
+                child: SizedBox(
                   width: 60,
                   height: 60,
                   child: CircularProgressIndicator(

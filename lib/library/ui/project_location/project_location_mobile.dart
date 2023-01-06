@@ -1,35 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/city.dart';
-import 'package:geo_monitor/library/data/position.dart' as mon;
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/location/loc_bloc.dart';
+
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:uuid/uuid.dart';
 
+import '../../api/data_api.dart';
+
+import '../../api/sharedprefs.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../data/city.dart';
+import '../../data/place_mark.dart';
+import '../../data/position.dart' as mon;
+
 import '../../functions.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../location/loc_bloc.dart';
 
 class ProjectLocationMobile extends StatefulWidget {
   final Project project;
 
-  ProjectLocationMobile(this.project);
+  const ProjectLocationMobile(this.project, {super.key});
 
   @override
-  _ProjectLocationMobileState createState() => _ProjectLocationMobileState();
+  ProjectLocationMobileState createState() => ProjectLocationMobileState();
 }
 
-class _ProjectLocationMobileState extends State<ProjectLocationMobile>
+class ProjectLocationMobileState extends State<ProjectLocationMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
-  ProjectPosition? _projectPosition;
   List<ProjectPosition> _projectPositions = [];
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   static const mx = '💙 💙 💙 ProjectLocation Mobile: 💙 : ';
 
   @override
@@ -49,7 +53,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
   Future<bool> _isLocationWithinProjectMonitorDistance() async {
     pp('$mx calculating _isLocationWithinProjectMonitorDistance .... '
         '${widget.project.monitorMaxDistanceInMetres!} metres');
-    var map = Map<double, ProjectPosition>();
+    var map = <double, ProjectPosition>{};
     for (var i = 0; i < _projectPositions.length; i++) {
       var projPos = _projectPositions.elementAt(i);
       var dist = await locationBloc.getDistanceFromCurrentPosition(
@@ -59,7 +63,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
       map[dist] = projPos;
       pp('$mx Distance: 🌶 $dist metres 🌶 projectId: ${projPos.projectId} 🐊 projectPositionId: ${projPos.projectPositionId}');
     }
-    if (map.length == 0) {
+    if (map.isEmpty) {
       return false;
     }
     var list = map.keys.toList();
@@ -78,7 +82,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
       pp('$mx _projectPositions found: ${_projectPositions.length}; checking location within project monitorDistance...');
       _isLocationWithinProjectMonitorDistance();
     } catch (e) {
-      print(e);
+      pp(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data refresh failed: $e')));
     }
   }
@@ -87,7 +91,10 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
     await _getLocation();
     var isWithin = await _isLocationWithinProjectMonitorDistance();
     if (isWithin) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('This location is already recorded for ${widget.project.name}')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
+            'This location is already recorded for ${widget.project.name}')));
+      }
       return;
     }
 
@@ -100,7 +107,10 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
     pp('$mx Cities found for project position: ${cities.length}');
 
     if (_position == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Current Location not available')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Current Location not available')));
+      }
       return;
     }
     setState(() {
@@ -115,7 +125,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
       }
       var org = await Prefs.getUser();
       var loc = ProjectPosition(
-          placemark: pm,
+          placemark: pm == null? null: PlaceMark.getPlaceMark(placemark: pm),
           projectName: widget.project.name,
           caption: 'tbd',
           organizationId: org!.organizationId,
@@ -124,22 +134,29 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
               type: 'Point',
               coordinates: [_position!.longitude, _position!.latitude]),
           projectId: widget.project.projectId,
-          nearestCities: cities, projectPositionId: Uuid().v4());
+          nearestCities: cities, projectPositionId: const Uuid().v4());
       try {
         var m = await DataAPI.addProjectPosition(position: loc);
         pp('$mx  _submit: new projectPosition added .........  🍅 ${m.toJson()} 🍅');
         await monitorBloc.getProjectPositions(
             projectId: widget.project.projectId!, forceRefresh: true);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Project Position failed: $e')));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Project Position failed: $e')));
+        }
       }
       setState(() {
         isBusy = false;
       });
-
-      Navigator.pop(context, loc);
+      if (mounted) {
+        Navigator.pop(context, loc);
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed: $e')));
+      }
 
     }
   }
@@ -169,7 +186,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(200),
+            preferredSize: const Size.fromHeight(200),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -178,14 +195,14 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
                     '${widget.project.name}',
                     style: Styles.blackBoldMedium,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                   Text(
                     'Add a Project Location at this location that you are at. This location will be enabled for monitoring',
                     style: Styles.whiteSmall,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                 ],
@@ -197,66 +214,76 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
         body: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Card(
-            elevation: 2,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24.0)),
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 _position == null
                     ? Container()
-                    : Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
+                    : Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Current Location',
+                            style: Styles.greyLabelMedium,
+                          ),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          Row(
                             children: [
+                               SizedBox(width: 80,
+                                 child: Text('Latitude', style: GoogleFonts.lato(
+                                    textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.normal),),
+                               ),
+                              const SizedBox(
+                                width: 12,
+                              ),
                               Text(
-                                'Current Location',
-                                style: Styles.greyLabelMedium,
-                              ),
-                              SizedBox(
-                                height: 32,
-                              ),
-                              Row(
-                                children: [
-                                  Text('Latitude'),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    '${_position!.latitude}',
-                                    style: Styles.blackBoldMedium,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  Text('Longitude'),
-                                  SizedBox(
-                                    width: 12,
-                                  ),
-                                  Text(
-                                    '${_position!.longitude}',
-                                    style: Styles.blackBoldMedium,
-                                  ),
-                                ],
+                                _position!.latitude.toStringAsFixed(6),
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: Theme.of(context).textTheme.headline6,
+                                      fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                        ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: [
+                               SizedBox(width: 80,
+                                 child: Text('Longitude', style: GoogleFonts.lato(
+                                    textStyle: Theme.of(context).textTheme.bodyMedium, fontWeight: FontWeight.normal),),
+                               ),
+                              const SizedBox(
+                                width: 12,
+                              ),
+                              Text(
+                                _position!.longitude.toStringAsFixed(6),
+                                style: GoogleFonts.lato(
+                                    textStyle: Theme.of(context).textTheme.headline6,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                SizedBox(
+                    ),
+                const SizedBox(
                   height: 48,
                 ),
                 isBusy
-                    ? Container(
-                        width: 48,
-                        height: 48,
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
                         child: CircularProgressIndicator(
-                          strokeWidth: 8,
+                          strokeWidth: 4,
                           backgroundColor: Colors.black,
                         ),
                       )
@@ -272,7 +299,7 @@ class _ProjectLocationMobileState extends State<ProjectLocationMobile>
                           ),
                         ),
                       ),
-                SizedBox(
+                const SizedBox(
                   height: 48,
                 ),
               ],

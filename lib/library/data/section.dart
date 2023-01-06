@@ -1,8 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/question.dart';
 
-import 'content.dart';
-
+import '../data/question.dart';
 class Section {
   String? title, description, sectionId;
   List<Question>? questions = [];

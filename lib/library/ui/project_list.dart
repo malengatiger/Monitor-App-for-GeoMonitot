@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
 
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
+import '../data/user.dart';
+import '../data/project.dart';
+import '../functions.dart';
 abstract class ProjectListener {
   onProjectSelected(Project project);
 }
@@ -12,17 +12,16 @@ abstract class ProjectListener {
 class ProjectList extends StatefulWidget {
   final ProjectListener listener;
 
-  ProjectList(this.listener);
+  const ProjectList(this.listener, {super.key});
 
   @override
-  _ProjectListState createState() => _ProjectListState();
+  ProjectListState createState() => ProjectListState();
 }
 
-class _ProjectListState extends State<ProjectList> {
+class ProjectListState extends State<ProjectList> {
   User? user;
   bool isBusy = false;
   List<Project> projects = [];
-  GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -50,7 +49,7 @@ class _ProjectListState extends State<ProjectList> {
         ),
         elevation: 8,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(100),
           child: Column(
             children: <Widget>[
               Padding(
@@ -59,15 +58,13 @@ class _ProjectListState extends State<ProjectList> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Expanded(
-                      child: Container(
-                        child: Text(
-                          user == null ? 'Organization' : user!.organizationName!,
-                          style: Styles.whiteBoldSmall,
-                          overflow: TextOverflow.clip,
-                        ),
+                      child: Text(
+                        user == null ? 'Organization' : user!.organizationName!,
+                        style: Styles.whiteBoldSmall,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Column(
@@ -76,7 +73,7 @@ class _ProjectListState extends State<ProjectList> {
                           '${projects.length}',
                           style: Styles.blackBoldLarge,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 4,
                         ),
                         Text(

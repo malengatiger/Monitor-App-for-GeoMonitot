@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/fcm_bloc.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/maps_field_monitor/field_monitor_map_main.dart';
-import 'package:geo_monitor/library/ui/message/message_main.dart';
-import 'package:geo_monitor/library/ui/schedule/scheduler_main.dart';
-import 'package:geo_monitor/library/users/report/user_rpt_main.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../api/sharedprefs.dart';
+import '../../bloc/fcm_bloc.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../functions.dart';
 import '../../hive_util.dart';
 import '../../snack.dart';
+import '../../ui/maps_field_monitor/field_monitor_map_main.dart';
+import '../../ui/message/message_main.dart';
+import '../../ui/schedule/scheduler_main.dart';
 import '../edit/user_edit_main.dart';
+import '../../data/user.dart';
+import '../report/user_rpt_main.dart';
+
 
 class UserListMobile extends StatefulWidget {
   final User user;
   const UserListMobile(this.user);
 
   @override
-  _UserListMobileState createState() => _UserListMobileState();
+  UserListMobileState createState() => UserListMobileState();
 }
 
-class _UserListMobileState extends State<UserListMobile>
+class UserListMobileState extends State<UserListMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isBusy = false;
   var _users = <User>[];
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   User? _user;
 
   @override
@@ -198,6 +200,7 @@ class _UserListMobileState extends State<UserListMobile>
                 ),
                 actions: getIconButtons(),
                 bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(100),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -206,7 +209,7 @@ class _UserListMobileState extends State<UserListMobile>
                           widget.user.organizationName!,
                           style: Styles.whiteBoldSmall,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
                         Row(
@@ -214,33 +217,32 @@ class _UserListMobileState extends State<UserListMobile>
                           children: [
                             Text(
                               'Admins & Field Monitors',
-                              style: Styles.blackTiny,
+                              style: Styles.whiteTiny,
                             ),
-                            SizedBox(
-                              width: 12,
+                            const SizedBox(
+                              width: 8,
                             ),
                             Text(
                               '${_users.length}',
                               style: Styles.whiteBoldSmall,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 12,
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                       ],
                     ),
                   ),
-                  preferredSize: Size.fromHeight(100),
                 ),
               ),
               backgroundColor: Colors.brown[100],
               body: isBusy
-                  ? Center(
-                      child: Container(width: 16, height: 16,
+                  ? const Center(
+                      child: SizedBox(width: 16, height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                         ),
@@ -273,18 +275,20 @@ class _UserListMobileState extends State<UserListMobile>
                             },
                             child: Card(
                               elevation: 2,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0)),
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Column(
                                   children: [
                                     ListTile(
-                                      leading: Icon(
-                                        Icons.person,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                      // leading: Icon(
+                                      //   Icons.person,
+                                      //   color: Theme.of(context).primaryColor,
+                                      // ),
                                       subtitle: Text(
                                         user.email!,
-                                        style: Styles.greyLabelSmall,
+                                        style: Styles.greyLabelTiny,
                                       ),
                                       title: Text(
                                         user.name!,
@@ -293,8 +297,8 @@ class _UserListMobileState extends State<UserListMobile>
                                     ),
                                     Row(
                                       children: [
-                                        SizedBox(
-                                          width: 72,
+                                        const SizedBox(
+                                          width: 12,
                                         ),
                                         Text(
                                           mType,
@@ -302,8 +306,8 @@ class _UserListMobileState extends State<UserListMobile>
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 12,
+                                    const SizedBox(
+                                      height: 4,
                                     )
                                   ],
                                 ),
@@ -341,7 +345,7 @@ class _UserListMobileState extends State<UserListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: UserReportMain(user)));
   }
 
@@ -351,7 +355,7 @@ class _UserListMobileState extends State<UserListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.bottomLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: MessageMain(
               user: user,
             )));
@@ -363,7 +367,7 @@ class _UserListMobileState extends State<UserListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.bottomLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: FieldMonitorMapMain(user)));
   }
 
@@ -373,7 +377,7 @@ class _UserListMobileState extends State<UserListMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.bottomLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: SchedulerMain(user)));
   }
 }

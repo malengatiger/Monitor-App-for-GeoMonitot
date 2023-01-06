@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
+import '../../data/user.dart';
 
 class UserListTablet extends StatefulWidget {
   final User user;
 
-  UserListTablet(this.user);
+  const UserListTablet(this.user, {super.key});
 
   @override
-  _UserListTabletState createState() => _UserListTabletState();
+  UserListTabletState createState() => UserListTabletState();
 }
 
-class _UserListTabletState extends State<UserListTablet>
+class UserListTabletState extends State<UserListTablet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

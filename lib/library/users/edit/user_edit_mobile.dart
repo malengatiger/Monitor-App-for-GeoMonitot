@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/auth/app_auth.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/user.dart' as ar;
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+import 'package:test_router/library/users/edit/user_edit_main.dart';
 
-import 'package:geo_monitor/library/generic_functions.dart';
-import 'package:geo_monitor/library/users/edit/user_edit_main.dart';
-
+import '../../api/sharedprefs.dart';
+import '../../auth/app_auth.dart';
+import '../../bloc/admin_bloc.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../data/user.dart' as ar;
 import '../../data/country.dart';
+import '../../data/user.dart';
+import '../../functions.dart';
+import '../../generic_functions.dart';
 
 class UserEditMobile extends StatefulWidget {
   final ar.User? user;
-  const UserEditMobile(this.user);
+  const UserEditMobile(this.user, {super.key});
 
   @override
   UserEditMobileState createState() => UserEditMobileState();
@@ -29,7 +28,7 @@ class UserEditMobileState extends State<UserEditMobile>
   var cellphoneController = TextEditingController();
   ar.User? admin;
   final _formKey = GlobalKey<FormState>();
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   var isBusy = false;
   Country? country;
 

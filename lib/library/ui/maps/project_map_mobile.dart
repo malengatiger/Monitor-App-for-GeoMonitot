@@ -3,9 +3,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
+
+import '../../data/photo.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../emojis.dart';
+import '../../functions.dart';
+
 
 import '../../functions.dart';
 
@@ -14,22 +18,22 @@ class ProjectMapMobile extends StatefulWidget {
   final List<ProjectPosition> projectPositions;
   final Photo? photo;
 
-  ProjectMapMobile(
-      {required this.project, required this.projectPositions, this.photo});
+  const ProjectMapMobile(
+      {super.key, required this.project, required this.projectPositions, this.photo});
 
   @override
-  _ProjectMapMobileState createState() => _ProjectMapMobileState();
+  ProjectMapMobileState createState() => ProjectMapMobileState();
 }
 
-class _ProjectMapMobileState extends State<ProjectMapMobile>
+class ProjectMapMobileState extends State<ProjectMapMobile>
     with SingleTickerProviderStateMixin{
   late AnimationController _controller;
-  Completer<GoogleMapController> _mapController = Completer();
+  final Completer<GoogleMapController> _mapController = Completer();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   var random = Random(DateTime.now().millisecondsSinceEpoch);
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -38,7 +42,6 @@ class _ProjectMapMobileState extends State<ProjectMapMobile>
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
-    _addMarkers();
   }
 
   @override
@@ -50,8 +53,12 @@ class _ProjectMapMobileState extends State<ProjectMapMobile>
   GoogleMapController? googleMapController;
   Future<void> _addMarkers() async {
     pp('💜 💜 💜 💜 💜 💜 ProjectMapMobile: _addMarkers: ....... 🍎 ${widget.projectPositions.length}');
+    if (widget.projectPositions.isEmpty) {
+      pp('There are no positions found ${Emoji.redDot}');
+      return;
+    }
     markers.clear();
-    widget.projectPositions.forEach((projectPosition) {
+    for (var projectPosition in widget.projectPositions) {
       final MarkerId markerId =
           MarkerId('${projectPosition.projectId}_${random.nextInt(9999988)}');
       final Marker marker = Marker(
@@ -69,7 +76,7 @@ class _ProjectMapMobileState extends State<ProjectMapMobile>
         },
       );
       markers[markerId] = marker;
-    });
+    }
     final CameraPosition _first = CameraPosition(
       target: LatLng(
           widget.projectPositions
@@ -108,13 +115,22 @@ class _ProjectMapMobileState extends State<ProjectMapMobile>
             GoogleMap(
               mapType: MapType.hybrid,
               mapToolbarEnabled: true,
+
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {
+                pp('🍎🍎🍎........... GoogleMap onMapCreated ... ready to rumble!');
                 _mapController.complete(controller);
                 googleMapController = controller;
+                _addMarkers();
+                setState(() {
+
+                });
               },
               myLocationEnabled: true,
               markers: Set<Marker>.of(markers.values),
+              compassEnabled: true,
+              buildingsEnabled: true,
+              zoomControlsEnabled: true,
             ),
             widget.photo != null
                 ? Positioned(
@@ -153,8 +169,5 @@ class _ProjectMapMobileState extends State<ProjectMapMobile>
     );
   }
 
-  @override
-  onClose() {
-    ScaffoldMessenger.of(_key.currentState!.context).removeCurrentSnackBar();
-  }
+
 }

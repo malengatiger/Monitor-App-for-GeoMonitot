@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/functions.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../library/data/community.dart';
+import '../../library/functions.dart';
 import '../map_editor.dart';
 import '../questionnaire/questionnaire_editor.dart';
 
@@ -97,7 +98,7 @@ class SettlementDetailState extends State<SettlementDetail> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Container(
+                      SizedBox(
                         height: 100,
                         width: 140,
                         child: Card(
@@ -121,7 +122,7 @@ class SettlementDetailState extends State<SettlementDetail> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: 100,
                         width: 140,
                         child: Card(
@@ -153,7 +154,7 @@ class SettlementDetailState extends State<SettlementDetail> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Container(
+                      SizedBox(
                         height: 100,
                         width: 140,
                         child: Card(
@@ -177,7 +178,7 @@ class SettlementDetailState extends State<SettlementDetail> {
                           ),
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         height: 100,
                         width: 140,
                         child: Card(
@@ -233,21 +234,21 @@ class SettlementDetailState extends State<SettlementDetail> {
   void _navTapped(int value) {
     switch (value) {
       case 0:
-        print('Questionnaire Nav  tapped');
+        pp('Questionnaire Nav  tapped');
         Navigator.push(
             context,
             PageTransition(
                 type: PageTransitionType.scale,
                 alignment: Alignment.topLeft,
                 duration: const Duration(seconds: 1),
-                child: QuestionnaireEditor()));
+                child: const QuestionnaireEditor()));
 
         break;
       case 1:
-        print('Project Nav  tapped');
+        pp('Project Nav  tapped');
         break;
       case 2:
-        print('Map Nav  tapped');
+        pp('Map Nav  tapped');
         Navigator.push(
             context,
             PageTransition(

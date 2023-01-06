@@ -1,25 +1,8 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
-// import 'package:fieldmonitor3/ui/intro/intro_mobile.dart';
-// import 'package:fieldmonitor3/ui/schedules/schedules_list_main.dart';
 import 'package:flutter/material.dart';
-// import 'package:monitorlibrary/api/sharedprefs.dart';
-// import 'package:monitorlibrary/bloc/fcm_bloc.dart';
-// import 'package:monitorlibrary/bloc/monitor_bloc.dart';
-// import 'package:monitorlibrary/bloc/theme_bloc.dart';
-// import 'package:monitorlibrary/data/photo.dart';
-// import 'package:monitorlibrary/data/project.dart';
-// import 'package:monitorlibrary/data/user.dart' as mon;
-// import 'package:monitorlibrary/data/user.dart';
-// import 'package:monitorlibrary/functions.dart';
-// import 'package:monitorlibrary/generic_functions.dart';
-// import 'package:monitorlibrary/geofence/geofencer_two.dart';
-// import 'package:monitorlibrary/snack.dart';
-// import 'package:monitorlibrary/ui/media/user_media_list/user_media_list_main.dart';
-// import 'package:monitorlibrary/ui/message/message_main.dart';
-// import 'package:monitorlibrary/ui/project_list/project_list_mobile.dart';
-// import 'package:monitorlibrary/users/list/user_list_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -41,10 +24,11 @@ import '../../library/ui/message/message_main.dart';
 import '../../library/ui/project_list/project_list_mobile.dart';
 import '../../library/users/list/user_list_main.dart';
 import '../intro/intro_mobile.dart';
+import '../schedules/schedules_list_main.dart';
 
 class DashboardMobile extends StatefulWidget {
   final User user;
-  DashboardMobile({Key? key, required this.user}) : super(key: key);
+  const DashboardMobile({Key? key, required this.user}) : super(key: key);
 
   @override
   DashboardMobileState createState() => DashboardMobileState();
@@ -77,11 +61,11 @@ class DashboardMobileState extends State<DashboardMobile>
   }
 
   void _buildGeofences() async {
-
     pp('\n\n$nn _buildGeofences starting ........................');
     await geofencerTwo.buildGeofences();
     pp('$nn _buildGeofences done.\n');
   }
+
   void _subscribeToConnectivity() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -107,7 +91,10 @@ class DashboardMobileState extends State<DashboardMobile>
     geofencerTwo.geofenceStream.listen((event) {
       pp('\n$nn geofenceEvent delivered by geofenceStream: ${event.projectName} ...');
       if (mounted) {
-        showToast(message: 'Geofence triggered: ${event.projectName} projectPositionId: ${event.projectPositionId}', context: context);
+        showToast(
+            message:
+                'Geofence triggered: ${event.projectName} projectPositionId: ${event.projectPositionId}',
+            context: context);
       }
     });
     monitorBloc.projectStream.listen((event) {
@@ -152,21 +139,22 @@ class DashboardMobileState extends State<DashboardMobile>
   }
 
   var items = <BottomNavigationBarItem>[];
+
   void _setItems() {
     // items
     //     .add(BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Users'));
-    items.add(BottomNavigationBarItem(
+    items.add(const BottomNavigationBarItem(
         icon: Icon(
           Icons.home,
         ),
         label: 'Projects'));
-    items.add(BottomNavigationBarItem(
+    items.add(const BottomNavigationBarItem(
         icon: Icon(
           Icons.person,
           color: Colors.pink,
         ),
         label: 'My Work'));
-    items.add(BottomNavigationBarItem(
+    items.add(const BottomNavigationBarItem(
         icon: Icon(
           Icons.send,
           color: Colors.blue,
@@ -181,10 +169,25 @@ class DashboardMobileState extends State<DashboardMobile>
     });
     try {
       user = await Prefs.getUser();
-      monitorBloc.refreshUserData(
-          userId: user!.userId!,
-          organizationId: user!.organizationId!,
-          forceRefresh: forceRefresh);
+      //todo what kind of user is this? if monitor or admin or executive
+      if (user != null) {
+        switch (user!.userType) {
+          case UserType.orgAdministrator:
+            monitorBloc.refreshOrgData(
+                organizationId: user!.organizationId!, forceRefresh: true);
+            break;
+          case UserType.fieldMonitor:
+            monitorBloc.refreshUserData(
+                userId: user!.userId!,
+                organizationId: user!.organizationId!,
+                forceRefresh: forceRefresh);
+            break;
+          case UserType.orgExecutive:
+            monitorBloc.refreshOrgData(
+                organizationId: user!.organizationId!, forceRefresh: true);
+            break;
+        }
+      }
     } catch (e) {
       pp(e);
       AppSnackbar.showErrorSnackbar(
@@ -240,196 +243,207 @@ class DashboardMobileState extends State<DashboardMobile>
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-              key: _key,
-              appBar: AppBar(
-                title: Text(
-                  'Digital Monitor',
-                  style: Styles.whiteTiny,
+        child: Scaffold(
+      key: _key,
+      appBar: AppBar(
+        title: Text(
+          'Digital Monitor',
+          style: Styles.whiteTiny,
+        ),
+        actions: [
+          IconButton(
+              icon: const Icon(
+                Icons.info_outline,
+                size: 20,
+              ),
+              onPressed: _navigateToIntro),
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              size: 20,
+            ),
+            onPressed: () {
+              themeBloc.changeToRandomTheme();
+            },
+          ),
+          IconButton(
+            icon: const Icon(
+              Icons.refresh,
+              size: 20,
+            ),
+            onPressed: () {
+              _refreshData(true);
+            },
+          )
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(140),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Text(
+                  widget.user.organizationName!,
+                  style: Styles.whiteBoldSmall,
                 ),
-                actions: [
-                  IconButton(
-                      icon: const Icon(
-                        Icons.info_outline,
-                        size: 20,
-                      ),
-                      onPressed: _navigateToIntro),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      themeBloc.changeToRandomTheme();
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.refresh,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      _refreshData(true);
-                    },
-                  )
-                ],
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(140),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          widget.user == null
-                              ? ''
-                              : widget.user.organizationName!,
-                          style: Styles.blackBoldSmall,
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        Text(
-                          widget.user == null ? '' : widget.user.name!,
-                          style: Styles.whiteBoldMedium,
-                        ),
-                        Text('Field Monitor', style: Styles.whiteTiny),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Text(
+                   widget.user.name!,
+                  style: Styles.whiteBoldMedium,
+                ),
+                user == null? const Text(''):Text(user!.userType!, style: Styles.whiteTiny),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      // backgroundColor: Colors.brown[100],
+      bottomNavigationBar: BottomNavigationBar(
+        items: items,
+        onTap: _handleBottomNav,elevation: 8,
+      ),
+      body: isBusy
+          ? const Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 6,
+                  backgroundColor: Colors.amber,
                 ),
               ),
-              backgroundColor: Colors.brown[100],
-              bottomNavigationBar: BottomNavigationBar(
-                items: items,
-                onTap: _handleBottomNav,
-              ),
-              body: isBusy
-                  ? Center(
-                      child: Container(
-                        height: 24,
-                        width: 24,
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 6,
-                          backgroundColor: Colors.amber,
-                        ),
-                      ),
-                    )
-                  : Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: GridView.count(
-                            crossAxisCount: 2,
+            )
+          : Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    children: [
+                      GestureDetector(
+                        onTap: _navigateToProjectList,
+                        child: Card(
+                          // color: Colors.brown[50],
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                          child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: _navigateToProjectList,
-                                child: Card(
-                                  color: Colors.brown[50],
-                                  elevation: 2,
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 48,
-                                      ),
-                                      Text(
-                                        '${_projects.length}',
-                                        style: Styles.blackBoldLarge,
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        'Projects',
-                                        style: Styles.greyLabelSmall,
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              const SizedBox(
+                                height: 32,
                               ),
-                              GestureDetector(
-                                onTap: _navigateToUserList,
-                                child: Card(
-                                  color: Colors.brown[50],
-                                  elevation: 2,
-                                  child: Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 48,
-                                      ),
-                                      Text(
-                                        '${_users.length}',
-                                        style: Styles.blackBoldLarge,
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        'Users',
-                                        style: Styles.greyLabelSmall,
-                                      )
-                                    ],
-                                  ),
-                                ),
+                              Text(
+                                '${_projects.length}',
+                                  style: GoogleFonts.secularOne(
+                                      textStyle: Theme.of(context).textTheme.headline4,
+                                      fontWeight: FontWeight.w900)),
+                              const SizedBox(
+                                height: 8,
                               ),
-                              Card(
-                                elevation: 1,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 48,
-                                    ),
-                                    Text(
-                                      '${_photos.length}',
-                                      style: Styles.blackBoldLarge,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      'Photos',
-                                      style: Styles.greyLabelSmall,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Card(
-                                elevation: 1,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 48,
-                                    ),
-                                    Text(
-                                      '${_videos.length}',
-                                      style: Styles.blackBoldLarge,
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                      'Videos',
-                                      style: Styles.greyLabelSmall,
-                                    )
-                                  ],
-                                ),
-                              ),
+                              Text(
+                                'Projects',
+                                style: Styles.greyLabelSmall,
+                              )
                             ],
                           ),
                         ),
-                      ],
-                    ),
-            )
-
-    );
+                      ),
+                      GestureDetector(
+                        onTap: _navigateToUserList,
+                        child: Card(
+                          // color: Colors.brown[50],
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              Text(
+                                '${_users.length}',
+                                style: GoogleFonts.secularOne(
+                                    textStyle: Theme.of(context).textTheme.headline4,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'Users',
+                                style: Styles.greyLabelSmall,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Text(
+                              '${_photos.length}',
+                              style: GoogleFonts.secularOne(
+                                  textStyle: Theme.of(context).textTheme.headline4,
+                                  fontWeight: FontWeight.w900)),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Photos',
+                              style: Styles.greyLabelSmall,
+                            )
+                          ],
+                        ),
+                      ),
+                      Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0)),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 32,
+                            ),
+                            Text(
+                              '${_videos.length}',
+                                style: GoogleFonts.secularOne(
+                                    textStyle: Theme.of(context).textTheme.headline4,
+                                    fontWeight: FontWeight.w900)),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              'Videos',
+                              style: Styles.greyLabelSmall,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    ));
   }
 
   final _key = GlobalKey<ScaffoldState>();
+
   void _handleBottomNav(int value) {
     switch (value) {
       case 0:
@@ -470,36 +484,42 @@ class DashboardMobileState extends State<DashboardMobile>
   }
 
   void _navigateToMediaList() {
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(seconds: 1),
-            child: UserMediaListMain(user!)));
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: UserMediaListMain(user!)));
+    }
   }
 
   void _navigateToScheduleList() {
-    // Navigator.push(
-    //     context,
-    //     PageTransition(
-    //         type: PageTransitionType.scale,
-    //         alignment: Alignment.topLeft,
-    //         duration: Duration(seconds: 1),
-    //         child: SchedulesListMain()));
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: SchedulesListMain()));
+    }
   }
 
   void _navigateToIntro() {
     pp('$mm _navigateToIntro to Intro ....');
-    Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.scale,
-            alignment: Alignment.topLeft,
-            duration: const Duration(seconds: 1),
-            child: IntroMobile(
-              user: widget.user,
-            )));
+    if (mounted) {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.scale,
+              alignment: Alignment.topLeft,
+              duration: const Duration(seconds: 1),
+              child: IntroMobile(
+                user: widget.user,
+              )));
+    }
   }
 
   void _navigateToUserList() {
@@ -511,6 +531,4 @@ class DashboardMobileState extends State<DashboardMobile>
             duration: const Duration(seconds: 1),
             child: UserListMain()));
   }
-
-
 }

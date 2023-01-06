@@ -1,7 +1,6 @@
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/interfaces.dart';
 
 import 'answer.dart';
+import '../data/interfaces.dart';
 
 class Question {
   String? text, created;

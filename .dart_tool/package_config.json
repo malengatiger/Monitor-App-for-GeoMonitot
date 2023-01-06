@@ -410,6 +410,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flex_color_scheme",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flex_color_scheme-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "flex_seed_scheme",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flex_seed_scheme-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -474,6 +486,12 @@
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.7",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_riverpod",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_riverpod-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_staggered_grid_view",
@@ -590,6 +608,12 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "go_router",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/go_router-6.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "google_api_headers",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/google_api_headers-1.5.0",
       "packageUri": "lib/",
@@ -687,7 +711,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image-4.0.5",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/image-4.0.7",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -980,6 +1004,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "riverpod",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/riverpod-2.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "rxdart",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.26.0",
       "packageUri": "lib/",
@@ -1084,6 +1114,12 @@
     {
       "name": "stack_trace",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/stack_trace-1.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "state_notifier",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/state_notifier-0.7.2+1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -1268,13 +1304,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "geo_monitor",
+      "name": "test_router",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-04T15:08:21.498809Z",
+  "generated": "2023-01-06T01:45:18.617727Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

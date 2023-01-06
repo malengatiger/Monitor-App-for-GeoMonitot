@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
-
+import '../../data/user.dart';
 class MessageTablet extends StatefulWidget {
   final User? user;
 
   const MessageTablet({Key? key,  this.user}) : super(key: key);
   @override
-  _MessageTabletState createState() => _MessageTabletState();
+  MessageTabletState createState() => MessageTabletState();
 }
 
-class _MessageTabletState extends State<MessageTablet>
+class MessageTabletState extends State<MessageTablet>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

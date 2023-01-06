@@ -1,22 +1,23 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/media/full_photo/full_photo_main.dart';
-import 'package:geo_monitor/library/ui/media/video/video_main.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../../bloc/monitor_bloc.dart';
 import '../../../data/video.dart';
+import '../../../data/photo.dart';
+import '../../../data/user.dart';
+
 import '../../../functions.dart';
+import '../../../generic_functions.dart';
 import '../../../snack.dart';
+import '../video/video_main.dart';
 
 class UserMediaListMobile extends StatefulWidget {
   final User user;
 
-  UserMediaListMobile(this.user);
+  const UserMediaListMobile(this.user, {super.key});
 
   @override
   UserMediaListMobileState createState() => UserMediaListMobileState();
@@ -27,6 +28,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
   late AnimationController _controller;
   StreamSubscription<List<Photo>>? photoStreamSubscription;
   StreamSubscription<List<Video>>? videoStreamSubscription;
+
   var _photos = <Photo>[];
   var _videos = <Video>[];
 
@@ -35,6 +37,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
     _controller = AnimationController(vsync: this);
     super.initState();
     _listen();
+    _refresh();
   }
 
   void _listen() async {
@@ -56,18 +59,18 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
   }
 
   Future<void> _refresh() async {
-    pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: _refresh ...');
+    pp('🔆🔆🔆 💜 💜 _MediaListMobileState: _refresh ...');
     setState(() {
       isBusy = true;
     });
     try {
-      _photos =
-          await monitorBloc.getUserProjectPhotos(userId: widget.user.userId!, forceRefresh: true);
-      _videos =
-          await monitorBloc.getUserProjectVideos(userId: widget.user.userId!, forceRefresh: true);
+      _photos = await monitorBloc.getUserProjectPhotos(
+          userId: widget.user.userId!, forceRefresh: true);
+      _videos = await monitorBloc.getUserProjectVideos(
+          userId: widget.user.userId!, forceRefresh: true);
       _processMedia();
     } catch (e) {
-      print(e);
+      p(e);
       AppSnackbar.showErrorSnackbar(
           scaffoldKey: _key, message: 'Data refresh failed: $e');
     }
@@ -76,7 +79,8 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
     });
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
+
   @override
   void dispose() {
     _controller.dispose();
@@ -87,14 +91,14 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
 
   void _processMedia() {
     suitcases.clear();
-    _photos.forEach((element) {
-      var sc = Suitcase(photo: element, date: element.created!);
+    for (var photo in _photos) {
+      var sc = Suitcase(photo: photo, date: photo.created!);
       suitcases.add(sc);
-    });
-    _videos.forEach((element) {
-      var sc = Suitcase(video: element, date: element.created!);
+    }
+    for (var video in _videos) {
+      var sc = Suitcase(video: video, date: video.created!);
       suitcases.add(sc);
-    });
+    }
     if (suitcases.isNotEmpty) {
       suitcases.sort((a, b) => b.date!.compareTo(a.date!));
       latest = getFormattedDateShortest(suitcases.first.date!, context);
@@ -116,7 +120,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
           ),
           actions: [
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.refresh,
                 size: 20,
               ),
@@ -124,6 +128,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
             )
           ],
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -132,7 +137,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isBusy
-                          ? Container(
+                          ? const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -141,21 +146,21 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
                               ),
                             )
                           : Container(),
-                      SizedBox(
+                      const SizedBox(
                         width: 28,
                       ),
                       Text(
                         'Digital Project Monitor',
                         style: Styles.whiteSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 64,
                       ),
                       Text(
                         '${suitcases.length}',
                         style: Styles.blackBoldSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12,
                       ),
                     ],
@@ -192,13 +197,12 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
                   //     )
                   //   ],
                   // ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
                 ],
               ),
             ),
-            preferredSize: Size.fromHeight(60),
           ),
         ),
         backgroundColor: Colors.brown[100],
@@ -206,18 +210,49 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
           children: [
             suitcases.isEmpty
                 ? Center(
-                    child: Container(
-                      child: Text(
-                        'No User Media found',
-                        style: Styles.blackBoldMedium,
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Card(
+                        elevation: 8,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SizedBox(
+                            height: 200,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'No User Media found',
+                                  style: Styles.blackBoldSmall,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                const Text(
+                                    'Tap the button below to start adding photos and videos for the project'),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text('Start Work')),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   )
                 : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 1,
-                        crossAxisSpacing: 1),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            mainAxisSpacing: 1,
+                            crossAxisSpacing: 1),
                     itemCount: suitcases.length,
                     itemBuilder: (BuildContext context, int index) {
                       var suitcase = suitcases.elementAt(index);
@@ -225,7 +260,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
                         onTap: () {
                           _onMediaTapped(suitcase);
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 120,
                           width: 120,
                           child: suitcase.video != null
@@ -259,7 +294,7 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
           PageTransition(
               type: PageTransitionType.scale,
               alignment: Alignment.bottomRight,
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               child: VideoMain(suitcase.video!)));
     } else {
       pp(' 🍎 🍎 🍎 _onMediaTapped: show full image from 🍎 ${suitcase.photo!.url!} 🍎');

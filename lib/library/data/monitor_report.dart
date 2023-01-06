@@ -1,9 +1,15 @@
-import 'package:flutter/cupertino.dart';
-import 'package:geo_monitor/library/data/interfaces.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/data/video.dart';
+
+
 import 'package:hive/hive.dart';
+import 'package:test_router/library/data/user.dart';
+
+import 'interfaces.dart';
+import '../data/photo.dart';
+import '../data/video.dart';
+import '../data/user.dart' as mon;
+
+
+
 
 part 'monitor_report.g.dart';
 
@@ -24,7 +30,7 @@ class MonitorReport {
   @HiveField(6)
   List<Video> videos = [];
   @HiveField(7)
-  User? user;
+  mon.User? user;
 
   MonitorReport(
       {required this.projectId,
@@ -44,7 +50,7 @@ class MonitorReport {
     description = data['description'];
     photos = [];
     if (data['user'] != null) {
-      user = User.fromJson(data['user']);
+      user = mon.User.fromJson(data['user']);
     }
     if (data['photos'] != null) {
       if (data['photos'] is List) {

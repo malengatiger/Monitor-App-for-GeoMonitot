@@ -13,12 +13,12 @@ import '../dashboard/dashboard_main.dart';
 
 class IntroMobile extends StatefulWidget {
   final User? user;
-  IntroMobile({Key? key, this.user}) : super(key: key);
+  const IntroMobile({Key? key, this.user}) : super(key: key);
   @override
-  _IntroMobileState createState() => _IntroMobileState();
+  IntroMobileState createState() => IntroMobileState();
 }
 
-class _IntroMobileState extends State<IntroMobile>
+class IntroMobileState extends State<IntroMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   User? user;
@@ -115,11 +115,11 @@ class _IntroMobileState extends State<IntroMobile>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(60),
+            preferredSize: const Size.fromHeight(60),
             child: Column(
               children: [
-                user == null
-                    ? Row(
+                // user == null
+                     Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           const SizedBox(
@@ -134,8 +134,8 @@ class _IntroMobileState extends State<IntroMobile>
                             width: 24,
                           ),
                         ],
-                      )
-                    : Text(user == null? '' : user!.name!, style: Styles.blackBoldMedium,),
+                      ),
+                    // : Text(user == null? '' : user!.name!, style: Styles.blackBoldMedium,),
                 const SizedBox(
                   height: 24,
                 )
@@ -199,7 +199,7 @@ class _IntroMobileState extends State<IntroMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(seconds: 1),
-            child: const SignIn(UserType.orgAdministrator)));
+            child: const SignIn()));
 
     if (result is User) {
       pp(' 👌👌👌 Returned from sign in; will navigate to Dashboard :  👌👌👌 ${result.toJson()}');

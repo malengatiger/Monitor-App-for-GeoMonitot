@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
-import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/position.dart';
+import '../data/position.dart';
 
 part 'user.g.dart';
 

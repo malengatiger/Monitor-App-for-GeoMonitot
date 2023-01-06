@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/message/message_desktop.dart';
-import 'package:geo_monitor/library/ui/message/message_mobile.dart';
-import 'package:geo_monitor/library/ui/message/message_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
+import '../../data/user.dart';
+import 'message_desktop.dart';
+import 'message_mobile.dart';
+import 'message_tablet.dart';
 class MessageMain extends StatefulWidget {
   final User? user;
-  MessageMain({Key? key,this.user}) : super(key: key);
+  const MessageMain({Key? key,this.user}) : super(key: key);
 
   @override
-  _MessageMainState createState() => _MessageMainState();
+  MessageMainState createState() => MessageMainState();
 }
 
-class _MessageMainState extends State<MessageMain> {
+class MessageMainState extends State<MessageMain> {
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart' as mon;
 
+import '../../data/user.dart' as mon;
 class ProjectListTablet extends StatefulWidget {
   final mon.User user;
 

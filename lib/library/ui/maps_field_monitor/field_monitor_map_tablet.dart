@@ -3,11 +3,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/data/position.dart';
-import 'package:geo_monitor/library/data/user.dart';
 
-
+import '../../api/data_api.dart';
+import '../../data/user.dart';
+import '../../data/position.dart';
 import '../../functions.dart';
 
 class FieldMonitorMapTablet extends StatefulWidget {

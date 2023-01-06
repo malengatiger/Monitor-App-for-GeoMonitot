@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/project.dart';
+
+import '../../../data/project.dart';
 
 class MediaListDesktop extends StatefulWidget {
   final Project project;
 
-  MediaListDesktop(this.project);
+  const MediaListDesktop(this.project, {super.key});
 
   @override
-  _MediaListDesktopState createState() => _MediaListDesktopState();
+  MediaListDesktopState createState() => MediaListDesktopState();
 }
 
-class _MediaListDesktopState extends State<MediaListDesktop>
+class MediaListDesktopState extends State<MediaListDesktop>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

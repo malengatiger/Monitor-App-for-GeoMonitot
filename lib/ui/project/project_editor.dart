@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/snack.dart';
-import 'package:page_transition/page_transition.dart';
+
+import '../../library/api/sharedprefs.dart';
+import '../../library/bloc/admin_bloc.dart';
+import '../../library/data/user.dart';
+import '../../library/data/project.dart';
+import '../../library/functions.dart';
+import '../../library/snack.dart';
 
 class ProjectEditor extends StatefulWidget {
   final Project? project;
 
-  ProjectEditor({this.project});
+  const ProjectEditor({super.key, this.project});
 
   @override
-  _ProjectEditorState createState() => _ProjectEditorState();
+  ProjectEditorState createState() => ProjectEditorState();
 }
 
-class _ProjectEditorState extends State<ProjectEditor>
+class ProjectEditorState extends State<ProjectEditor>
      {
   User? user;
   Project? mProject;
   TextEditingController nameController = TextEditingController();
   TextEditingController descController = TextEditingController();
   bool isBusy = false;
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -185,7 +185,7 @@ class _ProjectEditorState extends State<ProjectEditor>
       mProject = await adminBloc.addProject(mProject!);
 
     } catch (e) {
-      print(e);
+      pp(e);
       _showError('$e');
     }
     setState(() {
@@ -205,10 +205,6 @@ class _ProjectEditorState extends State<ProjectEditor>
         actionLabel: 'Error');
   }
 
-  @override
-  onActionPressed(int action) {
-    return null;
-  }
 
   void _onNavTapped(int value) {
     if (mProject!.projectId == null || mProject!.projectId!.isEmpty) {

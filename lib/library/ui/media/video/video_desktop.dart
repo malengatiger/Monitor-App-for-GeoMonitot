@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-
 import '../../../data/video.dart';
 
 class VideoDesktop extends StatefulWidget {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+
+import '../../data/user.dart';
+import '../../functions.dart';
 
 
 class CreditCardHandlerMobile extends StatefulWidget {
@@ -10,13 +11,13 @@ class CreditCardHandlerMobile extends StatefulWidget {
 
   const CreditCardHandlerMobile({Key? key, required this.user}) : super(key: key);
   @override
-  _CreditCardHandlerMobileState createState() =>
-      _CreditCardHandlerMobileState();
+  CreditCardHandlerMobileState createState() =>
+      CreditCardHandlerMobileState();
 }
 
-class _CreditCardHandlerMobileState extends State<CreditCardHandlerMobile>
+class CreditCardHandlerMobileState extends State<CreditCardHandlerMobile>
     with SingleTickerProviderStateMixin
-    implements SnackBarListener {
+     {
   late AnimationController _controller;
   String cardNumber = '';
   String expiryDate = '';
@@ -50,18 +51,18 @@ class _CreditCardHandlerMobileState extends State<CreditCardHandlerMobile>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(20),
             child: Column(
               children: [
                 Text(
                   '${widget.user.organizationName}',
                   style: Styles.whiteSmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 )
               ],
             ),
-            preferredSize: Size.fromHeight(20),
           ),
         ),
         body: Stack(

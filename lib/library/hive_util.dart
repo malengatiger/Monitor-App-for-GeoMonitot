@@ -1,23 +1,25 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/condition.dart';
-import 'package:geo_monitor/library/data/geofence_event.dart';
-import 'package:geo_monitor/library/data/org_message.dart';
-import 'package:geo_monitor/library/data/organization.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/video.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:test_router/library/data/place_mark.dart';
+import 'package:test_router/library/data/position.dart';
 
 import 'data/city.dart';
+import 'data/community.dart';
+import 'data/condition.dart';
 import 'data/field_monitor_schedule.dart';
+import 'data/geofence_event.dart';
 import 'data/monitor_report.dart';
+import 'data/org_message.dart';
+import 'data/organization.dart';
+import 'data/photo.dart';
+import 'data/project.dart';
+import 'data/project_position.dart';
 import 'data/section.dart';
 import 'data/user.dart';
+import 'data/video.dart';
 import 'emojis.dart';
 import 'functions.dart';
 import 'generic_functions.dart';
@@ -129,6 +131,14 @@ class HiveUtil {
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(GeofenceEventAdapter());
         p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive GeofenceEventAdapter registered');
+      }
+      if (!Hive.isAdapterRegistered(16)) {
+        Hive.registerAdapter(PositionAdapter());
+        p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive PositionAdapter registered');
+      }
+      if (!Hive.isAdapterRegistered(17)) {
+        Hive.registerAdapter(PlaceMarkAdapter());
+        p('${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive PlaceMarkAdapter registered');
       }
 
       p('${Emoji.peach}${Emoji.peach}${Emoji.peach}${Emoji.peach} Hive box collection created and types registered');

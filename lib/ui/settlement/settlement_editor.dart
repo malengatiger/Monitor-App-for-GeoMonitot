@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/snack.dart';
-import 'package:geo_monitor/library/ui/countries.dart';
+
+import '../../library/api/sharedprefs.dart';
+import '../../library/bloc/admin_bloc.dart';
+import '../../library/data/community.dart';
+import '../../library/data/country.dart';
+import '../../library/data/user.dart';
+import '../../library/functions.dart';
+import '../../library/snack.dart';
+import '../../library/ui/countries.dart';
+
 
 class SettlementEditor extends StatefulWidget {
   final Community settlement;
 
-  SettlementEditor({required this.settlement});
+  const SettlementEditor({super.key, required this.settlement});
 
   @override
   SettlementEditorState createState() => SettlementEditorState();
@@ -20,7 +22,7 @@ class SettlementEditor extends StatefulWidget {
 }
 class SettlementEditorState extends State<SettlementEditor>
     implements CountryListener {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   TextEditingController nameCntrl = TextEditingController();
   TextEditingController emailCntrl = TextEditingController();
   TextEditingController cellCntrl = TextEditingController();
@@ -59,7 +61,7 @@ class SettlementEditorState extends State<SettlementEditor>
         title: const Text('Settlement Editor'),
         backgroundColor: Colors.indigo[300],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(60),
           child: Column(
             children: <Widget>[
               Text(
@@ -74,8 +76,8 @@ class SettlementEditorState extends State<SettlementEditor>
         ),
       ),
       body: isBusy
-          ? Center(
-              child: Container(
+          ? const Center(
+              child: SizedBox(
                 height: 80,
                 width: 80,
                 child: CircularProgressIndicator(
@@ -90,49 +92,49 @@ class SettlementEditorState extends State<SettlementEditor>
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: <Widget>[
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       TextField(
                         controller: nameCntrl,
                         keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter settlement name',
                           labelText: 'Settlement Name',
                         ),
                         onChanged: _onNameChanged,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       TextField(
                         controller: emailCntrl,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter email address',
                           labelText: 'Email',
                         ),
                         onChanged: _onEmailChanged,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       TextField(
                         controller: cellCntrl,
                         keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter cellphone number',
                           labelText: 'Cellphone',
                         ),
                         onChanged: _onCellChanged,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       TextField(
                         controller: popCntrl,
                         keyboardType:
-                            TextInputType.numberWithOptions(signed: false),
+                            const TextInputType.numberWithOptions(signed: false),
                         decoration: const InputDecoration(
                           hintText: 'Enter population',
                           labelText: 'Population',
@@ -179,17 +181,17 @@ class SettlementEditorState extends State<SettlementEditor>
     return null;
   }
 
-  var name;
+  String? name;
   void _onNameChanged(String value) {
     name = value;
   }
 
-  var email;
+  String? email;
   void _onEmailChanged(String value) {
     email = value;
   }
 
-  var cell;
+  String? cell;
   void _onCellChanged(String value) {
     cell = value;
   }
@@ -234,7 +236,7 @@ class SettlementEditorState extends State<SettlementEditor>
       setState(() {
         isBusy = false;
       });
-      print(e);
+      pp(e);
       // AppSnackbar.showErrorSnackbar(
       //     scaffoldKey: _key,
       //     message: '$e',
@@ -243,9 +245,5 @@ class SettlementEditorState extends State<SettlementEditor>
     }
   }
 
-  @override
-  onActionPressed(int action) {
-    // TODO: implement onActionPressed
-    return null;
-  }
+
 }

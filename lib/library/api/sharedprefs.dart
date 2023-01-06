@@ -1,27 +1,28 @@
 import 'dart:convert';
 
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/data/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/country.dart';
+import '../data/questionnaire.dart';
 import '../functions.dart';
+import '../data/project.dart';
+import '../data/user.dart';
 
 class Prefs {
   static void setThemeIndex(int index) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setInt('index', index);
-    pp('🔵 🔵 🔵 Prefs: theme index set to: $index 🍎 🍎 ');
+    pp('🔵🔵🔵 Prefs: theme index set to: $index 🍎🍎 ');
   }
 
   static Future<int> getThemeIndex() async {
     final preferences = await SharedPreferences.getInstance();
     var b = preferences.getInt('index');
     if (b == null) {
+      pp('🔵🔵🔵 Prefs: theme index does not exist. default to 0 🍏🍏 ');
       return 0;
     } else {
-      pp('🔵 🔵 🔵  theme index retrieved: $b 🍏 🍏 ');
+      pp('🔵🔵🔵 Prefs: theme index retrieved: $b 🍏🍏 ');
       return b;
     }
   }

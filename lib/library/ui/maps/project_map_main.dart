@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_desktop.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_mobile.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_tablet.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:test_router/library/ui/maps/project_map_desktop.dart';
+import 'package:test_router/library/ui/maps/project_map_mobile.dart';
+import 'package:test_router/library/ui/maps/project_map_tablet.dart';
+
+import '../../bloc/monitor_bloc.dart';
+import '../../data/photo.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../functions.dart';
+import '../../hive_util.dart';
+
 
 
 class ProjectMapMain extends StatefulWidget {
@@ -17,10 +21,10 @@ class ProjectMapMain extends StatefulWidget {
   ProjectMapMain({required this.project, this.photo});
 
   @override
-  _ProjectMapMainState createState() => _ProjectMapMainState();
+  ProjectMapMainState createState() => ProjectMapMainState();
 }
 
-class _ProjectMapMainState extends State<ProjectMapMain> {
+class ProjectMapMainState extends State<ProjectMapMain> {
   var isBusy = false;
   var _positions = <ProjectPosition>[];
   var _key = GlobalKey<ScaffoldState>();
@@ -59,8 +63,8 @@ class _ProjectMapMainState extends State<ProjectMapMain> {
                   style: Styles.whiteTiny,
                 ),
               ),
-              body: Center(
-                child: Container(
+              body: const Center(
+                child: SizedBox(
                   width: 48,
                   height: 48,
                   child: CircularProgressIndicator(

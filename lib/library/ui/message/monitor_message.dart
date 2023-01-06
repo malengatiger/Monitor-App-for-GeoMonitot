@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
 import 'package:uuid/uuid.dart';
-
+import '../../api/data_api.dart';
+import '../../api/sharedprefs.dart';
+import '../../data/project.dart';
+import '../../data/user.dart';
 import '../../data/org_message.dart';
 import '../../functions.dart';
-import '../../snack.dart';
 
 class MonitorMessage extends StatefulWidget {
   final Project project;
   final User user;
 
-  const MonitorMessage({
+  const MonitorMessage({super.key,
     required this.project,
     required this.user,
   });
@@ -26,7 +24,6 @@ class MonitorMessage extends StatefulWidget {
 class MonitorMessageState extends State<MonitorMessage> {
   String frequency = MONITOR_TWICE_A_DAY;
   bool isBusy = false;
-  final _key = GlobalKey<ScaffoldState>();
   void _onRadioButtonSelected(String selected) {
     pp('MessageMobile :  🥦 🥦 🥦 _onRadioButtonSelected: 🍊 $selected 🍊');
     setState(() {
@@ -57,7 +54,7 @@ class MonitorMessageState extends State<MonitorMessage> {
           created: DateTime.now().toUtc().toIso8601String(),
           projectId: widget.project.projectId,
           organizationId: widget.project.organizationId,
-          orgMessageId: Uuid().v4());
+          orgMessageId: const Uuid().v4());
       try {
         var res = await DataAPI.sendMessage(msg);
         pp('MessageMobile:  🏓  🏓  🏓 Response from server:  🏓 ${res.toJson()}  🏓');
@@ -81,20 +78,20 @@ class MonitorMessageState extends State<MonitorMessage> {
             color: Theme.of(context).primaryColor,
           ),
           title: AnimatedContainer(
-            duration: Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 1000),
             width:  300.0,
             child: Text(widget.project.name!,
               style: Styles.blackBoldSmall,
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 2,
         ),
         RadioButtonGroup(
           labelStyle: Styles.blackSmall,
           picked: frequency,
-          labels: [
+          labels: const [
             MONITOR_ONCE_A_DAY,
             MONITOR_TWICE_A_DAY,
             // MONITOR_THREE_A_DAY,
@@ -102,11 +99,11 @@ class MonitorMessageState extends State<MonitorMessage> {
           ],
           onSelected: _onRadioButtonSelected,
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         isBusy
-            ? Container(
+            ? SizedBox(
                 height: 24,
                 width: 24,
                 child: Center(
@@ -116,15 +113,13 @@ class MonitorMessageState extends State<MonitorMessage> {
                   ),
                 ),
               )
-            : widget.project == null
-                ? Container()
-                : ElevatedButton(
+            :  ElevatedButton(
+                    onPressed: _sendMessage,
                     child: Text(
                       'Send Message',
                       style: Styles.whiteSmall,
-                    ),
-                    onPressed: _sendMessage),
-        SizedBox(
+                    )),
+        const SizedBox(
           height: 12,
         )
       ],

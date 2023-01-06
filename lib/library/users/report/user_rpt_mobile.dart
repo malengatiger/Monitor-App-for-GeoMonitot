@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+import '../../api/sharedprefs.dart';
+import '../../data/user.dart';
+import '../../functions.dart';
+
 
 class UserReportMobile extends StatefulWidget {
   final User user;
-  const UserReportMobile(this.user);
+  const UserReportMobile(this.user, {super.key});
 
   @override
-  _UserReportMobileState createState() => _UserReportMobileState();
+  UserReportMobileState createState() => UserReportMobileState();
 }
 
-class _UserReportMobileState extends State<UserReportMobile>
+class UserReportMobileState extends State<UserReportMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -46,18 +47,18 @@ class _UserReportMobileState extends State<UserReportMobile>
             style: Styles.whiteSmall,
           ),
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
             child: Column(
               children: [
                 Text(
                   widget.user == null ? 'New User' : 'Edit User',
                   style: Styles.blackBoldMedium,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 )
               ],
             ),
-            preferredSize: Size.fromHeight(100),
           ),
         ),
         backgroundColor: Colors.brown[100],

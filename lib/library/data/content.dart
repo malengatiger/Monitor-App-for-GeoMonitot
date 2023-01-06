@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:geo_monitor/library/data/position.dart';
+import '../data/position.dart';
 
 class Content {
   String? url;

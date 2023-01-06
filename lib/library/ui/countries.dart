@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/functions.dart';
 
+import '../api/data_api.dart';
+import '../data/country.dart';
+import '../functions.dart';
 class CountriesDropDown extends StatefulWidget {
   final CountryListener countryListener;
 
-  CountriesDropDown(this.countryListener);
+  const CountriesDropDown(this.countryListener, {super.key});
 
   @override
-  _CountriesDropDownState createState() => _CountriesDropDownState();
+  CountriesDropDownState createState() => CountriesDropDownState();
 }
 
-class _CountriesDropDownState extends State<CountriesDropDown> {
+class CountriesDropDownState extends State<CountriesDropDown> {
   @override
   void initState() {
     super.initState();
@@ -23,16 +23,16 @@ class _CountriesDropDownState extends State<CountriesDropDown> {
   _getCountries() async {
     _countries = await DataAPI.getCountries();
     pp('🦠 🦠 🦠 getCountries .....🦠 ${_countries.length} found');
-    _countries.forEach((c) {
+    for (var c in _countries) {
       var item = DropdownMenuItem<Country>(
         child: ListTile(
-          leading: Icon(Icons.local_library),
+          leading: const Icon(Icons.local_library),
           title: Text('${c.name}'),
         ),
       );
       items.add(item);
       prettyPrint(c.toJson(), '🏀🏀 Country ...  🏀🏀');
-    });
+    }
     pp('🧩 🧩  setting state ');
     setState(() {});
   }

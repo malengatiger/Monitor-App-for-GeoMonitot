@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/organization.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
 
+import '../../data/organization.dart';
+import '../../data/project_position.dart';
 import '../../functions.dart';
 import '../../hive_util.dart';
 

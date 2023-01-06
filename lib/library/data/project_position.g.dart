@@ -22,7 +22,7 @@ class ProjectPositionAdapter extends TypeAdapter<ProjectPosition> {
       projectPositionId: fields[4] as String?,
       created: fields[3] as String?,
       position: fields[6] as Position?,
-      placemark: fields[7] as Placemark?,
+      placemark: fields[7] as PlaceMark?,
       nearestCities: (fields[8] as List?)?.cast<City>(),
       organizationId: fields[5] as String?,
       projectId: fields[1] as String?,

@@ -1,12 +1,13 @@
-import 'package:geo_monitor/library/data/monitor_report.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/ratingContent.dart';
-import 'package:geo_monitor/library/data/video.dart';
+
 import 'package:hive/hive.dart';
 
 import 'city.dart';
 import 'community.dart';
+import '../data/video.dart';
+import '../data/photo.dart';
+import '../data/project_position.dart';
+import '../data/ratingContent.dart';
+import '../data/monitor_report.dart';
 
 part 'project.g.dart';
 

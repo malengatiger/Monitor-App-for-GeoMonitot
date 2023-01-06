@@ -1,6 +1,5 @@
-import 'package:geo_monitor/library/data/position.dart';
 import 'package:hive/hive.dart';
-
+import '../data/position.dart';
 part 'video.g.dart';
 
 @HiveType(typeId: 10)

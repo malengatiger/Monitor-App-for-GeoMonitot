@@ -1,17 +1,17 @@
-import 'package:geo_monitor/library/data/city.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/field_monitor_schedule.dart';
-import 'package:geo_monitor/library/data/monitor_report.dart';
-import 'package:geo_monitor/library/data/organization.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/section.dart';
-import 'package:geo_monitor/library/data/user.dart' as ar;
-import 'package:geo_monitor/library/data/user.dart';
 
+
+import '../data/city.dart';
+import '../data/community.dart';
 import '../data/condition.dart';
+import '../data/field_monitor_schedule.dart';
+import '../data/monitor_report.dart';
 import '../data/org_message.dart';
+import '../data/organization.dart';
+import '../data/photo.dart';
+import '../data/project.dart';
+import '../data/project_position.dart';
+import '../data/section.dart';
+import '../data/user.dart';
 import '../data/video.dart';
 
 abstract class LocalDatabase {
@@ -22,8 +22,8 @@ abstract class LocalDatabase {
   Future<int> addCommunity({required Community community});
   Future<int> addMonitorReports({required List<MonitorReport> monitorReports});
   Future<int> addMonitorReport({required MonitorReport monitorReport});
-  Future<int> addUsers({required List<ar.User> users});
-  Future<int> addUser({required ar.User user});
+  Future<int> addUsers({required List<User> users});
+  Future<int> addUser({required User user});
   Future<int> addProjects({required List<Project> projects});
   Future<int> addProject({required Project project});
   Future<int> addPhotos({required List<Photo> photos});
@@ -71,5 +71,5 @@ abstract class LocalDatabase {
   Future<List<FieldMonitorSchedule>> getOrganizationMonitorSchedules(String organizationId);
   List<FieldMonitorSchedule> filterSchedulesByProject(
       List<FieldMonitorSchedule> mList, String projectId);
-  Future<List<ar.User>> getUsers();
+  Future<List<User>> getUsers();
 }

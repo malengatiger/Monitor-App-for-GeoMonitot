@@ -1,5 +1,4 @@
-import 'package:geo_monitor/library/data/section.dart';
-
+import '../data/section.dart';
 
 class Questionnaire {
   late String questionnaireId,

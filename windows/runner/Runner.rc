@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.boha" "\0"
-            VALUE "FileDescription", "geo_monitor" "\0"
+            VALUE "FileDescription", "test_router" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "geo_monitor" "\0"
+            VALUE "InternalName", "test_router" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.boha. All rights reserved." "\0"
-            VALUE "OriginalFilename", "geo_monitor.exe" "\0"
-            VALUE "ProductName", "geo_monitor" "\0"
+            VALUE "OriginalFilename", "test_router.exe" "\0"
+            VALUE "ProductName", "test_router" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/ui/project_location/project_location_desktop.dart';
-import 'package:geo_monitor/library/ui/project_location/project_location_mobile.dart';
-import 'package:geo_monitor/library/ui/project_location/project_location_tablet.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
+
+import '../../bloc/monitor_bloc.dart';
+import '../../data/project.dart';
+import 'project_location_desktop.dart';
+import 'project_location_mobile.dart';
+import 'project_location_tablet.dart';
 
 class ProjectLocationMain extends StatefulWidget {
   final Project project;
-  ProjectLocationMain(this.project);
+  const ProjectLocationMain(this.project, {super.key});
 
   @override
-  _ProjectLocationMainState createState() => _ProjectLocationMainState();
+  ProjectLocationMainState createState() => ProjectLocationMainState();
 }
 
-class _ProjectLocationMainState extends State<ProjectLocationMain> {
+class ProjectLocationMainState extends State<ProjectLocationMain> {
   @override
   void initState() {
     super.initState();
@@ -40,11 +42,11 @@ class _ProjectLocationMainState extends State<ProjectLocationMain> {
         ? SafeArea(
             child: Scaffold(
               appBar: AppBar(
-                title: Text('Loading Project positions ...'),
+                title: const Text('Loading Project positions ...'),
               ),
               backgroundColor: Colors.brown[100],
-              body: Center(
-                child: Container(
+              body: const Center(
+                child: SizedBox(
                   width: 60,
                   height: 60,
                   child: CircularProgressIndicator(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/schedule/scheduler_desktop.dart';
-import 'package:geo_monitor/library/ui/schedule/scheduler_mobile.dart';
-import 'package:geo_monitor/library/ui/schedule/scheduler_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import '../../data/user.dart';
+import 'scheduler_desktop.dart';
+import 'scheduler_mobile.dart';
+import 'scheduler_tablet.dart';
 
 class SchedulerMain extends StatelessWidget {
   final User user;
 
-  SchedulerMain(this.user);
+  const SchedulerMain(this.user, {super.key});
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(

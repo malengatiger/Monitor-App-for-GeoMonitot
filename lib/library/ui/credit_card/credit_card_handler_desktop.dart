@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/user.dart';
+
+import '../../data/user.dart';
 
 class CreditCardHandlerDesktop extends StatefulWidget {
   final User user;

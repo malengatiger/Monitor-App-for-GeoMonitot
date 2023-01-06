@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
+import '../../data/organization.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../functions.dart';
+import '../../hive_util.dart';
 
 class ProjectMapDesktop extends StatefulWidget {
   final Project project;
   final List<ProjectPosition> projectPositions;
 
-  ProjectMapDesktop({required this.project, required this.projectPositions});
+  const ProjectMapDesktop({super.key, required this.project, required this.projectPositions});
 
   @override
-  _ProjectMapDesktopState createState() => _ProjectMapDesktopState();
+  ProjectMapDesktopState createState() => ProjectMapDesktopState();
 }
 
-class _ProjectMapDesktopState extends State<ProjectMapDesktop>
+class ProjectMapDesktopState extends State<ProjectMapDesktop>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 

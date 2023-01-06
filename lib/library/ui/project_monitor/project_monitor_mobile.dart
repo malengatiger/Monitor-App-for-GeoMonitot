@@ -1,32 +1,30 @@
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/location/loc_bloc.dart';
 
-import 'package:geo_monitor/library/ui/camera/field_camera.dart';
-import 'package:geo_monitor/library/ui/media/media_house.dart';
-import 'package:geo_monitor/library/ui/project_location/project_location_main.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../bloc/monitor_bloc.dart';
+import '../../functions.dart';
 import '../../hive_util.dart';
-
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../location/loc_bloc.dart';
+import '../camera/field_camera.dart';
+import '../project_location/project_location_main.dart';
 class ProjectMonitorMobile extends StatefulWidget {
   final Project project;
 
-  ProjectMonitorMobile(this.project);
+  const ProjectMonitorMobile(this.project, {super.key});
 
   @override
-  _ProjectMonitorMobileState createState() => _ProjectMonitorMobileState();
+  ProjectMonitorMobileState createState() => ProjectMonitorMobileState();
 }
 ///Checks whether the device is within monitoring distance for the project
-class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
+class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   var positions = <ProjectPosition>[];
 
   @override
@@ -45,7 +43,7 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       positions = await monitorBloc.getProjectPositions(
           projectId: widget.project.projectId!, forceRefresh: false);
     } catch (e) {
-      print(e);
+      pp(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data refresh failed: $e')));
 
     }
@@ -73,43 +71,43 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               style: Styles.whiteBoldSmall),
           actions: [
             IconButton(
-              icon: Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh),
               onPressed: _checkProjectDistance,
             ),
             IconButton(
-              icon: Icon(Icons.directions),
+              icon: const Icon(Icons.directions),
               onPressed: _navigateToDirections,
             )
           ],
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(240),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
                   Text(widget.project.name!, style: Styles.blackBoldSmall),
-                  SizedBox(
+                  const SizedBox(
                     height: 60,
                   ),
                   Text(
                     'The project should be monitored only when the device is within a radius of',
                     style: Styles.whiteSmall,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text('${widget.project.monitorMaxDistanceInMetres}',
                       style: Styles.blackBoldMedium),
-                  SizedBox(
+                  const SizedBox(
                     height: 0,
                   ),
-                  Text('metres'),
-                  SizedBox(
+                  const Text('metres'),
+                  const SizedBox(
                     height: 12,
                   ),
                 ],
               ),
             ),
-            preferredSize: Size.fromHeight(240),
           ),
         ),
         backgroundColor: Colors.brown[100],
@@ -121,7 +119,7 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 48,
                   ),
                   isWithinDistance
@@ -145,13 +143,13 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                           ),
                         )
                       : Container(),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   isBusy
                       ? Row(
                           children: [
-                            Container(
+                            const SizedBox(
                               width: 16,
                               height: 16,
                               child: CircularProgressIndicator(
@@ -159,7 +157,7 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                                 backgroundColor: Colors.yellowAccent,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 8,
                             ),
                             Text(
@@ -169,23 +167,19 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                           ],
                         )
                       : Container(),
-                  SizedBox(
+                  const SizedBox(
                     height: 24,
                   ),
                   isWithinDistance
-                      ? Container(
-                          child: Text('We are ready to start creating photos and videos for ${widget.project.name}',
-                              style: Styles.greyLabelMedium),
-                        )
-                      : Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
-                              style: Styles.greyLabelMedium,
-                            ),
-                          ),
+                      ? Text('We are ready to start creating photos and videos for ${widget.project.name}',
+                          style: Styles.greyLabelMedium)
+                      : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
+                          style: Styles.greyLabelMedium,
                         ),
+                      ),
                 ],
               ),
             ),
@@ -267,7 +261,7 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: FieldCamera(
               project: widget.project,
               projectPosition: nearestProjectPosition!,
@@ -276,7 +270,7 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
 
   _showError() {
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:
      Text('You are too far from the project for monitoring to work properly')));
     setState(() {
       isBusy = false;
@@ -295,14 +289,10 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       var position = await locationBloc.getLocation();
       var origin = '${position.latitude},${position.longitude}';
 
-      final AndroidIntent intent = new AndroidIntent(
+      final AndroidIntent intent = AndroidIntent(
           action: 'action_view',
           data: Uri.encodeFull(
-              "https://www.google.com/maps/dir/?api=1&origin=" +
-                  origin +
-                  "&destination=" +
-                  destination +
-                  "&travelmode=driving&dir_action=navigate"),
+              "https://www.google.com/maps/dir/?api=1&origin=$origin&destination=$destination&travelmode=driving&dir_action=navigate"),
           package: 'com.google.android.apps.maps');
       intent.launch();
     }
@@ -315,13 +305,11 @@ class _ProjectMonitorMobileState extends State<ProjectMonitorMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: ProjectLocationMain(widget.project)));
     if (projectPosition != null) {
       if (projectPosition is ProjectPosition) {
-        if (widget.project.projectPositions == null) {
-          widget.project.projectPositions = [];
-        }
+        widget.project.projectPositions ??= [];
         widget.project.projectPositions!.add(projectPosition);
         _checkProjectDistance();
       }

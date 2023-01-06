@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/ui/media/video/video_desktop.dart';
-import 'package:geo_monitor/library/ui/media/video/video_mobile.dart';
-import 'package:geo_monitor/library/ui/media/video/video_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../data/video.dart';
+import '../../../ui/media/video/video_mobile.dart';
+import '../../../ui/media/video/video_tablet.dart';
+import '../../../ui/media/video/video_desktop.dart';
+
+
 
 class VideoMain extends StatelessWidget {
   final Video video;

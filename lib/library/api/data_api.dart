@@ -4,25 +4,29 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
 import 'package:http/http.dart' as http;
-import 'package:geo_monitor/library/auth/app_auth.dart';
-import 'package:geo_monitor/library/data/city.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/counters.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/data/field_monitor_schedule.dart';
-import 'package:geo_monitor/library/data/geofence_event.dart';
-import 'package:geo_monitor/library/data/organization.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/data/section.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+import '../auth/app_auth.dart';
+import '../data/city.dart';
+import '../data/community.dart';
+import '../data/condition.dart';
+import '../data/counters.dart';
+import '../data/country.dart';
+import '../data/field_monitor_schedule.dart';
+import '../data/geofence_event.dart';
+import '../data/monitor_report.dart';
+import '../data/org_message.dart';
+import '../data/organization.dart';
+import '../data/photo.dart';
+import '../data/project.dart';
+import '../data/project_position.dart';
+import '../data/questionnaire.dart';
+import '../data/section.dart';
+import '../data/user.dart';
+import '../data/video.dart';
 
 import '../data/condition.dart';
 import '../data/org_message.dart';
 import '../data/video.dart';
+import '../functions.dart';
 import '../generic_functions.dart' as gen;
 import '../hive_util.dart';
 
@@ -241,6 +245,7 @@ class DataAPI {
       rethrow;
     }
   }
+
   static Future<List<ProjectPosition>> getOrganizationProjectPositions(
       String organizationId) async {
     String? mURL = await getUrl();
@@ -248,6 +253,25 @@ class DataAPI {
     try {
       var result = await _sendHttpGET(
           '${mURL!}getOrganizationProjectPositions?organizationId=$organizationId');
+      List<ProjectPosition> list = [];
+      result.forEach((m) {
+        list.add(ProjectPosition.fromJson(m));
+      });
+      await hiveUtil.addProjectPositions(positions: list);
+      return list;
+    } catch (e) {
+      pp(e);
+      rethrow;
+    }
+  }
+
+  static Future<List<ProjectPosition>> getProjectPositions(
+      String projectId) async {
+    String? mURL = await getUrl();
+
+    try {
+      var result = await _sendHttpGET(
+          '${mURL!}getProjectPositions?projectId=$projectId');
       List<ProjectPosition> list = [];
       result.forEach((m) {
         list.add(ProjectPosition.fromJson(m));

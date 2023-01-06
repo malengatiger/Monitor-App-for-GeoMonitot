@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_desktop.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_mobile.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_tablet.dart';
+import '../../data/project.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
+import 'project_monitor_desktop.dart';
+import 'project_monitor_mobile.dart';
+import 'project_monitor_tablet.dart';
 
 class ProjectMonitorMain extends StatefulWidget {
   final Project project;
 
-  const ProjectMonitorMain(this.project);
+  const ProjectMonitorMain(this.project, {super.key});
   @override
-  _ProjectMonitorMainState createState() => _ProjectMonitorMainState();
+  ProjectMonitorMainState createState() => ProjectMonitorMainState();
 }
 
-class _ProjectMonitorMainState extends State<ProjectMonitorMain>
+class ProjectMonitorMainState extends State<ProjectMonitorMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool isBusy = false;
@@ -35,12 +36,10 @@ class _ProjectMonitorMainState extends State<ProjectMonitorMain>
     return isBusy
         ? Scaffold(
             appBar: AppBar(),
-            body: Center(
-              child: Container(
-                child: CircularProgressIndicator(
-                  strokeWidth: 16,
-                  backgroundColor: Colors.pink,
-                ),
+            body: const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 16,
+                backgroundColor: Colors.pink,
               ),
             ),
           )

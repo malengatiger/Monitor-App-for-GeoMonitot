@@ -1,22 +1,30 @@
 import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/data/field_monitor_schedule.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/location/loc_bloc.dart';
+
 import 'package:universal_platform/universal_platform.dart';
 
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
+import '../data/country.dart';
+import '../data/questionnaire.dart';
 import '../data/video.dart';
+import '../functions.dart';
 import '../hive_util.dart';
+import '../data/city.dart';
+import '../data/community.dart';
+import '../data/condition.dart';
+import '../data/field_monitor_schedule.dart';
+import '../data/monitor_report.dart';
+import '../data/org_message.dart';
+import '../data/organization.dart';
+import '../data/photo.dart';
+import '../data/project.dart';
+import '../data/project_position.dart';
+import '../data/section.dart';
+import '../data/user.dart';
+import '../data/video.dart';
+import '../location/loc_bloc.dart';
 
 final MonitorBloc monitorBloc = MonitorBloc();
 
@@ -145,13 +153,12 @@ class MonitorBloc {
 
       if (_projects.isEmpty || forceRefresh) {
         _projects = await DataAPI.findProjectsByOrganization(organizationId);
-        await hiveUtil.addProjects(projects: _projects);
       }
       _projController.sink.add(_projects);
-      pp('💜 💜 💜 💜 MonitorBloc: OrganizationProjects found: 💜 ${_projects
+      pp('💜💜💜💜 MonitorBloc: OrganizationProjects found: 💜 ${_projects
           .length} projects ; organizationId: $organizationId💜');
       for (var project in _projects) {
-        pp('💜 💜 💜 💜 Org PROJECT: ${project.name} 🍏 ${project
+        pp('💜💜 Org PROJECT: ${project.name} 🍏 ${project
             .organizationName}  🍏 ${project.organizationId}');
       }
     } catch (e) {
@@ -177,7 +184,7 @@ class MonitorBloc {
     await getOrganizationProjectPositions(
         organizationId: _user!.organizationId!, forceRefresh: forceRefresh);
   }
-  static const mm = '💜 💜 💜 💜 💜 💜 MonitorBloc 💜 💜 ';
+  static const mm = '💜💜💜 MonitorBloc 💜 ';
 
   Future<List<User>> getOrganizationUsers(
       {required String organizationId, required bool forceRefresh}) async {
@@ -187,7 +194,6 @@ class MonitorBloc {
     if (_users.isEmpty || forceRefresh) {
       _users = await DataAPI.findUsersByOrganization(organizationId);
       pp('$mm getOrganizationUsers ... _users: ${_users.length} ... will add to cache');
-      await hiveUtil.addUsers(users: _users);
     }
     pp('$mm getOrganizationUsers found: 💜 ${_users.length} users. adding to stream ... ');
     _userController.sink.add(_users);
@@ -405,21 +411,34 @@ class MonitorBloc {
     return _videos;
   }
 
+  Future refreshOrgData({required String organizationId,required bool forceRefresh}) async {
+    try {
+      await getOrganizationUsers(organizationId: organizationId, forceRefresh: forceRefresh);
+      await getOrganizationPhotos(organizationId: organizationId, forceRefresh: forceRefresh);
+      await getOrganizationVideos(organizationId: organizationId, forceRefresh: forceRefresh);
+      await getOrganizationProjects(organizationId: organizationId, forceRefresh: forceRefresh);
+    }catch (e) {
+  pp('We seem fucked! $e');
+  rethrow;
+  }
+  }
   Future refreshUserData(
       {required String userId, required String organizationId, required bool forceRefresh}) async {
     pp('💜 💜 💜 MonitorBloc: refreshUserData ... forceRefresh: $forceRefresh');
     try {
+      //todo - for monitor, only their projects must show
       await getOrganizationProjects(
           organizationId: organizationId, forceRefresh: forceRefresh);
       await getOrganizationUsers(
           organizationId: organizationId, forceRefresh: forceRefresh);
+
       await getUserProjectPhotos(userId: userId, forceRefresh: forceRefresh);
       await getUserProjectVideos(userId: userId, forceRefresh: forceRefresh);
       await getMonitorFieldMonitorSchedules(
           userId: userId, forceRefresh: forceRefresh);
       await getOrganizationProjectPositions(organizationId: organizationId, forceRefresh: forceRefresh);
     } catch (e) {
-      pp('We seem fucked! ');
+      pp('We seem fucked! $e');
       rethrow;
     }
   }

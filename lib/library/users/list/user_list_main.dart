@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/users/list/user_list_desktop.dart';
-import 'package:geo_monitor/library/users/list/user_list_mobile.dart';
-import 'package:geo_monitor/library/users/list/user_list_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import '../../api/sharedprefs.dart';
+import '../../data/user.dart';
+import 'user_list_desktop.dart';
+import 'user_list_mobile.dart';
+import 'user_list_tablet.dart';
 
 class UserListMain extends StatefulWidget {
-  UserListMain({Key? key}) : super(key: key);
+  const UserListMain({Key? key}) : super(key: key);
 
   @override
-  _UserListMainState createState() => _UserListMainState();
+  UserListMainState createState() => UserListMainState();
 }
 
-class _UserListMainState extends State<UserListMain> {
+class UserListMainState extends State<UserListMain> {
   User? _user;
   bool isBusy = false;
 
@@ -39,17 +39,15 @@ class _UserListMainState extends State<UserListMain> {
         ? SafeArea(
             child: Scaffold(
               appBar: AppBar(
-                title: Text('Organization Users Loading'),
+                title: const Text('Organization Users Loading'),
                 bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(100),
                   child: Column(),
-                  preferredSize: Size.fromHeight(100),
                 ),
               ),
-              body: Center(
-                child: Container(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 8,
-                  ),
+              body: const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 8,
                 ),
               ),
             ),

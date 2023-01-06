@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/snack.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../library/api/sharedprefs.dart';
+import '../../library/bloc/admin_bloc.dart';
+import '../../library/data/community.dart';
+import '../../library/data/project.dart';
+import '../../library/data/user.dart';
+
+import '../../library/functions.dart';
+import '../../library/snack.dart';
 import 'project_editor.dart';
 
 /// shows the details for projects
@@ -21,7 +23,7 @@ class ProjectDetail extends StatefulWidget {
 }
 
 class ProjectDetailState extends State<ProjectDetail> {
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   late Project project;
 
   @override
@@ -160,7 +162,7 @@ class ProjectDetailState extends State<ProjectDetail> {
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             height: 100,
                             width: 140,
                             child: Card(
@@ -194,7 +196,7 @@ class ProjectDetailState extends State<ProjectDetail> {
                             ? MainAxisAlignment.center
                             : MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Container(
+                          SizedBox(
                             height: 100,
                             width: 140,
                             child: Card(
@@ -290,23 +292,23 @@ class ProjectDetailState extends State<ProjectDetail> {
     //todo - check usertype
     switch (value) {
       case 0:
-        print('Questionnaire Nav  tapped');
+        pp('Questionnaire Nav  tapped');
         Navigator.push(
             context,
             PageTransition(
                 type: PageTransitionType.scale,
                 alignment: Alignment.topLeft,
-                duration: Duration(seconds: 1),
+                duration: const Duration(seconds: 1),
                 child: ProjectEditor()));
 
         break;
       case 1:
-        print('Project Nav  tapped');
+        pp('Project Nav  tapped');
         AppSnackbar.showErrorSnackbar(
             scaffoldKey: _key, message: 'Under Construction');
         break;
       case 2:
-        print('Map Nav  tapped');
+        pp('Map Nav  tapped');
         AppSnackbar.showErrorSnackbar(
             scaffoldKey: _key, message: 'Under Construction');
 //        Navigator.push(context, SlideRightRoute(

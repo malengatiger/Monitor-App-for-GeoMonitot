@@ -1,23 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_main.dart';
+
 import 'package:page_transition/page_transition.dart';
+import '../../../data/photo.dart';
+import '../../../data/project.dart';
+import '../../../functions.dart';
+import '../../maps/project_map_main.dart';
 
 class FullPhotoMobile extends StatefulWidget {
   final Photo photo;
   final Project project;
 
-  FullPhotoMobile(this.photo, this.project);
+  const FullPhotoMobile(this.photo, this.project, {super.key});
 
   @override
-  _FullPhotoMobileState createState() => _FullPhotoMobileState();
+  FullPhotoMobileState createState() => FullPhotoMobileState();
 }
 
-class _FullPhotoMobileState extends State<FullPhotoMobile>
+class FullPhotoMobileState extends State<FullPhotoMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -47,10 +48,10 @@ class _FullPhotoMobileState extends State<FullPhotoMobile>
             child: Column(
               children: [
                 Text(
-                  '${getFormattedDateLongWithTime(widget.photo.created!, context)}',
+                  getFormattedDateLongWithTime(widget.photo.created!, context),
                   style: Styles.blackBoldSmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 )
               ],
@@ -122,7 +123,7 @@ class _FullPhotoMobileState extends State<FullPhotoMobile>
                             PageTransition(
                                 type: PageTransitionType.scale,
                                 alignment: Alignment.bottomRight,
-                                duration: Duration(seconds: 1),
+                                duration: const Duration(seconds: 1),
                                 child: ProjectMapMain(
                                   project: widget.project,
                                   photo: widget.photo,

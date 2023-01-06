@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:geofence_service/geofence_service.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/geofence_event.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/location/loc_bloc.dart';
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
+import '../data/geofence_event.dart';
+import '../data/project_position.dart';
+import '../data/user.dart';
 import 'package:uuid/uuid.dart';
 
+import '../functions.dart';
 import '../hive_util.dart';
+import '../location/loc_bloc.dart';
 
 final GeofencerTwo geofencerTwo = GeofencerTwo();
 

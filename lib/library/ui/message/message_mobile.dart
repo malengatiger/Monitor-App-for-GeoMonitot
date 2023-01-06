@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/ui/message/generic_message.dart';
 
+import '../../bloc/monitor_bloc.dart';
+import '../../data/project.dart';
+import '../../data/user.dart';
 import '../../functions.dart';
+import 'generic_message.dart';
 
 class MessageMobile extends StatefulWidget {
   final User? user;
 
   const MessageMobile({Key? key,  this.user}) : super(key: key);
   @override
-  _MessageMobileState createState() => _MessageMobileState();
+  MessageMobileState createState() => MessageMobileState();
 }
 
-class _MessageMobileState extends State<MessageMobile>
+class MessageMobileState extends State<MessageMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   List<Project> _projects = [];
 
   @override
@@ -64,18 +64,19 @@ class _MessageMobileState extends State<MessageMobile>
           style: Styles.whiteSmall,
         ),
         bottom: PreferredSize(
+            preferredSize: Size.fromHeight(_genericMessage ? 320 : 360),
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                        '${_genericMessage ? 'Generic Message' : 'Project Message'}'),
-                    SizedBox(
+                        _genericMessage ? 'Generic Message' : 'Project Message'),
+                    const SizedBox(
                       width: 20,
                     ),
                     Switch(value: _genericMessage, onChanged: _onSwitchChanged),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                   ],
@@ -84,7 +85,7 @@ class _MessageMobileState extends State<MessageMobile>
                   '${widget.user!.name}',
                   style: Styles.blackBoldMedium,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 Padding(
@@ -97,12 +98,11 @@ class _MessageMobileState extends State<MessageMobile>
                                 project: _selectedProject == null? null: _selectedProject!, user: widget.user!))),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 )
               ],
-            ),
-            preferredSize: Size.fromHeight(_genericMessage ? 320 : 360)),
+            )),
       ),
       backgroundColor: Colors.brown[100],
       body: widget.user!.userType == ORG_ADMINISTRATOR

@@ -1,11 +1,11 @@
 {
-    "name": "geo_monitor",
-    "short_name": "geo_monitor",
+    "name": "test_router",
+    "short_name": "test_router",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Flutter app to front GeoMonitor; for monitors, admins and execs",
+    "description": "Testing go router app",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

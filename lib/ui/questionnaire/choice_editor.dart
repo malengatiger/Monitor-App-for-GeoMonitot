@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/question.dart';
-import 'package:geo_monitor/library/data/questionnaire.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
+
+import '../../library/api/sharedprefs.dart';
+import '../../library/bloc/admin_bloc.dart';
+import '../../library/data/question.dart';
+import '../../library/data/questionnaire.dart';
+import '../../library/functions.dart';
+
 
 class ChoiceEditor extends StatefulWidget {
   final Question question;
   final Questionnaire questionnaire;
-  ChoiceEditor(this.question, this.questionnaire);
+  const ChoiceEditor(this.question, this.questionnaire, {super.key});
 
   @override
-  _ChoiceEditorState createState() => _ChoiceEditorState();
+  ChoiceEditorState createState() => ChoiceEditorState();
 }
 
-class _ChoiceEditorState extends State<ChoiceEditor>
+class ChoiceEditorState extends State<ChoiceEditor>
     implements ChoiceFormListener {
   List<String> choices = [];
   TextEditingController textEditingController = TextEditingController();
@@ -22,16 +24,16 @@ class _ChoiceEditorState extends State<ChoiceEditor>
   initState() {
     super.initState();
     choices = widget.question.choices!;
-    print('$choices choices found in question');
+    pp('$choices choices found in question');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choices Editor'),
+        title: const Text('Choices Editor'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(120),
+          preferredSize: const Size.fromHeight(120),
           child: Column(
             children: <Widget>[
               Padding(
@@ -40,15 +42,13 @@ class _ChoiceEditorState extends State<ChoiceEditor>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     Expanded(
-                      child: Container(
-                        child: Text(
-                          '${widget.question.text}',
-                          style: Styles.whiteMedium,
-                          overflow: TextOverflow.clip,
-                        ),
+                      child: Text(
+                        '${widget.question.text}',
+                        style: Styles.whiteMedium,
+                        overflow: TextOverflow.clip,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 28,
                     ),
                     Padding(
@@ -59,7 +59,7 @@ class _ChoiceEditorState extends State<ChoiceEditor>
                             '${choices.length}',
                             style: Styles.blackBoldLarge,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 4,
                           ),
                           Text(
@@ -72,7 +72,7 @@ class _ChoiceEditorState extends State<ChoiceEditor>
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],
@@ -94,7 +94,7 @@ class _ChoiceEditorState extends State<ChoiceEditor>
 
   @override
   onTextChange(String text, int index) async {
-    print('🐼 🐼 🐼 🐼 onTextChange: 🧩 $text for choice 🧩 #${index + 1} 🧩 will update active questionnaire');
+    pp('🐼 🐼 🐼 🐼 onTextChange: 🧩 $text for choice 🧩 #${index + 1} 🧩 will update active questionnaire');
     setState(() {
       choices[index] = text;
       widget.question.choices = choices;
@@ -113,13 +113,13 @@ class ChoiceForm extends StatefulWidget {
   final String choice;
   final int index;
   final ChoiceFormListener listener;
-  ChoiceForm(this.choice, this.index, this.listener);
+  const ChoiceForm(this.choice, this.index, this.listener, {super.key});
 
   @override
-  _ChoiceFormState createState() => _ChoiceFormState();
+  ChoiceFormState createState() => ChoiceFormState();
 }
 
-class _ChoiceFormState extends State<ChoiceForm> {
+class ChoiceFormState extends State<ChoiceForm> {
   TextEditingController textEditingController = TextEditingController();
   String? text;
   @override

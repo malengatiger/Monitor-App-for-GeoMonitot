@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/media/user_media_list/user_media_list_desktop.dart';
-import 'package:geo_monitor/library/ui/media/user_media_list/user_media_list_mobile.dart';
-import 'package:geo_monitor/library/ui/media/user_media_list/user_media_list_tablet.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:test_router/library/ui/media/user_media_list/user_media_list_desktop.dart';
+import 'package:test_router/library/ui/media/user_media_list/user_media_list_mobile.dart';
+import 'package:test_router/library/ui/media/user_media_list/user_media_list_tablet.dart';
+
+import '../../../api/sharedprefs.dart';
+import '../../../bloc/monitor_bloc.dart';
+import '../../../data/user.dart';
+import '../../../functions.dart';
 
 class UserMediaListMain extends StatefulWidget {
   final User user;
 
-  UserMediaListMain(this.user);
+  const UserMediaListMain(this.user, {super.key});
 
   @override
-  _UserMediaListMainState createState() => _UserMediaListMainState();
+  UserMediaListMainState createState() => UserMediaListMainState();
 }
 
-class _UserMediaListMainState extends State<UserMediaListMain>
+class UserMediaListMainState extends State<UserMediaListMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
@@ -35,9 +36,7 @@ class _UserMediaListMainState extends State<UserMediaListMain>
       isBusy = true;
     });
     user = widget.user;
-    if (user == null) {
-      user = await Prefs.getUser();
-    }
+    user ??= await Prefs.getUser();
 
     pp('MediaListMain: 💜 💜 💜 getting media for ${user!.name}');
     await monitorBloc.getUserProjectPhotos(userId: user!.userId!, forceRefresh: true);
@@ -64,8 +63,8 @@ class _UserMediaListMainState extends State<UserMediaListMain>
                   style: Styles.whiteSmall,
                 ),
               ),
-              body: Center(
-                child: Container(
+              body: const Center(
+                child: SizedBox(
                   width: 60,
                   height: 60,
                   child: CircularProgressIndicator(

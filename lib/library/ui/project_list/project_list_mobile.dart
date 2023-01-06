@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/fcm_bloc.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/data/user.dart' as mon;
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/ui/maps/org_map_mobile.dart';
-import 'package:geo_monitor/library/ui/maps/project_map_mobile.dart';
-import 'package:geo_monitor/library/ui/media/list/media_list_main.dart';
-import 'package:geo_monitor/library/ui/project_edit/project_edit_main.dart';
-import 'package:geo_monitor/library/ui/project_edit/project_edit_mobile.dart';
-import 'package:geo_monitor/library/ui/project_location/project_location_main.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_main.dart';
-import 'package:geo_monitor/library/ui/project_monitor/project_monitor_mobile.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:page_transition/page_transition.dart';
 
+import '../../api/data_api.dart';
+import '../../api/sharedprefs.dart';
+import '../../bloc/fcm_bloc.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../data/user.dart';
+import '../../functions.dart';
 import '../../hive_util.dart';
 import '../../snack.dart';
+import '../../data/user.dart' as mon;
+import '../../data/project.dart';
+import '../maps/org_map_mobile.dart';
+import '../maps/project_map_mobile.dart';
+import '../media/list/media_list_main.dart';
+import '../project_edit/project_edit_main.dart';
+import '../project_edit/project_edit_mobile.dart';
+import '../project_location/project_location_main.dart';
 
 class ProjectListMobile extends StatefulWidget {
   final mon.User user;
@@ -114,7 +114,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
             organizationId: user!.organizationId!, forceRefresh: forceRefresh);
       }
     } catch (e) {
-      print(e);
+      pp(e);
       AppSnackbar.showErrorSnackbar(
           scaffoldKey: _key, message: 'Data refresh failed: $e');
     }
@@ -125,7 +125,6 @@ class ProjectListMobileState extends State<ProjectListMobile>
     }
   }
 
-  Project? _currentProject;
   bool openProjectActions = false;
   void _navigateToDetail(Project? p) {
     if (user!.userType == FIELD_MONITOR) {
@@ -184,8 +183,11 @@ class ProjectListMobileState extends State<ProjectListMobile>
 
   }
   void _navigateToProjectMap(Project p) async {
-    pp('_navigateToProjectMap: ');
+    pp('.................. _navigateToProjectMap: ');
     var pos = await hiveUtil.getProjectPositions(p.projectId!);
+    if (pos.isEmpty) {
+      pos = await DataAPI.getProjectPositions(p.projectId!);
+    }
     if (mounted) {
       Navigator.push(
           context,
@@ -202,7 +204,9 @@ class ProjectListMobileState extends State<ProjectListMobile>
     List<FocusedMenuItem> menuItems = [];
     menuItems.add(
       FocusedMenuItem(
-          title: Text('Project Map'),
+          title:  Text('Project Map', style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.normal, color: Colors.black),),
           trailingIcon: Icon(
             Icons.map,
             color: Theme.of(context).primaryColor,
@@ -213,7 +217,9 @@ class ProjectListMobileState extends State<ProjectListMobile>
     );
     menuItems.add(
       FocusedMenuItem(
-          title: Text('Photos & Videos'),
+          title:  Text('Photos & Videos', style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.normal, color: Colors.black)),
           trailingIcon: Icon(
             Icons.camera,
             color: Theme.of(context).primaryColor,
@@ -224,7 +230,9 @@ class ProjectListMobileState extends State<ProjectListMobile>
     );
     if (user!.userType == ORG_ADMINISTRATOR) {
       menuItems.add(FocusedMenuItem(
-          title: Text('Add Project Location'),
+          title:  Text('Add Project Location',style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.normal, color: Colors.black)),
           trailingIcon: Icon(
             Icons.location_pin,
             color: Theme.of(context).primaryColor,
@@ -232,10 +240,10 @@ class ProjectListMobileState extends State<ProjectListMobile>
           onPressed: () {
             _navigateToProjectLocation(p);
           }));
-    }
-    if (user!.userType == ORG_ADMINISTRATOR) {
       menuItems.add(FocusedMenuItem(
-          title: Text('Edit Project'),
+          title:  Text('Edit Project',style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.normal, color: Colors.black)),
           trailingIcon: Icon(
             Icons.create,
             color: Theme.of(context).primaryColor,
@@ -244,6 +252,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
             _navigateToDetail(p);
           }));
     }
+
     return menuItems;
   }
 
@@ -258,11 +267,11 @@ class ProjectListMobileState extends State<ProjectListMobile>
     // ));
     list.add(IconButton(
       icon: isProjectsByLocation
-          ? Icon(
+          ? const Icon(
               Icons.list,
               size: 24,
             )
-          : Icon(
+          : const Icon(
               Icons.location_pin,
               size: 20,
             ),
@@ -274,7 +283,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
     if (projects.isNotEmpty) {
       list.add(
         IconButton(
-          icon: Icon(Icons.map),
+          icon: const Icon(Icons.map),
           onPressed: () {
            _navigateToOrgMap();
           },
@@ -284,7 +293,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
     if (user!.userType == ORG_ADMINISTRATOR) {
       list.add(
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.add,
             size: 20,
           ),
@@ -322,32 +331,36 @@ class ProjectListMobileState extends State<ProjectListMobile>
                 appBar: AppBar(
                   title: Text(
                     'Projects',
-                    style: Styles.whiteTiny,
-                  ),
+                      style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                          fontWeight: FontWeight.w900)),
                   actions: _getActions(),
                   bottom: PreferredSize(
                     preferredSize:
-                        Size.fromHeight(isProjectsByLocation ? 160 : 120),
+                        Size.fromHeight(isProjectsByLocation ? 160 : 140),
                     child: Column(
                       children: [
                         Text(
                           user == null ? 'Unknown User' : user!.organizationName!,
-                          style: Styles.blackBoldSmall,
-                        ),
+                            style: GoogleFonts.lato(
+                                textStyle: Theme.of(context).textTheme.bodySmall,
+                                fontWeight: FontWeight.normal)),
                         const SizedBox(
                           height: 24,
                         ),
                         Text(
                           user == null ? '' : '${user!.name}',
-                          style: Styles.whiteSmall,
-                        ),
+                            style: GoogleFonts.lato(
+                                textStyle: Theme.of(context).textTheme.bodyLarge,
+                                fontWeight: FontWeight.normal)),
                         const SizedBox(
                           height: 2,
                         ),
                         Text(
-                          '$userTypeLabel',
-                          style: Styles.blackTiny,
-                        ),
+                          userTypeLabel,
+                            style: GoogleFonts.lato(
+                                textStyle: Theme.of(context).textTheme.bodyMedium,
+                                fontWeight: FontWeight.normal)),
                         const SizedBox(
                           height: 2,
                         ),
@@ -377,7 +390,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
                                           inactiveTickMarkColor:
                                               Colors.pink[100],
                                           valueIndicatorShape:
-                                              PaddleSliderValueIndicatorShape(),
+                                              const PaddleSliderValueIndicatorShape(),
                                           valueIndicatorColor:
                                               Colors.pinkAccent,
                                           valueIndicatorTextStyle: const TextStyle(
@@ -408,15 +421,17 @@ class ProjectListMobileState extends State<ProjectListMobile>
                             ),
                             Text(
                               'Projects',
-                              style: Styles.blackTiny,
-                            ),
+                                style: GoogleFonts.lato(
+                                    textStyle: Theme.of(context).textTheme.bodySmall,
+                                    fontWeight: FontWeight.normal)),
                             const SizedBox(
                               width: 8,
                             ),
                             Text(
                               '${projects.length}',
-                              style: Styles.whiteBoldSmall,
-                            ),
+                                style: GoogleFonts.secularOne(
+                                    textStyle: Theme.of(context).textTheme.bodyLarge,
+                                    fontWeight: FontWeight.w900)),
                             const SizedBox(
                               width: 24,
                             )
@@ -429,15 +444,15 @@ class ProjectListMobileState extends State<ProjectListMobile>
                     ),
                   ),
                 ),
-                backgroundColor: Colors.brown[100],
+                // backgroundColor: Colors.brown[100],
                 body: isBusy
                     ? Center(
                         child: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 100,
                             ),
-                            Container(
+                            const SizedBox(
                               width: 48,
                               height: 48,
                               child: CircularProgressIndicator(
@@ -445,7 +460,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
                                 backgroundColor: Colors.black,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Text(isProjectsByLocation
@@ -460,8 +475,9 @@ class ProjectListMobileState extends State<ProjectListMobile>
                             ? Center(
                                 child: Text(
                                   'Projects Not Found',
-                                  style: Styles.blackBoldMedium,
-                                ),
+                                    style: GoogleFonts.lato(
+                                        textStyle: Theme.of(context).textTheme.bodyLarge,
+                                        fontWeight: FontWeight.w900)),
                               )
                             : Stack(
                                 children: [
@@ -483,12 +499,14 @@ class ProjectListMobileState extends State<ProjectListMobile>
                                           pp('.... 💛️ 💛️ 💛️ not sure what I pressed ...');
                                         },
                                         child: Card(
-                                          elevation: 2,
+                                          elevation: 4,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16.0)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(12.0),
                                             child: Column(
                                               children: [
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 12,
                                                 ),
                                                 Row(
@@ -501,19 +519,19 @@ class ProjectListMobileState extends State<ProjectListMobile>
                                                             .primaryColor,
                                                       ),
                                                     ),
-                                                    SizedBox(
+                                                    const SizedBox(
                                                       width: 8,
                                                     ),
                                                     Flexible(
                                                       child: Text(
                                                         selectedProject.name!,
-                                                        style: Styles
-                                                            .blackBoldSmall,
-                                                      ),
+                                                          style: GoogleFonts.lato(
+                                                              textStyle: Theme.of(context).textTheme.bodySmall,
+                                                              fontWeight: FontWeight.bold)),
                                                     )
                                                   ],
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 12,
                                                 ),
                                               ],
@@ -539,8 +557,5 @@ class ProjectListMobileState extends State<ProjectListMobile>
     refreshProjects(false);
   }
 
-  @override
-  onClose() {
-    ScaffoldMessenger.of(_key.currentState!.context).removeCurrentSnackBar();
-  }
+
 }

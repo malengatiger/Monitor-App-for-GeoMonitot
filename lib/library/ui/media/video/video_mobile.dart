@@ -1,11 +1,13 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/functions.dart';
+
 import 'package:video_player/video_player.dart';
 
 import '../../../data/video.dart';
+import '../../../data/photo.dart';
+import '../../../functions.dart';
+
 
 class VideoMobile extends StatefulWidget {
   final Video video;

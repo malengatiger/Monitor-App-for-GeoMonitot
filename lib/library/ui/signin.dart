@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
-import 'package:geo_monitor/library/auth/app_auth.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+
+import '../auth/app_auth.dart';
+import '../functions.dart';
 
 class SignIn extends StatefulWidget {
-  final String type;
 
-  const SignIn(this.type, {super.key});
+  const SignIn( {super.key});
 
   @override
   SignInState createState() => SignInState();
@@ -30,7 +29,7 @@ class SignInState extends State<SignIn> {
           preferredSize: const Size.fromHeight(80),
           child: Column(
             children: [
-              Text(widget.type, style: Styles.whiteBoldMedium),
+              Text('Signing In ...', style: Styles.whiteBoldMedium),
               const SizedBox(
                 height: 24,
               )
@@ -130,28 +129,32 @@ class SignInState extends State<SignIn> {
   //user: ORG_ADMINISTRATOR 🍎  org.qaf@monitor.com 🔵  Nicole Seleka
   //user: FIELD_MONITOR 🍎  monitor.zyp@monitor.com 🔵  Mmaphefo De sousa
   //user: EXECUTIVE 🍎  exec.uat@monitor.com 🔵  Andre Motau
+
+  //user: ORG_ADMINISTRATOR 🍎  org.kis@monitor.com 🔵  Lesley Makhubo
+  //user: FIELD_MONITOR 🍎  monitor.ffg@monitor.com 🔵  Vusi Mavuso
+  //user: EXECUTIVE 🍎  exec.wub@monitor.com 🔵  David Maepa
   void _checkStatus() async {
     var status = dot.dotenv.env['CURRENT_STATUS'];
     pp('🥦🥦 Checking status ..... 🥦🥦 status: $status 🌸 🌸 🌸');
-    if (status == 'dev') {
-      pswdCntr.text = 'pass123';
-      switch (widget.type) {
-        case UserType.fieldMonitor:
-          emailCntr.text = 'monitor.zyp@monitor.com';
-          break;
-        case UserType.orgExecutive:
-          emailCntr.text = 'exec.uat@monitor.com';
-          break;
-        case UserType.orgAdministrator:
-          emailCntr.text = 'org.qaf@monitor.com';
-          break;
-        default:
-          emailCntr.text = 'org.qaf@monitor.com';
-          break;
-
-          break;
-      }
-    }
+    // if (status == 'dev') {
+    //   pswdCntr.text = 'pass123';
+    //   switch (widget.type) {
+    //     case UserType.fieldMonitor:
+    //       emailCntr.text = 'monitor.ffg@monitor.com';
+    //       break;
+    //     case UserType.orgExecutive:
+    //       emailCntr.text = 'exec.wub@monitor.com';
+    //       break;
+    //     case UserType.orgAdministrator:
+    //       emailCntr.text = 'org.kis@monitor.com';
+    //       break;
+    //     default:
+    //       emailCntr.text = 'org.kis@monitor.com';
+    //       break;
+    //
+    //       break;
+    //   }
+    // }
 
 
     setState(() {});
@@ -175,7 +178,7 @@ class SignInState extends State<SignIn> {
       isBusy = true;
     });
     try {
-      var user = await AppAuth.signIn(email, password, widget.type);
+      var user = await AppAuth.signIn(email: email, password: password,);
       if (!mounted) return;
       Navigator.pop(context, user);
       //do I want to gp to dashboard??

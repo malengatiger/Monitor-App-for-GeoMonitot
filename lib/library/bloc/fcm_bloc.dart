@@ -3,19 +3,19 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart' as fb;
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/photo.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import '../api/data_api.dart';
+import '../api/sharedprefs.dart';
 import '../data/condition.dart';
 import '../data/org_message.dart';
 import '../data/video.dart';
 import '../functions.dart';
 import '../generic_functions.dart';
 import '../hive_util.dart';
+import '../data/photo.dart';
+import '../data/project.dart';
+import '../data/user.dart';
 
 FCMBloc fcmBloc = FCMBloc();
 const mm = '🔵 🔵 🔵 🔵 🔵 🔵 FCMBloc: ';

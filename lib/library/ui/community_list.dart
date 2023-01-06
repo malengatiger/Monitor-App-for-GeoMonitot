@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/country.dart';
-import 'package:geo_monitor/library/functions.dart';
 
+import '../api/sharedprefs.dart';
+import '../bloc/admin_bloc.dart';
+import '../data/community.dart';
+import '../data/country.dart';
+import '../functions.dart';
 
 abstract class CommunityListener {
   onSettlementSelected(Community settlement);
@@ -13,17 +13,17 @@ abstract class CommunityListener {
 class CommunityList extends StatefulWidget {
   final CommunityListener listener;
 
-  CommunityList(this.listener);
+  const CommunityList(this.listener, {super.key});
 
   @override
-  _CommunityListState createState() => _CommunityListState();
+  CommunityListState createState() => CommunityListState();
 }
 
-class _CommunityListState extends State<CommunityList> {
+class CommunityListState extends State<CommunityList> {
   Country? country;
   List<Community> list = [];
   List<Country> countries = [];
-  GlobalKey<ScaffoldState> _key = GlobalKey();
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
   bool isBusy = false;
 
   @override
@@ -48,8 +48,10 @@ class _CommunityListState extends State<CommunityList> {
         await adminBloc.findCommunitiesByCountry(country!.countryId!);
       } catch (e) {
         pp('👿 error getting community list ... 👿👿👿👿 does fucking the snackBar show?');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Query failed, what now, Boss?: $e')));
-
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Query failed, what now, Boss?: $e')));
+        }
       }
     }
     setState(() {
@@ -70,16 +72,16 @@ class _CommunityListState extends State<CommunityList> {
         return Scaffold(
           key: _key,
           appBar: AppBar(
-            title: Text('Settlements'),
+            title: const Text('Settlements'),
             backgroundColor: Colors.indigo[400],
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 onPressed: _getCommunities,
               ),
             ],
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(80),
+              preferredSize: const Size.fromHeight(80),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -91,7 +93,7 @@ class _CommunityListState extends State<CommunityList> {
                           "Total Settlements",
                           style: Styles.whiteSmall,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         Text(
@@ -107,8 +109,8 @@ class _CommunityListState extends State<CommunityList> {
           ),
           backgroundColor: Colors.brown[100],
           body: isBusy
-              ? Center(
-                  child: Container(
+              ? const Center(
+                  child: SizedBox(
                     height: 80,
                     width: 80,
                     child: CircularProgressIndicator(

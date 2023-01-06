@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
+
 import 'package:uuid/uuid.dart';
 
+import '../../api/data_api.dart';
+import '../../api/sharedprefs.dart';
 import '../../data/org_message.dart';
 import '../../functions.dart';
-import '../../snack.dart';
-
+import '../../data/project.dart';
+import '../../data/user.dart';
 class GenericMessage extends StatefulWidget {
   final Project? project;
   final User user;
 
-  const GenericMessage({
+  const GenericMessage({super.key,
     this.project,
     required this.user,
   });

@@ -9,14 +9,14 @@ import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/storage_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/project_position.dart';
-import 'package:geo_monitor/library/generic_functions.dart';
-import 'package:geo_monitor/library/functions.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../api/storage_bloc.dart';
+import '../../data/project.dart';
+import '../../data/project_position.dart';
+import '../../functions.dart';
+import '../../generic_functions.dart';
 
 class FieldCamera extends StatefulWidget {
   final Project project;
@@ -214,7 +214,7 @@ class FieldCameraState extends State<FieldCamera>
             },
             child: Container(
               width: 32, height: 32,
-                decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.pink),
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.pink),
                 child: Center(
               child: Text('${_mediaBags.length}', style: Styles.whiteSmall),
             )

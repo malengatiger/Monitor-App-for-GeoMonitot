@@ -2,33 +2,31 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/data/community.dart';
-import 'package:geo_monitor/library/data/position.dart';
-import 'package:geo_monitor/library/functions.dart';
-import 'package:geo_monitor/library/snack.dart';
 
+import '../library/bloc/admin_bloc.dart';
+import '../library/data/community.dart';
+import '../library/data/position.dart';
 import '../library/functions.dart';
-import '../library/functions.dart';
+import '../library/snack.dart';
 
 class MapEditor extends StatefulWidget {
   final Community community;
 
-  MapEditor(this.community);
+  const MapEditor(this.community, {super.key});
 
   @override
-  _MapEditorState createState() => _MapEditorState();
+  MapEditorState createState() => MapEditorState();
 }
 
-class _MapEditorState extends State<MapEditor>  {
+class MapEditorState extends State<MapEditor>  {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-  Completer<GoogleMapController> _completer = Completer();
+  final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _mapController;
   Position? position;
   late CameraPosition _cameraPosition;
   late MapType mapType;
-  final Set<Marker> _markersForMap = Set();
+  final Set<Marker> _markersForMap = {};
   @override
   void initState() {
     super.initState();
@@ -39,7 +37,7 @@ class _MapEditorState extends State<MapEditor>  {
 
   _getLocation() async {
     position = await adminBloc.getCurrentPosition();
-    print(
+    pp(
         '💠💠💠 setting new camera position  💠💠💠 after getting current location ${position?.coordinates}');
     _cameraPosition = CameraPosition(
       target: LatLng(position!.coordinates[1], position!.coordinates[0]),
@@ -54,26 +52,26 @@ class _MapEditorState extends State<MapEditor>  {
     return Scaffold(
       key: _key,
       appBar: AppBar(
-        title: Text('Settlement Map Editor'),
+        title: const Text('Settlement Map Editor'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel),
             onPressed: _confirmRemovePolygons,
           ),
           IconButton(
-            icon: Icon(Icons.create_new_folder),
+            icon: const Icon(Icons.create_new_folder),
             onPressed: _drawPolygon,
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(60),
           child: Column(
             children: <Widget>[
               Text(
                 '${widget.community.name}',
                 style: Styles.blackBoldMedium,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
             ],
@@ -82,11 +80,9 @@ class _MapEditorState extends State<MapEditor>  {
       ),
       body: Stack(
         children: <Widget>[
-          _cameraPosition == null
-              ? Container()
-              : GoogleMap(
+           GoogleMap(
                   initialCameraPosition: _cameraPosition,
-                  mapType: mapType == null ? MapType.hybrid : mapType,
+                  mapType: mapType ?? MapType.hybrid,
                   markers: _markersForMap,
                   polygons: polygons,
                   myLocationEnabled: true,
@@ -102,7 +98,7 @@ class _MapEditorState extends State<MapEditor>  {
                     _completer.complete(mapController);
                     _mapController = mapController;
                     if (points.isEmpty) {
-                      print(
+                      pp(
                           'No points in polygon ... 🌍 🌍 🌍  try to place map at current location');
                     } else {
                       if (points.length < 3) {
@@ -120,7 +116,7 @@ class _MapEditorState extends State<MapEditor>  {
 
   LatLng? latLng;
   void _onMapLongPressed(LatLng p) {
-    print('🥏 Map long pressed 🥏 🥏 $p ...');
+    pp('🥏 Map long pressed 🥏 🥏 $p ...');
     latLng = p;
     showDialog(
         context: context,
@@ -130,7 +126,7 @@ class _MapEditorState extends State<MapEditor>  {
                 "Confirm Point",
                 style: Styles.blackBoldLarge,
               ),
-              content: Container(
+              content: SizedBox(
                 height: 40.0,
                 child: Column(
                   children: <Widget>[
@@ -155,7 +151,7 @@ class _MapEditorState extends State<MapEditor>  {
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      print('🍏 onPressed');
+                      pp('🍏 onPressed');
                       _addPointToPolygon();
                     },
 
@@ -173,7 +169,7 @@ class _MapEditorState extends State<MapEditor>  {
   }
 
   _addPointToPolygon() async {
-    print('🔸🔸🔸 _addPointToPolygon: $latLng');
+    pp('🔸🔸🔸 _addPointToPolygon: $latLng');
     Navigator.pop(context);
     _placeNewMarker();
     points.add(latLng!);
@@ -192,9 +188,9 @@ class _MapEditorState extends State<MapEditor>  {
           latitude: latLng!.latitude,
           longitude: latLng!.longitude);
 
-      print(res);
+      pp(res);
     } catch (e) {
-      print(e);
+      pp(e);
       // AppSnackbar.showErrorSnackbar(
       //     scaffoldKey: _key,
       //     message: e.message,
@@ -231,7 +227,7 @@ class _MapEditorState extends State<MapEditor>  {
     _markersForMap.clear();
     if (points.isEmpty) return;
     debugPrint('Setting  🏮 🏮 ${points.length} 🏮 🏮 markers on map');
-    points.forEach((p) {
+    for (var p in points) {
       var marker = Marker(
           onTap: () {
             debugPrint('marker tapped!! ❤️ 🧡 💛 :latLng: $latLng ');
@@ -241,17 +237,15 @@ class _MapEditorState extends State<MapEditor>  {
           markerId: MarkerId(DateTime.now().toIso8601String()),
           position: LatLng(p.latitude, p.longitude),
           infoWindow: InfoWindow(
-              title: '${DateTime.now().toIso8601String()}',
+              title: DateTime.now().toIso8601String(),
               snippet: 'Point in Settlement Polygon',
               onTap: () {
                 debugPrint(' 🧩 🧩 🧩 infoWindow tapped  🧩 🧩 🧩 ');
               }));
       _markersForMap.add(marker);
-    });
-    if (_mapController != null) {
-      _mapController.animateCamera(CameraUpdate.newLatLngZoom(points[0], 14));
-      setState(() {});
     }
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(points[0], 14));
+    setState(() {});
   }
 
   List<LatLng> points = [];
@@ -270,8 +264,7 @@ class _MapEditorState extends State<MapEditor>  {
     polygons.add(pol);
     setState(() {});
     var latLng = points[0];
-    if (_mapController != null)
-      _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 14));
+    _mapController.animateCamera(CameraUpdate.newLatLngZoom(latLng, 14));
   }
 
   _setPoints() {
@@ -280,11 +273,6 @@ class _MapEditorState extends State<MapEditor>  {
     });
   }
 
-  @override
-  onActionPressed(int action) {
-    // TODO: implement onActionPressed
-    return null;
-  }
 
   void _confirmRemovePolygons() {
     showDialog(
@@ -295,7 +283,7 @@ class _MapEditorState extends State<MapEditor>  {
                 "Confirm Delete",
                 style: Styles.blackBoldLarge,
               ),
-              content: Container(
+              content: SizedBox(
                 height: 40.0,
                 child: Column(
                   children: <Widget>[
@@ -320,7 +308,6 @@ class _MapEditorState extends State<MapEditor>  {
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      print('🍏 onPressed');
                       points.clear();
                       _markersForMap.clear();
                       polygons.clear();

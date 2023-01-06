@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
-import 'package:geo_monitor/library/bloc/admin_bloc.dart';
-import 'package:geo_monitor/library/bloc/monitor_bloc.dart';
-import 'package:geo_monitor/library/data/project.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/functions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'package:geo_monitor/library/ui/project_location/project_location_main.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';
-
+import '../../api/sharedprefs.dart';
+import '../../bloc/admin_bloc.dart';
+import '../../bloc/monitor_bloc.dart';
+import '../../data/project.dart';
+import '../../data/user.dart';
+import '../../functions.dart';
+import '../project_location/project_location_main.dart';
 class ProjectEditMobile extends StatefulWidget {
   final Project? project;
-  const ProjectEditMobile(this.project);
+  const ProjectEditMobile(this.project, {super.key});
 
   @override
-  _ProjectEditMobileState createState() => _ProjectEditMobileState();
+  ProjectEditMobileState createState() => ProjectEditMobileState();
 }
 
-class _ProjectEditMobileState extends State<ProjectEditMobile>
+class ProjectEditMobileState extends State<ProjectEditMobile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var nameController = TextEditingController();
@@ -68,7 +68,7 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
         Project mProject;
         if (widget.project == null) {
           pp('😡 😡 😡 _submit new project ......... ${nameController.text}');
-          var uuid = Uuid();
+          var uuid = const Uuid();
           mProject = Project(
               name: nameController.text,
               description: descController.text,
@@ -117,12 +117,14 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
         PageTransition(
             type: PageTransitionType.scale,
             alignment: Alignment.bottomRight,
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: ProjectLocationMain(mProject)));
-    Navigator.pop(context);
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +140,7 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
             widget.project == null
                 ? Container()
                 : IconButton(
-                    icon: Icon(Icons.location_on),
+                    icon: const Icon(Icons.location_on),
                     onPressed: () {
                       if (widget.project != null) {
                         _navigateToProjectLocation(widget.project!);
@@ -147,44 +149,50 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                   )
           ],
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
             child: Column(
               children: [
                 Text(
                   widget.project == null ? 'New Project' : 'Edit Project',
                   style: Styles.blackBoldMedium,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Text(
-                  admin == null ? '' : '${admin!.organizationName!}',
+                  admin == null ? '' : admin!.organizationName!,
                   style: Styles.whiteSmall,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 )
               ],
             ),
-            preferredSize: Size.fromHeight(100),
           ),
         ),
-        backgroundColor: Colors.brown[100],
+        // backgroundColor: Colors.brown[100],
         body: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SingleChildScrollView(
             child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 0,
                       ),
                       TextFormField(
                         controller: nameController,
                         keyboardType: TextInputType.text,
+                        style: GoogleFonts.lato(
+                            textStyle: Theme.of(context).textTheme.bodyMedium,
+                            fontWeight: FontWeight.normal),
                         decoration: InputDecoration(
                             icon: Icon(
                               Icons.event,
@@ -199,16 +207,20 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       TextFormField(
                         controller: descController,
                         keyboardType: TextInputType.multiline,
+                          style: GoogleFonts.lato(
+                              textStyle: Theme.of(context).textTheme.bodySmall,
+                              fontWeight: FontWeight.normal),
                         minLines: 2, //Normal textInputField will be displayed
                         maxLines:
                             6, // when user presses enter it will adapt to it
                         decoration: InputDecoration(
+
                             icon: Icon(
                               Icons.info_outline,
                               color: Theme.of(context).primaryColor,
@@ -222,7 +234,7 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       TextFormField(
@@ -243,11 +255,11 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 48,
                       ),
                       isBusy
-                          ? Container(
+                          ? const SizedBox(
                               width: 48,
                               height: 48,
                               child: CircularProgressIndicator(
@@ -259,7 +271,7 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                               children: [
                                 widget.project == null
                                     ? Container()
-                                    : Container(
+                                    : SizedBox(
                                         width: 220,
                                         child: ElevatedButton(
 
@@ -278,12 +290,13 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                                       ),
                                 widget.project == null
                                     ? Container()
-                                    : SizedBox(
+                                    : const SizedBox(
                                         height: 20,
                                       ),
-                                Container(
+                                SizedBox(
                                   width: 220,
                                   child: ElevatedButton(
+                                    onPressed: _submit,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12.0),
                                       child: Text(
@@ -291,12 +304,11 @@ class _ProjectEditMobileState extends State<ProjectEditMobile>
                                         style: Styles.whiteSmall,
                                       ),
                                     ),
-                                    onPressed: _submit,
                                   ),
                                 ),
                               ],
                             ),
-                      SizedBox(
+                      const SizedBox(
                         height: 40,
                       ),
                     ],

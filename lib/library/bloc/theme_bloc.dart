@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:geo_monitor/library/api/sharedprefs.dart';
 
+
+import '../api/sharedprefs.dart';
+import '../emojis.dart';
 import '../functions.dart';
 import '../generic_functions.dart';
 
@@ -12,18 +14,14 @@ final ThemeBloc themeBloc = ThemeBloc();
 
 class ThemeBloc {
   ThemeBloc() {
-    pp('✈️✈️ ThemeBloc initializing....');
+    pp('✈️✈️ ... ThemeBloc initializing ....');
     initialize();
   }
 
   final StreamController<int> _themeController = StreamController.broadcast();
+  Stream<int> get newThemeStream => _themeController.stream;
+
   final _rand = Random(DateTime.now().millisecondsSinceEpoch);
-
-  get changeToTheme0 => _themeController.sink.add(0);
-
-  get changeToTheme1 => _themeController.sink.add(1);
-
-  get changeToTheme2 => _themeController.sink.add(2);
 
   int _themeIndex = 0;
 
@@ -35,217 +33,191 @@ class ThemeBloc {
     _themeController.sink.add(_themeIndex);
   }
 
-  ThemeData getCurrentTheme() {
-    p('✈️✈️ getCurrentTheme: getting and setting current stream ....');
-    return ThemeUtil.getTheme(themeIndex: _themeIndex);
+  void start() async {
+    var index = await Prefs.getThemeIndex();
+    _themeController.sink.add(index);
   }
 
-  ThemeData getTheme(int index) {
-    p('✈️✈️ getTheme: getting and setting current stream ....');
-    return ThemeUtil.getTheme(themeIndex: index);
-  }
-
-  changeToTheme(int index) {
-    p('✈️✈️ changeToTheme: adding index to stream ....');
-    _setStream(index);
+  ThemeBag getTheme(int index) {
+    p('$mm getTheme: getting and setting current stream ....');
+    return SchemeUtil.getTheme(themeIndex: index);
   }
 
   changeToRandomTheme() {
-    _themeIndex = _rand.nextInt(ThemeUtil.getThemeCount() - 1);
+    _themeIndex = _rand.nextInt(SchemeUtil.getThemeCount() - 1);
     _setStream(_themeIndex);
   }
 
   _setStream(int index) {
-    pp('✈️✈️ _setStream: setting stream .... to theme index: $index');
+    pp('$mm _setStream: setting stream .... to theme index: $index');
     Prefs.setThemeIndex(index);
     _themeController.sink.add(index);
-
   }
 
   closeStream() {
     _themeController.close();
   }
 
-  get newThemeStream => _themeController.stream;
+  static final mm = '${Emoji.appleRed}${Emoji.appleRed}${Emoji.appleRed}';
 }
 
-class ThemeUtil {
-  static final List<ThemeData> _themes = [];
 
+/*
+theme: FlexThemeData.light(scheme: FlexScheme.mallardGreen),
+        // The Mandy red, dark theme.
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.mallardGreen),
+        // Use dark or light theme based on system setting.
+        themeMode: ThemeMode.system,
+ */
+class SchemeUtil {
+  static final List<ThemeBag> _themeBags = [];
+  static final _rand = Random(DateTime.now().millisecondsSinceEpoch);
   static int index = 0;
-
-  static ThemeData getTheme({required int themeIndex}) {
-    p('🌈 🌈 getting theme with index: 🌈 $themeIndex');
-    if (_themes.isEmpty) {
-      _setThemes();
-    }
-
-    return _themes.elementAt(themeIndex);
-  }
+  static final mm = 'ThemeBloc ${Emoji.diamond}${Emoji.diamond}${Emoji.diamond}';
 
   static int getThemeCount() {
     _setThemes();
-    return _themes.length;
+    return _themeBags.length;
+  }
+  static ThemeBag getTheme({required int themeIndex}) {
+    p('$mm getting theme with index: 🌈 $themeIndex');
+    if (_themeBags.isEmpty) {
+      _setThemes();
+    }
+    if (themeIndex >= _themeBags.length) {
+      return _themeBags.first;
+    }
+
+    return _themeBags.elementAt(themeIndex);
   }
 
-  static final _rand = Random(DateTime.now().millisecondsSinceEpoch);
-
-  static ThemeData getRandomTheme() {
-    if (_themes.isEmpty) _setThemes();
-    var index = _rand.nextInt(_themes.length - 1);
-    return _themes.elementAt(index);
+  static ThemeBag getRandomTheme() {
+    if (_themeBags.isEmpty) _setThemes();
+    var index = _rand.nextInt(_themeBags.length - 1);
+    return _themeBags.elementAt(index);
   }
 
-  static ThemeData getThemeByIndex(int index) {
-    if (_themes.isEmpty) _setThemes();
-    if (index >= _themes.length || index < 0) index = 0;
-    return _themes.elementAt(index);
+  static ThemeBag getThemeByIndex(int index) {
+    if (_themeBags.isEmpty) _setThemes();
+    if (index >= _themeBags.length || index < 0) index = 0;
+    return _themeBags.elementAt(index);
   }
 
   static void _setThemes() {
-    _themes.clear();
+    _themeBags.clear();
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.mallardGreen),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.mallardGreen)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.indigo),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.indigo)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.deepBlue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.deepBlue)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.hippieBlue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.hippieBlue)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.deepPurple),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.deepPurple)));
 
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.indigo.shade500,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(
-          color: Colors.indigo.shade300,),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.pink.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(elevation: 8, color: Colors.pink.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.teal.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.teal.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.brown.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.brown.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.amber.shade800,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.amber.shade700),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.blue.shade400,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.blue.shade400),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.blueGrey.shade400,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.blueGrey.shade400),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.purple.shade500,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.purple.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.deepPurple.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.deepPurple.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.deepOrange.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.deepOrange.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.orange.shade400,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.orange.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.red.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.red.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.green.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.green.shade300),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.amber.shade700,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.amber.shade700),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.grey.shade600,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.grey.shade600),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.lime.shade700,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.lime.shade700),
-    ));
-    _themes.add(ThemeData(
-      fontFamily: GoogleFonts.raleway().fontFamily,
-      primaryColor: Colors.indigo.shade300,
-      cardColor: Colors.white,
-      backgroundColor: Colors.brown.shade100,
-      appBarTheme: AppBarTheme(color: Colors.indigo.shade300),
-    ));
-    //
-    // final darkTheme = ThemeData(
-    //   primarySwatch: Colors.grey,
-    //   primaryColor: Colors.black,
-    //   brightness: Brightness.dark,
-    //   backgroundColor: const Color(0xFF212121),
-    //   accentColor: Colors.white,
-    //   accentIconTheme: IconThemeData(color: Colors.black),
-    //   dividerColor: Colors.black12,
-    // );
-    // _themes.add(darkTheme);
-    //
-    // final lightTheme = ThemeData(
-    //   primarySwatch: Colors.grey,
-    //   primaryColor: Colors.white,
-    //   brightness: Brightness.light,
-    //   backgroundColor: const Color(0xFFE5E5E5),
-    //   accentColor: Colors.black,
-    //   accentIconTheme: IconThemeData(color: Colors.white),
-    //   dividerColor: Colors.white54,
-    // );
-    // _themes.add(lightTheme);
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.espresso),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.espresso)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.barossa),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.barossa)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.bigStone),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.bigStone)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.damask),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.damask)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.purpleBrown),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.purpleBrown)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.wasabi),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.wasabi)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.rosewood),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.rosewood)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.sanJuanBlue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.sanJuanBlue)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.material),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.material)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.mandyRed),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.mandyRed)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.mango),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.mango)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.amber),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.amber)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.dellGenoa),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.dellGenoa)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.gold),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.gold)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.blue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.blue)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.red),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.red)));
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.green),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.green)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.blueWhale),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.blueWhale)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.purpleBrown),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.purpleBrown)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.ebonyClay),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.ebonyClay)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.money),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.money)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.aquaBlue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.aquaBlue)));
+
+    _themeBags.add(ThemeBag(
+        lightTheme: FlexThemeData.light(scheme: FlexScheme.blumineBlue),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.blumineBlue)));
+
+    p('$mm ThemeBags set up; number of themes: ${_themeBags.length} 🍎');
   }
+}
+
+class ThemeBag {
+  late final ThemeData lightTheme;
+  late final ThemeData darkTheme;
+
+  ThemeBag({required this.lightTheme, required this.darkTheme});
 }

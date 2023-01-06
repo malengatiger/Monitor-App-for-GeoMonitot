@@ -1,10 +1,13 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:geo_monitor/library/functions.dart';
+
+import '../functions.dart';
 
 final LocationBloc locationBloc = LocationBloc();
 
 class LocationBloc {
   Future<Position> getLocation() async {
+    var result = await requestPermission();
+    pp(result);
     var pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
     pp('🔆🔆🔆 Location has been found:  💜 latitude: ${pos.latitude} longitude: ${pos.longitude}');
@@ -23,8 +26,6 @@ class LocationBloc {
 
   Future<double> getDistanceFromCurrentPosition(
       {required double latitude, required double longitude}) async {
-    assert(latitude != null);
-    assert(longitude != null);
     var pos = await getLocation();
 
     return Geolocator.distanceBetween(

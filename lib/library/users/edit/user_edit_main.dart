@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:geo_monitor/library/api/data_api.dart';
-import 'package:geo_monitor/library/data/user.dart';
-import 'package:geo_monitor/library/users/edit/user_edit_desktop.dart';
-import 'package:geo_monitor/library/users/edit/user_edit_mobile.dart';
-import 'package:geo_monitor/library/users/edit/user_edit_tablet.dart';
+
 import 'package:responsive_builder/responsive_builder.dart';
 
+import '../../api/data_api.dart';
 import '../../data/country.dart';
+import '../../data/user.dart';
+import 'user_edit_desktop.dart';
+import 'user_edit_mobile.dart';
+import 'user_edit_tablet.dart';
 
 class UserEditMain extends StatelessWidget {
   final User? user;
