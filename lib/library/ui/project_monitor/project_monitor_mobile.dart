@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/bloc/project_bloc.dart';
 
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../functions.dart';
 import '../../hive_util.dart';
 import '../../data/project.dart';
@@ -41,7 +42,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       isBusy = true;
     });
     try {
-      positions = await monitorBloc.getProjectPositions(
+      positions = await projectBloc.getProjectPositions(
           projectId: widget.project.projectId!, forceRefresh: false);
     } catch (e) {
       pp(e);

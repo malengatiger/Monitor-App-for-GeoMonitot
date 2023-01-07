@@ -4,13 +4,14 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/bloc/organization_bloc.dart';
 import 'package:test_router/library/data/field_monitor_schedule.dart';
 import 'package:test_router/library/data/project_position.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../library/api/sharedprefs.dart';
 import '../../library/bloc/fcm_bloc.dart';
-import '../../library/bloc/monitor_bloc.dart';
+import '../../library/bloc/user_bloc.dart';
 import '../../library/bloc/theme_bloc.dart';
 import '../../library/data/org_message.dart';
 import '../../library/data/photo.dart';
@@ -62,6 +63,7 @@ class DashboardMobileState extends State<DashboardMobile>
     _listenForFCM();
     _refreshData(false);
     _subscribeToConnectivity();
+    _subscribeToGeofenceStream();
     _buildGeofences();
   }
 
@@ -92,17 +94,38 @@ class DashboardMobileState extends State<DashboardMobile>
     });
   }
 
-  void _listenToStreams() async {
+  void _subscribeToGeofenceStream() async {
     geofencerTwo.geofenceStream.listen((event) {
       pp('\n$nn geofenceEvent delivered by geofenceStream: ${event.projectName} ...');
       if (mounted) {
         showToast(
             message:
-                'Geofence triggered: ${event.projectName} projectPositionId: ${event.projectPositionId}',
+            'Geofence triggered: ${event.projectName} projectPositionId: ${event.projectPositionId}',
             context: context);
       }
     });
-    monitorBloc.projectStream.listen((event) {
+  }
+
+  void _listenToStreams() async {
+    var user = await Prefs.getUser();
+    if (user == null) return;
+    switch(user.userType) {
+      case UserType.orgExecutive:
+        _listenToOrgStreams();
+        break;
+      case UserType.orgAdministrator:
+        _listenToOrgStreams();
+        break;
+      case UserType.fieldMonitor:
+        _listenToMonitorStreams();
+        break;
+    }
+
+  }
+
+  void _listenToOrgStreams() async {
+
+    organizationBloc.projectStream.listen((event) {
       if (mounted) {
         setState(() {
           _projects = event;
@@ -110,7 +133,7 @@ class DashboardMobileState extends State<DashboardMobile>
         });
       }
     });
-    monitorBloc.usersStream.listen((event) {
+    organizationBloc.usersStream.listen((event) {
       if (mounted) {
         setState(() {
           _users = event;
@@ -118,7 +141,7 @@ class DashboardMobileState extends State<DashboardMobile>
         });
       }
     });
-    monitorBloc.photoStream.listen((event) {
+    organizationBloc.photoStream.listen((event) {
       if (mounted) {
         setState(() {
           _photos = event;
@@ -126,7 +149,7 @@ class DashboardMobileState extends State<DashboardMobile>
         });
       }
     });
-    monitorBloc.videoStream.listen((event) {
+    organizationBloc.videoStream.listen((event) {
       if (mounted) {
         setState(() {
           _videos = event;
@@ -134,7 +157,7 @@ class DashboardMobileState extends State<DashboardMobile>
         });
       }
     });
-    monitorBloc.projectPositionsStream.listen((event) {
+    organizationBloc.projectPositionsStream.listen((event) {
       if (mounted) {
         setState(() {
           _projectPositions = event;
@@ -142,7 +165,59 @@ class DashboardMobileState extends State<DashboardMobile>
         });
       }
     });
-    monitorBloc.fieldMonitorScheduleStream.listen((event) {
+    organizationBloc.fieldMonitorScheduleStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _schedules = event;
+          pp('$mm fieldMonitorSchedules delivered by stream: ${_schedules.length} ...');
+        });
+      }
+    });
+  }
+
+  void _listenToMonitorStreams() async {
+
+    organizationBloc.projectStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _projects = event;
+          pp('$nn projects delivered by stream: ${_projects.length} ...');
+        });
+      }
+    });
+    organizationBloc.usersStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _users = event;
+          pp('$mm users delivered by stream: ${_users.length} ...');
+        });
+      }
+    });
+    userBloc.photoStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _photos = event;
+          pp('$mm photos delivered by stream: ${_photos.length} ...');
+        });
+      }
+    });
+    userBloc.videoStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _videos = event;
+          pp('$mm videos delivered by stream: ${_videos.length} ...');
+        });
+      }
+    });
+    organizationBloc.projectPositionsStream.listen((event) {
+      if (mounted) {
+        setState(() {
+          _projectPositions = event;
+          pp('$mm projectPositions delivered by stream: ${_projectPositions.length} ...');
+        });
+      }
+    });
+    userBloc.fieldMonitorScheduleStream.listen((event) {
       if (mounted) {
         setState(() {
           _schedules = event;
@@ -194,17 +269,17 @@ class DashboardMobileState extends State<DashboardMobile>
       if (user != null) {
         switch (user!.userType) {
           case UserType.orgAdministrator:
-            monitorBloc.refreshOrganizationData(
+            organizationBloc.refreshOrganizationData(
                 organizationId: user!.organizationId!, forceRefresh: true);
             break;
           case UserType.fieldMonitor:
-            monitorBloc.refreshUserData(
+            userBloc.refreshUserData(
                 userId: user!.userId!,
                 organizationId: user!.organizationId!,
                 forceRefresh: forceRefresh);
             break;
           case UserType.orgExecutive:
-            monitorBloc.refreshOrganizationData(
+            organizationBloc.refreshOrganizationData(
                 organizationId: user!.organizationId!, forceRefresh: true);
             break;
         }
@@ -228,22 +303,16 @@ class DashboardMobileState extends State<DashboardMobile>
       fcmBloc.projectStream.listen((Project project) async {
         if (mounted) {
           pp('DashboardMobile: 🍎 🍎 showProjectSnackbar: ${project.name} ... 🍎 🍎');
-          _projects = await monitorBloc.getOrganizationProjects(
+          _projects = await organizationBloc.getProjects(
               organizationId: user!.organizationId!, forceRefresh: false);
           setState(() {});
-          // SpecialSnack.showProjectSnackbar(
-          //     scaffoldKey: _key,
-          //     textColor: Colors.white,
-          //     backgroundColor: Theme.of(context).primaryColor,
-          //     project: project,
-          //     listener: this);
         }
       });
 
       fcmBloc.userStream.listen((User user) async {
         if (mounted) {
           pp('DashboardMobile: 🍎 🍎 showUserSnackbar: ${user.name} ... 🍎 🍎');
-          _users = await monitorBloc.getOrganizationUsers(
+          _users = await organizationBloc.getUsers(
               organizationId: user.organizationId!, forceRefresh: false);
           setState(() {});
           // SpecialSnack.showUserSnackbar(

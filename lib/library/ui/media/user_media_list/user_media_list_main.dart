@@ -5,7 +5,7 @@ import 'package:test_router/library/ui/media/user_media_list/user_media_list_mob
 import 'package:test_router/library/ui/media/user_media_list/user_media_list_tablet.dart';
 
 import '../../../api/sharedprefs.dart';
-import '../../../bloc/monitor_bloc.dart';
+import '../../../bloc/user_bloc.dart';
 import '../../../data/user.dart';
 import '../../../functions.dart';
 
@@ -39,8 +39,8 @@ class UserMediaListMainState extends State<UserMediaListMain>
     user ??= await Prefs.getUser();
 
     pp('MediaListMain: 💜 💜 💜 getting media for ${user!.name}');
-    await monitorBloc.getUserProjectPhotos(userId: user!.userId!, forceRefresh: true);
-    await monitorBloc.getUserProjectVideos(userId: user!.userId!, forceRefresh: true);
+    await userBloc.getPhotos(userId: user!.userId!, forceRefresh: true);
+    await userBloc.getVideos(userId: user!.userId!, forceRefresh: true);
     setState(() {
       isBusy = false;
     });

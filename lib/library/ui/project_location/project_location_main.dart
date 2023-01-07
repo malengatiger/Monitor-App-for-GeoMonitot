@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/project_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/project.dart';
 import 'project_location_desktop.dart';
 import 'project_location_mobile.dart';
@@ -29,7 +30,7 @@ class ProjectLocationMainState extends State<ProjectLocationMain> {
     setState(() {
       isBusy = true;
     });
-    await monitorBloc.getProjectPositions(
+    await projectBloc.getProjectPositions(
         projectId: widget.project.projectId!, forceRefresh: true);
     setState(() {
       isBusy = false;

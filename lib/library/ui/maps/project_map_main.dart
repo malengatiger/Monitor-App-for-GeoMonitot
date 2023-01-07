@@ -5,12 +5,11 @@ import 'package:test_router/library/ui/maps/project_map_desktop.dart';
 import 'package:test_router/library/ui/maps/project_map_mobile.dart';
 import 'package:test_router/library/ui/maps/project_map_tablet.dart';
 
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/project_bloc.dart';
 import '../../data/photo.dart';
 import '../../data/project.dart';
 import '../../data/project_position.dart';
 import '../../functions.dart';
-import '../../hive_util.dart';
 
 
 
@@ -18,7 +17,7 @@ class ProjectMapMain extends StatefulWidget {
   final Project project;
   final Photo? photo;
 
-  ProjectMapMain({required this.project, this.photo});
+  const ProjectMapMain({super.key, required this.project, this.photo});
 
   @override
   ProjectMapMainState createState() => ProjectMapMainState();
@@ -27,7 +26,7 @@ class ProjectMapMain extends StatefulWidget {
 class ProjectMapMainState extends State<ProjectMapMain> {
   var isBusy = false;
   var _positions = <ProjectPosition>[];
-  var _key = GlobalKey<ScaffoldState>();
+  final _key = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -39,10 +38,10 @@ class ProjectMapMainState extends State<ProjectMapMain> {
       isBusy = true;
     });
     try {
-      _positions = await monitorBloc.getProjectPositions(
+      _positions = await projectBloc.getProjectPositions(
           projectId: widget.project.projectId!, forceRefresh: false);
     } catch (e) {
-      print(e);
+      pp(e);
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Data refresh failed: $e')));
     }

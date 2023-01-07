@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../library/api/sharedprefs.dart';
-import '../../library/bloc/monitor_bloc.dart';
+import '../../library/bloc/user_bloc.dart';
 import '../../library/data/field_monitor_schedule.dart';
 import '../../library/data/user.dart';
 import '../../library/functions.dart';
@@ -73,7 +73,7 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
     });
     try {
       _user = await Prefs.getUser();
-      _schedules = await monitorBloc.getMonitorFieldMonitorSchedules(
+      _schedules = await userBloc.getFieldMonitorSchedules(
           userId: _user!.userId!, forceRefresh: refresh);
     } catch (e) {
       AppSnackbar.showErrorSnackbar(

@@ -5,7 +5,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:uuid/uuid.dart';
 import '../../api/sharedprefs.dart';
 import '../../bloc/admin_bloc.dart';
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/organization_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/project.dart';
 import '../../data/user.dart';
 import '../../functions.dart';
@@ -96,7 +97,7 @@ class ProjectEditMobileState extends State<ProjectEditMobile>
         setState(() {
           isBusy = false;
         });
-        monitorBloc.getOrganizationProjects(
+        organizationBloc.getProjects(
             organizationId: mProject.organizationId!, forceRefresh: true);
         _navigateToProjectLocation(mProject);
       } catch (e) {

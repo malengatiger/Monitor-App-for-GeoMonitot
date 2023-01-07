@@ -636,7 +636,7 @@ class HiveUtil {
         }
       }
     }
-    pp('$mm .... getProjectPosition ..... 🌺 found:  🌼 ${position == null ? 'Not Found' : position!.projectPositionId}  🌼');
+    pp('$mm .... getProjectPosition ..... 🌺 found:  🌼 ${position == null ? 'Not Found' : position.projectPositionId}  🌼');
     return position;
   }
 

@@ -1,18 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'package:page_transition/page_transition.dart';
 import '../../../data/photo.dart';
-import '../../../data/project.dart';
 import '../../../functions.dart';
-import '../../maps/project_map_main.dart';
 
 class FullPhotoMobile extends StatefulWidget {
   final Photo photo;
-  final Project project;
 
-  const FullPhotoMobile(this.photo, this.project, {super.key});
+  const FullPhotoMobile({super.key, required this.photo});
+
 
   @override
   FullPhotoMobileState createState() => FullPhotoMobileState();
@@ -41,15 +38,19 @@ class FullPhotoMobileState extends State<FullPhotoMobile>
         appBar: AppBar(
           title: Text(
             '${widget.photo.projectName}',
-            style: Styles.whiteSmall,
+            style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodySmall,
+              fontWeight: FontWeight.w900,),
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40),
+            preferredSize: const Size.fromHeight(28),
             child: Column(
               children: [
                 Text(
                   getFormattedDateLongWithTime(widget.photo.created!, context),
-                  style: Styles.blackBoldSmall,
+                  style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    fontWeight: FontWeight.normal,),
                 ),
                 const SizedBox(
                   height: 16,
@@ -63,16 +64,16 @@ class FullPhotoMobileState extends State<FullPhotoMobile>
           children: [
             CachedNetworkImage(
               imageUrl: widget.photo.url!,
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.fill,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
                   Center(
-                      child: Container(
+                      child: SizedBox(
                           width: 24,
                           height: 24,
                           child: CircularProgressIndicator(
                               backgroundColor: Colors.white,
                               value: downloadProgress.progress))),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Positioned(
               right: 20,
@@ -83,20 +84,26 @@ class FullPhotoMobileState extends State<FullPhotoMobile>
                   padding: const EdgeInsets.only(left: 20.0, bottom: 8, top: 8),
                   child: Row(
                     children: [
-                      Text('Distance from Project'),
-                      SizedBox(
+                       Text('Distance from Project', style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.bodySmall,
+                        fontWeight: FontWeight.normal,),),
+                      const SizedBox(
                         width: 8,
                       ),
                       Text(
                         widget.photo.distanceFromProjectPosition!
                             .toStringAsFixed(1),
-                        style: Styles.blackBoldMedium,
+                        style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                          fontWeight: FontWeight.w900,),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8,
                       ),
-                      Text('metres'),
-                      SizedBox(
+                       Text('metres', style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.bodySmall,
+                        fontWeight: FontWeight.normal,),),
+                      const SizedBox(
                         width: 28,
                       ),
                     ],
@@ -104,33 +111,6 @@ class FullPhotoMobileState extends State<FullPhotoMobile>
                 ),
               ),
             ),
-            widget.project == null
-                ? Container()
-                : Positioned(
-                    right: 40,
-                    bottom: 28,
-                    child: FloatingActionButton(
-                      elevation: 8,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: Icon(
-                        Icons.map,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        pp(' 😡  😡  😡  😡  😡 Go do something, Joe!');
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.scale,
-                                alignment: Alignment.bottomRight,
-                                duration: const Duration(seconds: 1),
-                                child: ProjectMapMain(
-                                  project: widget.project,
-                                  photo: widget.photo,
-                                )));
-                      },
-                    ),
-                  )
           ],
         ),
       ),

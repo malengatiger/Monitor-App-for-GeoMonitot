@@ -4,7 +4,8 @@ import 'package:test_router/library/users/edit/user_edit_main.dart';
 import '../../api/sharedprefs.dart';
 import '../../auth/app_auth.dart';
 import '../../bloc/admin_bloc.dart';
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/organization_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/user.dart' as ar;
 import '../../data/country.dart';
 import '../../data/user.dart';
@@ -124,7 +125,7 @@ class UserEditMobileState extends State<UserEditMobile>
                 textStyle: Styles.whiteSmall,
                 duration: const Duration(seconds: 5));
 
-            await monitorBloc.getOrganizationUsers(
+            await organizationBloc.getUsers(
                 organizationId: user.organizationId!, forceRefresh: true);
             if (mounted) {
               Navigator.pop(context);
@@ -143,7 +144,7 @@ class UserEditMobileState extends State<UserEditMobile>
 
           try {
             await adminBloc.updateUser(widget.user!);
-            var list = await monitorBloc.getOrganizationUsers(
+            var list = await organizationBloc.getUsers(
                 organizationId: widget.user!.organizationId!,
                 forceRefresh: true);
             if (mounted) {

@@ -3,13 +3,14 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:test_router/library/bloc/project_bloc.dart';
 
 import 'package:uuid/uuid.dart';
 
 import '../../api/data_api.dart';
 
 import '../../api/sharedprefs.dart';
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/city.dart';
 import '../../data/place_mark.dart';
 import '../../data/position.dart' as mon;
@@ -77,7 +78,7 @@ class ProjectLocationMobileState extends State<ProjectLocationMobile>
 
   void _getProjectPositions(bool forceRefresh) async {
     try {
-      _projectPositions = await monitorBloc.getProjectPositions(
+      _projectPositions = await projectBloc.getProjectPositions(
           projectId: widget.project.projectId!, forceRefresh: forceRefresh);
       pp('$mx _projectPositions found: ${_projectPositions.length}; checking location within project monitorDistance...');
       _isLocationWithinProjectMonitorDistance();
@@ -138,7 +139,7 @@ class ProjectLocationMobileState extends State<ProjectLocationMobile>
       try {
         var m = await DataAPI.addProjectPosition(position: loc);
         pp('$mx  _submit: new projectPosition added .........  🍅 ${m.toJson()} 🍅');
-        await monitorBloc.getProjectPositions(
+        await projectBloc.getProjectPositions(
             projectId: widget.project.projectId!, forceRefresh: true);
       } catch (e) {
         if (mounted) {

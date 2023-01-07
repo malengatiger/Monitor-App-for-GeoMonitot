@@ -6,7 +6,8 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../api/sharedprefs.dart';
 import '../../bloc/fcm_bloc.dart';
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/organization_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../functions.dart';
 import '../../hive_util.dart';
 import '../../snack.dart';
@@ -60,7 +61,7 @@ class UserListMobileState extends State<UserListMobile>
     });
     try {
       _user = await Prefs.getUser();
-      _users = await monitorBloc.getOrganizationUsers(
+      _users = await organizationBloc.getUsers(
           organizationId: widget.user.organizationId!,
           forceRefresh: forceRefresh);
       _users.sort((a, b) => (a.name!.compareTo(b.name!)));
@@ -186,7 +187,7 @@ class UserListMobileState extends State<UserListMobile>
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder<List<User>>(
-          stream: monitorBloc.usersStream,
+          stream: organizationBloc.usersStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               _users = snapshot.data!;

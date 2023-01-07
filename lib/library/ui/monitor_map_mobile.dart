@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../api/sharedprefs.dart';
-import '../bloc/monitor_bloc.dart';
+import '../bloc/organization_bloc.dart';
+import '../bloc/project_bloc.dart';
+import '../bloc/user_bloc.dart';
 import '../data/user.dart';
 import '../data/project_position.dart';
 import '../data/project.dart';
@@ -70,11 +72,11 @@ class MonitorMapMobileState extends State<MonitorMapMobile>
     });
     try {
       user = await Prefs.getUser();
-      projects = await monitorBloc.getOrganizationProjects(
+      projects = await organizationBloc.getProjects(
           organizationId: user!.organizationId!, forceRefresh: forceRefresh);
 
       for (var i = 0; i < projects.length; i++) {
-        var pos = await monitorBloc.getProjectPositions(
+        var pos = await projectBloc.getProjectPositions(
             projectId: projects.elementAt(i).projectId!,
             forceRefresh: forceRefresh);
         projectPositions.addAll(pos);

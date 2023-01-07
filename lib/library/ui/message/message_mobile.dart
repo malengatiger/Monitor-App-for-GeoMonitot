@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/organization_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/project.dart';
 import '../../data/user.dart';
 import '../../functions.dart';
@@ -43,7 +44,7 @@ class MessageMobileState extends State<MessageMobile>
     setState(() {
       isBusy = true;
     });
-    _projects = await monitorBloc.getOrganizationProjects(
+    _projects = await organizationBloc.getProjects(
         organizationId: widget.user!.organizationId!, forceRefresh: force);
     setState(() {
       isBusy = false;

@@ -113,6 +113,24 @@ class DataAPI {
       rethrow;
     }
   }
+  static Future<List<FieldMonitorSchedule>> getUserFieldMonitorSchedules(
+      String userId) async {
+    String? mURL = await getUrl();
+    List<FieldMonitorSchedule> mList = [];
+    try {
+      List result = await _sendHttpGET(
+          '${mURL!}getUserFieldMonitorSchedules?projectId=$userId');
+      for (var element in result) {
+        mList.add(FieldMonitorSchedule.fromJson(element));
+      }
+      pp('🌿 🌿 🌿 getProjectFieldMonitorSchedules returned: 🌿 ${mList.length}');
+      await hiveUtil.addFieldMonitorSchedules(schedules: mList);
+      return mList;
+    } catch (e) {
+      pp(e);
+      rethrow;
+    }
+  }
 
   static Future<List<FieldMonitorSchedule>> getMonitorFieldMonitorSchedules(
       String userId) async {

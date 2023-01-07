@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import 'package:test_router/library/data/organization.dart';
 import '../../../api/sharedprefs.dart';
-import '../../../bloc/monitor_bloc.dart';
+import '../../../bloc/organization_bloc.dart';
+import '../../../bloc/user_bloc.dart';
 import '../../../data/project.dart';
+import '../../../data/user.dart';
 import '../../../functions.dart';
 import 'media_list_desktop.dart';
 import 'media_list_mobile.dart';
 import 'media_list_tablet.dart';
 
 class MediaListMain extends StatefulWidget {
-  final Project project;
+  final Project? project;
+  final Organization? organization;
 
-  const MediaListMain({super.key, required this.project});
+  const MediaListMain({super.key, this.project, this.organization});
+
+
 
 
   @override
@@ -22,6 +28,10 @@ class MediaListMainState extends State<MediaListMain>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   var isBusy = false;
+
+  MediaListDesktop? mediaListDesktop;
+  MediaListMobile? mediaListMobile;
+  MediaListTablet? mediaListTablet;
 
   @override
   void initState() {
@@ -35,9 +45,28 @@ class MediaListMainState extends State<MediaListMain>
       isBusy = true;
     });
 
+    var user = await Prefs.getUser();
+    if (user != null) {
+      switch (user.userType!) {
+        case UserType.fieldMonitor:
+          await userBloc.refreshUserData(
+              userId: user.userId!, forceRefresh: true,
+              organizationId: user.organizationId!);
+
+          break;
+        case UserType.orgAdministrator:
+          await organizationBloc.refreshOrganizationData(
+              organizationId: user.organizationId!,
+              forceRefresh: true);
+          break;
+        case UserType.orgExecutive:
+          await organizationBloc.refreshOrganizationData(
+              organizationId: user.organizationId!,
+              forceRefresh: true);
+          break;
+      }
+    }
       pp('MediaListMain: 💜 💜 💜 getting media for PROJECT: ${widget.project!.name!}');
-      await monitorBloc.refreshProjectData(
-          projectId: widget.project!.projectId!, forceRefresh: false);
 
     setState(() {
       isBusy = false;
@@ -74,7 +103,7 @@ class MediaListMainState extends State<MediaListMain>
             ),
           )
         : ScreenTypeLayout(
-            mobile: MediaListMobile(widget.project!),
+            mobile: const MediaListMobile(),
             tablet: MediaListTablet(widget.project!),
             desktop: MediaListDesktop(widget.project!),
           );

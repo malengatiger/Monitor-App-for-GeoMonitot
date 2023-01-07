@@ -26,6 +26,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "animations",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/animations-2.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/archive-3.3.5",
       "packageUri": "lib/",
@@ -1310,7 +1316,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-06T01:45:18.617727Z",
+  "generated": "2023-01-07T21:07:31.862186Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

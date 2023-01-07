@@ -8,7 +8,9 @@ import 'package:page_transition/page_transition.dart';
 import '../../api/data_api.dart';
 import '../../api/sharedprefs.dart';
 import '../../bloc/fcm_bloc.dart';
-import '../../bloc/monitor_bloc.dart';
+import '../../bloc/organization_bloc.dart';
+import '../../bloc/project_bloc.dart';
+import '../../bloc/user_bloc.dart';
 import '../../data/user.dart';
 import '../../functions.dart';
 import '../../hive_util.dart';
@@ -107,10 +109,10 @@ class ProjectListMobileState extends State<ProjectListMobile>
     try {
       if (isProjectsByLocation) {
         pp('ProjectListMobile  🥏 🥏 🥏 getProjectsWithinRadius: $sliderValue km  🥏');
-        projects = await monitorBloc.getProjectsWithinRadius(
+        projects = await projectBloc.getProjectsWithinRadius(
             radiusInKM: sliderValue, checkUserOrg: true);
       } else {
-        projects = await monitorBloc.getOrganizationProjects(
+        projects = await organizationBloc.getProjects(
             organizationId: user!.organizationId!, forceRefresh: forceRefresh);
       }
       projects.sort((a,b) => a.name!.compareTo(b.name!));
@@ -322,7 +324,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
   Widget build(BuildContext context) {
     return SafeArea(
       child: StreamBuilder<List<Project>>(
-          stream: monitorBloc.projectStream,
+          stream: organizationBloc.projectStream,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               projects = snapshot.data!;

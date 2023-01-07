@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:page_transition/page_transition.dart';
 
-import '../../../bloc/monitor_bloc.dart';
+import '../../../bloc/user_bloc.dart';
 import '../../../data/video.dart';
 import '../../../data/photo.dart';
 import '../../../data/user.dart';
@@ -43,13 +43,13 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
   void _listen() async {
     pp('🔆 🔆 🔆 🔆 💜 💜 💜 Listening to streams from monitorBloc ....');
 
-    photoStreamSubscription = monitorBloc.photoStream.listen((value) {
+    photoStreamSubscription = userBloc.photoStream.listen((value) {
       pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Photos from stream controller: 💙 ${value.length}');
       _photos = value;
       _processMedia();
       setState(() {});
     });
-    videoStreamSubscription = monitorBloc.videoStream.listen((value) {
+    videoStreamSubscription = userBloc.videoStream.listen((value) {
       pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Videos from stream controller: 🏈 ${value.length}');
       _videos = value;
       _processMedia();
@@ -64,9 +64,9 @@ class UserMediaListMobileState extends State<UserMediaListMobile>
       isBusy = true;
     });
     try {
-      _photos = await monitorBloc.getUserProjectPhotos(
+      _photos = await userBloc.getPhotos(
           userId: widget.user.userId!, forceRefresh: true);
-      _videos = await monitorBloc.getUserProjectVideos(
+      _videos = await userBloc.getVideos(
           userId: widget.user.userId!, forceRefresh: true);
       _processMedia();
     } catch (e) {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../library/api/sharedprefs.dart';
-import '../../library/bloc/monitor_bloc.dart';
+import '../../library/bloc/user_bloc.dart';
 import '../../library/data/field_monitor_schedule.dart';
 import '../../library/data/user.dart';
 import '../../library/functions.dart';
@@ -41,7 +41,7 @@ class SchedulesListDesktopState extends State<SchedulesListDesktop>
     });
     try {
       _user = await Prefs.getUser();
-      _schedules = await monitorBloc.getMonitorFieldMonitorSchedules(
+      _schedules = await userBloc.getFieldMonitorSchedules(
           userId: _user!.userId!, forceRefresh: refresh);
     } catch (e) {
       AppSnackbar.showErrorSnackbar(
@@ -79,20 +79,20 @@ class SchedulesListDesktopState extends State<SchedulesListDesktop>
           : Scaffold(
               key: _key,
               appBar: AppBar(
-                title: Text('FieldMonitor Schedules'),
+                title: const Text('FieldMonitor Schedules'),
                 bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(100),
                     child: Column(
                       children: [
                         Text(
                           '${_user == null ? '' : _user!.name},',
                           style: Styles.whiteBoldMedium,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                       ],
-                    ),
-                    preferredSize: Size.fromHeight(100)),
+                    )),
               ),
               backgroundColor: Colors.brown[100],
               body: ListView.builder(
