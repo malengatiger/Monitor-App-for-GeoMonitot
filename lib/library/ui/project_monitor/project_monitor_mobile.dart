@@ -270,6 +270,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   void _startMonitoring() async {
     pp('🍏 🍏 Start Monitoring this project after checking that the device is within '
         ' 🍎 ${widget.project.monitorMaxDistanceInMetres} metres 🍎 of a project point within ${widget.project.name}');
+
     Navigator.push(
         context,
         PageTransition(

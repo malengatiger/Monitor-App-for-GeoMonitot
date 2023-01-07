@@ -324,7 +324,7 @@ class DashboardMobileState extends State<DashboardMobile>
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
               duration: const Duration(seconds: 1),
-              child: SchedulesListMain()));
+              child: const SchedulesListMain()));
     }
   }
 
@@ -350,7 +350,7 @@ class DashboardMobileState extends State<DashboardMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(seconds: 1),
-            child: UserListMain()));
+            child: const UserListMain()));
   }
 
   @override
@@ -561,7 +561,7 @@ class DashboardMobileState extends State<DashboardMobile>
                               height: 8,
                             ),
                             Text(
-                              'Project\nLocations',
+                              'Locations',
                               style: Styles.greyLabelSmall,
                             )
                           ],

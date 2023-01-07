@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -46,19 +46,20 @@ class MediaListMobileState extends State<MediaListMobile>
   }
 
   void _listen() async {
-    pp('$mm Listening to streams from monitorBloc ....');
+    pp('$mm .................... Listening to streams from monitorBloc ....');
     user = await Prefs.getUser();
 
     photoStreamSubscription = monitorBloc.projectPhotoStream.listen((value) {
-      pp('$mm _MediaListMobileState: Photos from stream controller: 💙 ${value.length}');
+      pp('$mm Photos received from stream projectPhotoStream: 💙 ${value.length}');
       _photos = value;
       _processMedia();
       if (mounted) {
         setState(() {});
       }
     });
+
     videoStreamSubscription = monitorBloc.projectVideoStream.listen((value) {
-      pp('$mm _MediaListMobileState: Videos from stream controller: 🏈 ${value.length}');
+      pp('$mm:Videos received from projectVideoStream: 🏈 ${value.length}');
       _videos = value;
       _processMedia();
       if (mounted) {
@@ -67,7 +68,7 @@ class MediaListMobileState extends State<MediaListMobile>
     });
 
     if (mounted) {
-      _refresh(true);
+      _refresh(false);
     }
   }
 
@@ -100,20 +101,25 @@ class MediaListMobileState extends State<MediaListMobile>
   }
 
   void _processMedia() {
-    suitcases.clear();
-    _photos.forEach((element) {
+    pp('$mm _processMedia: create suitcases to hold photos and videos ...');
+    _suitcases.clear();
+    for (var element in _photos) {
       var sc = MediaBag(photo: element, date: element.created!);
-      suitcases.add(sc);
-    });
-    _videos.forEach((element) {
-      var sc = MediaBag(video: element, date: element.created!);
-      suitcases.add(sc);
-    });
-    if (suitcases.isNotEmpty) {
-      suitcases.sort((a, b) => b.date!.compareTo(a.date!));
-      latest = getFormattedDateShortest(suitcases.first.date!, context);
-      earliest = getFormattedDateShortest(suitcases.last.date!, context);
+      _suitcases.add(sc);
     }
+    for (var element in _videos) {
+      var sc = MediaBag(video: element, date: element.created!);
+      _suitcases.add(sc);
+    }
+    if (_suitcases.isNotEmpty) {
+      _suitcases.sort((a, b) => b.date!.compareTo(a.date!));
+      latest = getFormattedDateShortest(_suitcases.first.date!, context);
+      earliest = getFormattedDateShortest(_suitcases.last.date!, context);
+    }
+    pp('$mm _processMedia: created : ${_suitcases.length} suitcases');
+    setState(() {
+
+    });
   }
 
   String? latest, earliest;
@@ -121,6 +127,41 @@ class MediaListMobileState extends State<MediaListMobile>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+
+        body: Stack(
+          children: [
+            _suitcases.isEmpty
+                ? Center(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 120,
+                        ),
+                        Text(
+                          'No Monitor Reports yet',
+                          style: Styles.blackBoldMedium,
+                        ),
+                        const SizedBox(
+                          height: 60,
+                        ),
+                        Card(
+                          elevation: 8,
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: IconButton(
+                                icon: const Icon(Icons.add_a_photo),
+                                onPressed: _navigateToMonitor),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                : MediaGrid(
+                    imageList: _suitcases,
+                    mediaGridListener: this,
+                  )
+          ],
+        ),
       child: Scaffold(
         key: _key,
         appBar: AppBar(
@@ -128,7 +169,7 @@ class MediaListMobileState extends State<MediaListMobile>
           elevation: 16,
           actions: [
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.refresh,
                 size: 20,
               ),
@@ -137,7 +178,7 @@ class MediaListMobileState extends State<MediaListMobile>
               },
             ),
             IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.add_a_photo,
                 size: 20,
               ),
@@ -145,22 +186,25 @@ class MediaListMobileState extends State<MediaListMobile>
             )
           ],
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(80),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
                   Text(
                     widget.project.name == null ? '' : widget.project.name!,
-                    style: Styles.whiteBoldSmall,
-                  ),
-                  SizedBox(
+                  style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                      fontWeight: FontWeight.w900)),
+
+                  const SizedBox(
                     height: 16,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       isBusy
-                          ? Container(
+                          ? const SizedBox(
                               width: 20,
                               height: 20,
                               child: CircularProgressIndicator(
@@ -169,29 +213,29 @@ class MediaListMobileState extends State<MediaListMobile>
                               ),
                             )
                           : Container(),
-                      SizedBox(
+                      const SizedBox(
                         width: 28,
                       ),
                       Text(
                         'Photos & Videos',
                         style: Styles.blackTiny,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8,
                       ),
                       Text(
-                        '${suitcases.length}',
+                        '${_suitcases.length}',
                         style: Styles.whiteBoldSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12,
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 12,
                   ),
-                  // suitcases.isEmpty
+                  // _suitcases.isEmpty
                   //     ? Container()
                   //     : Row(
                   //         children: [
@@ -228,51 +272,13 @@ class MediaListMobileState extends State<MediaListMobile>
                 ],
               ),
             ),
-            preferredSize: Size.fromHeight(80),
           ),
-        ),
-        backgroundColor: Colors.brown[100],
-        body: Stack(
-          children: [
-            suitcases.isEmpty
-                ? Center(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 120,
-                          ),
-                          Text(
-                            'No Monitor Reports yet',
-                            style: Styles.blackBoldMedium,
-                          ),
-                          SizedBox(
-                            height: 60,
-                          ),
-                          Card(
-                            elevation: 8,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: IconButton(
-                                  icon: Icon(Icons.add_a_photo),
-                                  onPressed: _navigateToMonitor),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                : MediaGrid(
-                    imageList: suitcases,
-                    mediaGridListener: this,
-                  )
-          ],
         ),
       ),
     );
   }
 
-  var suitcases = <MediaBag>[];
+  final _suitcases = <MediaBag>[];
 
   @override
   void onMediaSelected(MediaBag suitcase) {

@@ -469,7 +469,7 @@ prettyPrint(Map map, String name) {
 }
 
 pp(dynamic msg) {
-  var time = '${getFormattedDateHour(DateTime.now().toIso8601String())}';
+  var time = getFormattedDateHourMinSec(DateTime.now().toString());
   if (msg is String) {
     debugPrint('$time ==> $msg');
   } else {
@@ -716,7 +716,7 @@ String getFormattedDate(String date) {
 String getFormattedDateHour(String date) {
   try {
     DateTime d = DateTime.parse(date);
-    var format = DateFormat.Hm();
+    var format = DateFormat.Hms();
     return format.format(d.toUtc());
   } catch (e) {
     DateTime d = DateTime.now();

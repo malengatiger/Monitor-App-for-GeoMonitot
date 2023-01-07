@@ -6,10 +6,13 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:test_router/library/ui/media/list/media_list_main.dart';
 import 'package:video_player/video_player.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../api/storage_bloc.dart';
@@ -22,7 +25,8 @@ class FieldCamera extends StatefulWidget {
   final Project project;
   final ProjectPosition projectPosition;
 
-  const FieldCamera({Key? key, required this.project, required this.projectPosition});
+  const FieldCamera({super.key, required this.project, required this.projectPosition});
+
 
   @override
   FieldCameraState createState() {
@@ -46,16 +50,16 @@ IconData getCameraLensIcon(CameraLensDirection direction) {
 
 void logError(String code, String? message) {
   if (message != null) {
-    print('Error: $code\nError Message: $message');
+    pp('Error: $code\nError Message: $message');
   } else {
-    print('Error: $code');
+    pp('Error: $code');
   }
 }
 
 class FieldCameraState extends State<FieldCamera>
     with WidgetsBindingObserver, TickerProviderStateMixin
     implements StorageBlocListener {
-  CameraController? controller;
+  CameraController? _cameraController;
   XFile? imageFile;
   XFile? videoFile;
   VideoPlayerController? videoController;
@@ -63,7 +67,7 @@ class FieldCameraState extends State<FieldCamera>
   bool enableAudio = true;
   double _minAvailableExposureOffset = 0.0;
   double _maxAvailableExposureOffset = 0.0;
-  double _currentExposureOffset = 0.0;
+
   late AnimationController _flashModeControlRowAnimationController;
   late Animation<double> _flashModeControlRowAnimation;
   late AnimationController _exposureModeControlRowAnimationController;
@@ -74,7 +78,7 @@ class FieldCameraState extends State<FieldCamera>
   double _maxAvailableZoom = 1.0;
   double _currentScale = 1.0;
   double _baseScale = 1.0;
-  static const mm = '🍎 🍎 🍎 FieldCamera 🍎 : ';
+  static const mm = '🍎🍎🍎 FieldCamera 🍎 : ';
 
   // Counting pointers (number of user fingers on screen)
   int _pointers = 0;
@@ -83,8 +87,9 @@ class FieldCameraState extends State<FieldCamera>
   void initState() {
     super.initState();
     pp('$mm initState ....');
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    //_ambiguate(WidgetsBinding.instance)?.addObserver(this);
     _getCameras();
+
     _flashModeControlRowAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -113,7 +118,7 @@ class FieldCameraState extends State<FieldCamera>
 
   @override
   void dispose() {
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    //_ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _flashModeControlRowAnimationController.dispose();
     _exposureModeControlRowAnimationController.dispose();
     super.dispose();
@@ -121,7 +126,7 @@ class FieldCameraState extends State<FieldCamera>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
     pp('$mm didChangeAppLifecycleState ....');
     // App state changed before we got the chance to initialize.
     if (cameraController == null || !cameraController.value.isInitialized) {
@@ -138,99 +143,15 @@ class FieldCameraState extends State<FieldCamera>
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _showGrid = false;
-  List<StorageMediaBag> _mediaBags = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('FieldCamera'),
-      ),
-      body: Stack(
-        children: [
-          _showGrid? Container() : Column(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  child: Center(
-                    child: _cameraPreviewWidget(),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border.all(
-                      color:
-                      controller != null && controller!.value.isRecordingVideo
-                          ? Colors.redAccent
-                          : Colors.grey,
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-              ),
-              _captureControlRowWidget(),
-              // _modeControlRowWidget(),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    _thumbnailWidget(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          _showGrid? GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 1,
-                crossAxisSpacing: 1),
-            itemCount: _mediaBags.length,
-            itemBuilder: (BuildContext context, int index) {
-              var item = _mediaBags.elementAt(index);
-              return Container(
-                height: 180,
-                width: 180,
-                child: item.isVideo
-                    ? Image.asset(
-                  'assets/video3.png',
-                  width: 180,
-                  height: 180,
-                  fit: BoxFit.fill,
-                )
-                    : Image.file(
-                  item.thumbnailFile!,
-                  fit: BoxFit.fill,
-                ),
-              );
-            },
-          ) : Container(),
-          Positioned(right: 12, top: 12, child: InkWell(
-            onTap: () {
-              setState(() {
-                _showGrid = !_showGrid;
-              });
-            },
-            child: Container(
-              width: 32, height: 32,
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.pink),
-                child: Center(
-              child: Text('${_mediaBags.length}', style: Styles.whiteSmall),
-            )
-            ),
-          )),
-        ],
-      ),
-    );
-  }
+  final List<StorageMediaBag> _mediaBags = [];
 
   void _getCameras() async {
     cameras = await availableCameras();
     pp('$mm Found ${cameras.length} cameras');
-    cameras.forEach((cameraDescription) {
-      pp('$mm _getCameras:cameraDescription: ${cameraDescription.name}  🔵 ${cameraDescription.lensDirection.toString()}');
-    });
+    for (var camera in cameras) {
+      pp('$mm _getCameras:camera: ${camera.name}  🔵 ${camera.lensDirection.toString()}');
+    }
+
     cameras = [cameras.first];
     _onNewCameraSelected(cameras.first);
     setState(() {});
@@ -238,9 +159,8 @@ class FieldCameraState extends State<FieldCamera>
 
   /// Display the preview from the camera (or a message if the preview is not available).
   Widget _cameraPreviewWidget() {
-    final CameraController? cameraController = controller;
 
-    if (cameraController == null || !cameraController.value.isInitialized) {
+    if (_cameraController == null || !_cameraController!.value.isInitialized) {
       return const Text(
         'Tap a camera',
         style: TextStyle(
@@ -254,7 +174,7 @@ class FieldCameraState extends State<FieldCamera>
         onPointerDown: (_) => _pointers++,
         onPointerUp: (_) => _pointers--,
         child: CameraPreview(
-          controller!,
+          _cameraController!,
           child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
             return GestureDetector(
@@ -275,14 +195,14 @@ class FieldCameraState extends State<FieldCamera>
 
   Future<void> _handleScaleUpdate(ScaleUpdateDetails details) async {
     // When there are not exactly two fingers on screen don't scale
-    if (controller == null || _pointers != 2) {
+    if (_pointers != 2) {
       return;
     }
 
     _currentScale = (_baseScale * details.scale)
         .clamp(_minAvailableZoom, _maxAvailableZoom);
 
-    await controller!.setZoomLevel(_currentScale);
+    await _cameraController!.setZoomLevel(_currentScale);
   }
 
   /// Display the thumbnail of the captured image or video.
@@ -298,23 +218,22 @@ class FieldCameraState extends State<FieldCamera>
             localVideoController == null && imageFile == null
                 ? Container()
                 : SizedBox(
+                    width: 64.0,
+                    height: 64.0,
                     child: (localVideoController == null)
                         ? Image.file(File(imageFile!.path))
                         : Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.pink)),
                             child: Center(
                               child: AspectRatio(
                                   aspectRatio:
-                                      localVideoController.value.size != null
-                                          ? localVideoController
-                                              .value.aspectRatio
-                                          : 1.0,
+                                       localVideoController
+                                              .value.aspectRatio,
+
                                   child: VideoPlayer(localVideoController)),
                             ),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.pink)),
                           ),
-                    width: 64.0,
-                    height: 64.0,
                   ),
           ],
         ),
@@ -324,7 +243,7 @@ class FieldCameraState extends State<FieldCamera>
 
   /// Display the control bar with buttons to take pictures and record videos.
   Widget _captureControlRowWidget() {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -351,8 +270,8 @@ class FieldCameraState extends State<FieldCamera>
         IconButton(
           icon: cameraController != null &&
                   cameraController.value.isRecordingPaused
-              ? Icon(Icons.play_arrow)
-              : Icon(Icons.pause),
+              ? const Icon(Icons.play_arrow)
+              : const Icon(Icons.pause),
           color: Colors.blue,
           onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
@@ -389,62 +308,63 @@ class FieldCameraState extends State<FieldCamera>
   void showInSnackBar(String message) {
     // ignore: deprecated_member_use
     //_scaffoldKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
     pp('$mm onViewFinderTap ....');
-    if (controller == null) {
+    if (_cameraController == null) {
       return;
     }
-
-    final CameraController cameraController = controller!;
 
     final offset = Offset(
       details.localPosition.dx / constraints.maxWidth,
       details.localPosition.dy / constraints.maxHeight,
     );
-    cameraController.setExposurePoint(offset);
-    cameraController.setFocusPoint(offset);
+
+    if (_cameraController != null) {
+      _cameraController!.setExposurePoint(offset);
+      _cameraController!.setFocusPoint(offset);
+    }
   }
 
   void _onNewCameraSelected(CameraDescription cameraDescription) async {
     pp('$mm onNewCameraSelected .... cameraDescription: ${cameraDescription.name} ${cameraDescription.lensDirection}');
-    if (controller != null) {
-      await controller!.dispose();
+    if (_cameraController != null) {
+      await _cameraController!.dispose();
     }
     pp('$mm onNewCameraSelected .... setting up new cameraController with camera description');
-    final CameraController cameraController = CameraController(
+
+    _cameraController = CameraController(
       cameraDescription,
       ResolutionPreset.medium,
       enableAudio: enableAudio,
       imageFormatGroup: ImageFormatGroup.jpeg,
     );
 
-    controller = cameraController;
-
     // If the controller is updated then update the UI.
-    cameraController.addListener(() {
+    _cameraController!.addListener(() {
       if (mounted) setState(() {});
-      if (cameraController.value.hasError) {
+      if (_cameraController!.value.hasError) {
         showInSnackBar(
-            'Camera error ${cameraController.value.errorDescription}');
+            'Camera error ${_cameraController!.value.errorDescription}');
       }
     });
 
     try {
-      await cameraController.initialize();
+      await _cameraController!.initialize();
       await Future.wait([
-        cameraController
+        _cameraController!
             .getMinExposureOffset()
             .then((value) => _minAvailableExposureOffset = value),
-        cameraController
+        _cameraController!
             .getMaxExposureOffset()
             .then((value) => _maxAvailableExposureOffset = value),
-        cameraController
+        _cameraController!
             .getMaxZoomLevel()
             .then((value) => _maxAvailableZoom = value),
-        cameraController
+        _cameraController!
             .getMinZoomLevel()
             .then((value) => _minAvailableZoom = value),
       ]);
@@ -457,9 +377,9 @@ class FieldCameraState extends State<FieldCamera>
     }
   }
 
-  List<File> _imageFiles = [];
+  final List<File> _imageFiles = [];
   void onTakePictureButtonPressed() {
-    pp('$mm onTakePictureButtonPressed ....');
+    pp('$mm ... onTakePictureButtonPressed ....');
     takePicture().then((XFile? file) async {
       if (videoController != null) {
         videoController!.dispose();
@@ -470,12 +390,13 @@ class FieldCameraState extends State<FieldCamera>
           imageFile = file;
         });
         if (file != null) {
-          pp('$mm onTakePictureButtonPressed ....  🔵  🔵  🔵 file saved: ${file.path} 🔵');
+          pp('$mm onTakePictureButtonPressed 🔵🔵🔵 file saved: ${file.path} 🔵');
           File mImageFile = File(file.path);
-          pp('$mm onTakePictureButtonPressed ....  🔵  🔵  🔵 file to upload: ${mImageFile.path} size: ${await mImageFile.length()} 🔵');
+          pp('$mm onTakePictureButtonPressed 🔵🔵🔵 file to upload, size: ${await mImageFile.length()} bytes🔵');
           _imageFiles.add(mImageFile);
-          pp('$mm onTakePictureButtonPressed ....  🔵  🔵  🔵 files to upload: ${_imageFiles.length} 🔵');
+          pp('$mm onTakePictureButtonPressed 🔵🔵🔵 files to upload: ${_imageFiles.length} bytes🔵');
           var thumbnailFile = await getThumbnail(mImageFile);
+
           storageBloc.uploadPhotoOrVideo(
               listener: this,
               file: mImageFile,
@@ -488,8 +409,10 @@ class FieldCameraState extends State<FieldCamera>
           showToast(
               context: context,
               message: 'Picture file saved',
-              backgroundColor: Colors.teal, textStyle: Styles.whiteSmall,
-              toastGravity: ToastGravity.TOP, duration: Duration(seconds: 2));
+              backgroundColor: Colors.teal,
+              textStyle: Styles.whiteSmall,
+              toastGravity: ToastGravity.TOP,
+              duration: const Duration(seconds: 2));
 
           var mediaBag = StorageMediaBag(
               url: '',
@@ -499,9 +422,7 @@ class FieldCameraState extends State<FieldCamera>
               date: getFormattedDate(DateTime.now().toString()),
               thumbnailFile: thumbnailFile);
           _mediaBags.add(mediaBag);
-          setState(() {
-
-          });
+          setState(() {});
         }
       }
     });
@@ -612,7 +533,7 @@ class FieldCameraState extends State<FieldCamera>
   }
 
   Future<void> onPausePreviewButtonPressed() async {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
 
     if (cameraController == null || !cameraController.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
@@ -645,7 +566,7 @@ class FieldCameraState extends State<FieldCamera>
 
   Future<void> startVideoRecording() async {
     pp('$mm startVideoRecording 🥏 🥏 🥏  ....');
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
 
     if (cameraController == null || !cameraController.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
@@ -666,7 +587,7 @@ class FieldCameraState extends State<FieldCamera>
   }
 
   Future<XFile?> stopVideoRecording() async {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
     pp('$mm stopVideoRecording ....');
     if (cameraController == null || !cameraController.value.isRecordingVideo) {
       return null;
@@ -681,10 +602,10 @@ class FieldCameraState extends State<FieldCamera>
   }
 
   Future<void> pauseVideoRecording() async {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
     pp('$mm pauseVideoRecording ....');
     if (cameraController == null || !cameraController.value.isRecordingVideo) {
-      return null;
+      return;
     }
 
     try {
@@ -696,10 +617,10 @@ class FieldCameraState extends State<FieldCamera>
   }
 
   Future<void> resumeVideoRecording() async {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
 
     if (cameraController == null || !cameraController.value.isRecordingVideo) {
-      return null;
+      return;
     }
     pp('$mm resumeVideoRecording ....');
     try {
@@ -718,7 +639,7 @@ class FieldCameraState extends State<FieldCamera>
     final VideoPlayerController vController =
         VideoPlayerController.file(File(videoFile!.path));
     videoPlayerListener = () {
-      if (videoController != null && videoController!.value.size != null) {
+      if (videoController != null) {
         // Refreshing the state to update video player with the correct ratio.
         if (mounted) setState(() {});
         videoController!.removeListener(videoPlayerListener!);
@@ -738,7 +659,7 @@ class FieldCameraState extends State<FieldCamera>
   }
 
   Future<XFile?> takePicture() async {
-    final CameraController? cameraController = controller;
+    final CameraController? cameraController = _cameraController;
     if (cameraController == null || !cameraController.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
       return null;
@@ -766,9 +687,10 @@ class FieldCameraState extends State<FieldCamera>
 
   String? totalByteCount, bytesTransferred;
   String? fileUrl, thumbnailUrl;
+
   @override
   onFileProgress(int totalByteCount, int bytesTransferred) {
-    pp('$mm 🍏 🍏 🍏 file Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
+    pp('$mm 🍏file Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
         'of totalByteCount: ${(totalByteCount / 1024).toStringAsFixed(1)} KB');
     setState(() {
       this.totalByteCount = '${(totalByteCount / 1024).toStringAsFixed(1)} KB';
@@ -779,9 +701,9 @@ class FieldCameraState extends State<FieldCamera>
 
   @override
   onFileUploadComplete(String url, int totalByteCount, int bytesTransferred) {
-    pp('$mm 🍏 🍏 🍏 😡 file Upload has been completed 😡 bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
+    pp('$mm 🍏😡 file Upload has been completed 😡 bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
         'of totalByteCount: ${(totalByteCount / 1024).toStringAsFixed(1)} KB');
-    pp('MediaHouse: 😡 😡 😡 this file url should be saved somewhere .... 😡😡 $url 😡😡');
+    pp('$mm 😡😡😡 this file url should be saved in DB .... 😡😡 $url 😡😡');
     if (mounted) {
       setState(() {});
     }
@@ -789,14 +711,14 @@ class FieldCameraState extends State<FieldCamera>
 
   @override
   onThumbnailProgress(int totalByteCount, int bytesTransferred) {
-    pp('$mm 🍏 🍏 🍏 thumbnail Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
+    pp('$mm 🍏thumbnail Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
         'of totalByteCount: ${(totalByteCount / 1024).toStringAsFixed(1)} KB');
   }
 
   @override
   onThumbnailUploadComplete(
       String url, int totalByteCount, int bytesTransferred) async {
-    pp('$mm 🍏 🍏 🍏 😡 thumbnail Upload has been completed 😡 bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
+    pp('$mm 🍏thumbnail Upload has been completed 😡 bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
         'of totalByteCount: ${(totalByteCount / 1024).toStringAsFixed(1)} KB');
     setState(() {});
   }
@@ -808,7 +730,117 @@ class FieldCameraState extends State<FieldCamera>
         context: context,
         backgroundColor: Colors.red,
         textStyle: Styles.whiteBoldSmall,
-        duration: Duration(seconds: 10));
+        duration: const Duration(seconds: 10));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text('Field Camera',style: GoogleFonts.lato(
+            textStyle: Theme.of(context).textTheme.bodyMedium,
+            fontWeight: FontWeight.w900)),
+        actions: [
+          IconButton(onPressed: onListButtonPressed, icon: const Icon(Icons.list)),
+        ],
+      ),
+      body: Stack(
+        children: [
+          _showGrid
+              ? Container()
+              : Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    border: Border.all(
+                      color: _cameraController != null || _cameraController!.value.isRecordingVideo
+                          ? Colors.redAccent
+                          : Colors.grey,
+                      width: 3.0,
+                    ),
+                  ),
+                  child: Center(
+                    child: _cameraPreviewWidget(),
+                  ),
+                ),
+              ),
+              _captureControlRowWidget(),
+              // _modeControlRowWidget(),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    _thumbnailWidget(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          _showGrid
+              ? GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 1,
+                crossAxisSpacing: 1),
+            itemCount: _mediaBags.length,
+            itemBuilder: (BuildContext context, int index) {
+              var item = _mediaBags.elementAt(index);
+              return SizedBox(
+                height: 180,
+                width: 180,
+                child: item.isVideo
+                    ? Image.asset(
+                  'assets/video3.png',
+                  width: 180,
+                  height: 180,
+                  fit: BoxFit.fill,
+                )
+                    : Image.file(
+                  item.thumbnailFile!,
+                  fit: BoxFit.fill,
+                ),
+              );
+            },
+          )
+              : Container(),
+          Positioned(
+              right: 0,
+              top: 0,
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _showGrid = !_showGrid;
+                  });
+                },
+                child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.teal),
+                    child: Center(
+                      child: Text('${_mediaBags.length}',
+                          style: Styles.whiteSmall),
+                    )),
+              )),
+        ],
+      ),
+    );
+  }
+
+
+  void onListButtonPressed() {
+    pp('$mm onListButtonPressed ...');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.leftToRightWithFade,
+            alignment: Alignment.topLeft,
+            duration: const Duration(milliseconds: 1500),
+            child: MediaListMain(project: widget.project)));
   }
 }
 
@@ -819,4 +851,4 @@ List<CameraDescription> cameras = [];
 /// We use this so that APIs that have become non-nullable can still be used
 /// with `!` and `?` on the stable branch.
 // TODO(ianh): Remove this once we roll stable in late 2021.
-T? _ambiguate<T>(T? value) => value;
+//T? _ambiguate<T>(T? value) => value;

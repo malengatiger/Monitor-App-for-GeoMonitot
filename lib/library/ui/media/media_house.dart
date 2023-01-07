@@ -363,7 +363,7 @@ class MediaHouseState extends State<MediaHouse>
 
   @override
   onFileProgress(int totalByteCount, int bytesTransferred) {
-    pp('$mm 🍏 🍏 🍏 file Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
+    pp('$mm 🍏file Upload progress: bytesTransferred: ${(bytesTransferred / 1024).toStringAsFixed(1)} KB '
         'of totalByteCount: ${(totalByteCount / 1024).toStringAsFixed(1)} KB');
     setState(() {
       this.totalByteCount = '${(totalByteCount / 1024).toStringAsFixed(1)} KB';

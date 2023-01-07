@@ -12,19 +12,12 @@ import '../data/questionnaire.dart';
 import '../data/video.dart';
 import '../functions.dart';
 import '../hive_util.dart';
-import '../data/city.dart';
 import '../data/community.dart';
-import '../data/condition.dart';
 import '../data/field_monitor_schedule.dart';
-import '../data/monitor_report.dart';
-import '../data/org_message.dart';
-import '../data/organization.dart';
 import '../data/photo.dart';
 import '../data/project.dart';
 import '../data/project_position.dart';
-import '../data/section.dart';
 import '../data/user.dart';
-import '../data/video.dart';
 import '../location/loc_bloc.dart';
 
 final MonitorBloc monitorBloc = MonitorBloc();
@@ -59,6 +52,8 @@ class MonitorBloc {
 
   final StreamController<List<ProjectPosition>> _projPositionsController =
       StreamController.broadcast();
+  final StreamController<List<ProjectPosition>> _projectPositionsController =
+  StreamController.broadcast();
   final StreamController<List<FieldMonitorSchedule>>
       _fieldMonitorScheduleController = StreamController.broadcast();
   final StreamController<List<Country>> _countryController =
@@ -82,6 +77,8 @@ class MonitorBloc {
   Stream<List<Project>> get projectStream => _projController.stream;
 
   Stream get projectPositionsStream => _projPositionsController.stream;
+
+  Stream get projectProjectPositionsStream => _projectPositionsController.stream;
 
   Stream get countryStream => _countryController.stream;
 
@@ -350,13 +347,12 @@ class MonitorBloc {
   Future refreshProjectData(
       {required String projectId, required bool forceRefresh}) async {
     pp('$mm refreshing project data ... photos, videos and schedules ...');
-
     var bag = await hiveUtil.getLatestDataBag();
+
     if (forceRefresh || bag == null) {
       bag = await DataAPI.getProjectData(projectId);
     }
-
-    _processBag(bag);
+    _processProjectBag(bag);
     return bag;
   }
 
@@ -428,6 +424,7 @@ class MonitorBloc {
   }
 
   void _processBag(DataBag bag) {
+    pp('$mm _processBag: send data to streams ...');
     if (bag.photos != null) {
       if (bag.photos!.isNotEmpty) {
         _photoController.sink.add(bag.photos!);
@@ -456,6 +453,39 @@ class MonitorBloc {
     if (bag.projectPositions != null) {
       if (bag.projectPositions!.isNotEmpty) {
         _projPositionsController.sink.add(bag.projectPositions!);
+      }
+    }
+  }
+  void _processProjectBag(DataBag bag) {
+    pp('$mm _processBag: send data to project streams ...');
+    if (bag.photos != null) {
+      if (bag.photos!.isNotEmpty) {
+        _projectPhotoController.sink.add(bag.photos!);
+      }
+    }
+    if (bag.videos != null) {
+      if (bag.videos!.isNotEmpty) {
+        _projectVideoController.sink.add(bag.videos!);
+      }
+    }
+    // if (bag.fieldMonitorSchedules != null) {
+    //   if (bag.fieldMonitorSchedules!.isNotEmpty) {
+    //     projectPositionsStream.sink.add(bag.fieldMonitorSchedules!);
+    //   }
+    // }
+    // if (bag.users != null) {
+    //   if (bag.users!.isNotEmpty) {
+    //     _userController.sink.add(bag.users!);
+    //   }
+    // }
+    // if (bag.projects != null) {
+    //   if (bag.projects!.isNotEmpty) {
+    //     _projController.sink.add(bag.projects!);
+    //   }
+    // }
+    if (bag.projectPositions != null) {
+      if (bag.projectPositions!.isNotEmpty) {
+        _projectPositionsController.sink.add(bag.projectPositions!);
       }
     }
   }

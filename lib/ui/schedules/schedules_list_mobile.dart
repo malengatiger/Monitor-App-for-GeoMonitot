@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
 
@@ -169,7 +170,7 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
                 ),
                 actions: [
                   IconButton(
-                      icon: Icon(Icons.refresh),
+                      icon: const Icon(Icons.refresh),
                       onPressed: () {
                         _getData(true);
                       })
@@ -195,25 +196,27 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
                       ],
                     )),
               ),
-              backgroundColor: Colors.brown[100],
+              // backgroundColor: Colors.brown[100],
               body: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ListView.builder(
                     itemCount: _schedules.length,
                     itemBuilder: (context, index) {
-                      var sched = _schedules.elementAt(index);
-                      var subTitle = _getSubTitle(sched);
+                      var schedule = _schedules.elementAt(index);
+                      var subTitle = _getSubTitle(schedule);
                       return FocusedMenuHolder(
                         menuOffset: 20,
                         duration: const Duration(milliseconds: 300),
-                        menuItems: getPopUpMenuItems(sched),
+                        menuItems: getPopUpMenuItems(schedule),
                         animateMenuItems: true,
                         openWithTap: true,
                         onPressed: () {
-                          pp('.... 💛️ 💛️ 💛️ not sure what I pressed ...');
+                          pp('💛️ 💛️ 💛️ not sure what I pressed on schedules context menu ...');
                         },
                         child: Card(
                           elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Column(
@@ -235,20 +238,27 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
                                     ),
                                     Flexible(
                                       child: Text(
-                                        sched.projectName!,
-                                        style: Styles.blackBoldSmall,
+                                        schedule.projectName!,
+                                          style: GoogleFonts.lato(
+                                              textStyle: Theme.of(context).textTheme.bodySmall,
+                                              fontWeight: FontWeight.normal),
                                       ),
                                     )
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 4,
+                                  height: 8,
                                 ),
                                 Row(
                                   children: [
                                     const SizedBox(width: 32,),
-                                    Text('Frequency: ', style: Styles.greyLabelSmall,),
-                                    Text('$subTitle', style: Styles.blackBoldSmall,),
+                                    Text('Frequency :', style: GoogleFonts.lato(
+                                        textStyle: Theme.of(context).textTheme.bodySmall,
+                                        fontWeight: FontWeight.normal)),
+                                    const SizedBox(width: 12,),
+                                    Text(subTitle, style: GoogleFonts.secularOne(
+                                        textStyle: Theme.of(context).textTheme.bodyMedium,
+                                        fontWeight: FontWeight.w900),),
                                   ],
                                 ),
                                 const SizedBox(
@@ -272,7 +282,7 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
                       //           color: Theme.of(context).primaryColor,
                       //         ),
                       //         title: Text(
-                      //           '${sched.projectName}',
+                      //           '${schedule.projectName}',
                       //           style: Styles.blackBoldSmall,
                       //         ),
                       //         subtitle: Text('$subTitle'),
@@ -281,7 +291,7 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
                       //       //   height: 0,
                       //       // ),
                       //       // Text(getFormattedDateLongWithTime(
-                      //       //     sched.date!, context), style: Styles.greyLabelSmall,),
+                      //       //     schedule.date!, context), style: Styles.greyLabelSmall,),
                       //       SizedBox(
                       //         height: 8,
                       //       ),

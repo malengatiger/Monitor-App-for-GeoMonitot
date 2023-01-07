@@ -29,7 +29,7 @@ class ThemeBloc {
 
   initialize() async {
     _themeIndex = await Prefs.getThemeIndex();
-    pp('📌 📌 📌 📌️ ThemeBloc: initialize:: adding index to stream ....theme index: $themeIndex');
+    pp('$mm ThemeBloc: initialize:: adding index to stream ....theme index: $themeIndex');
     _themeController.sink.add(_themeIndex);
   }
 
@@ -39,7 +39,7 @@ class ThemeBloc {
   }
 
   ThemeBag getTheme(int index) {
-    p('$mm getTheme: getting and setting current stream ....');
+    pp('$mm getTheme: getting and setting current stream ....');
     return SchemeUtil.getTheme(themeIndex: index);
   }
 
@@ -80,7 +80,7 @@ class SchemeUtil {
     return _themeBags.length;
   }
   static ThemeBag getTheme({required int themeIndex}) {
-    p('$mm getting theme with index: 🌈 $themeIndex');
+    pp('$mm getting theme with index: 🌈 $themeIndex');
     if (_themeBags.isEmpty) {
       _setThemes();
     }

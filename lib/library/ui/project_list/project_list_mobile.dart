@@ -113,6 +113,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
         projects = await monitorBloc.getOrganizationProjects(
             organizationId: user!.organizationId!, forceRefresh: forceRefresh);
       }
+      projects.sort((a,b) => a.name!.compareTo(b.name!));
     } catch (e) {
       pp(e);
       AppSnackbar.showErrorSnackbar(
