@@ -100,34 +100,28 @@ class OrganizationBloc {
   void _processBag(DataBag bag) {
     pp('$mm _processBag: send data to streams ...');
     if (bag.photos != null) {
-      if (bag.photos!.isNotEmpty) {
         _photoController.sink.add(bag.photos!);
-      }
+
     }
     if (bag.videos != null) {
-      if (bag.videos!.isNotEmpty) {
         _videoController.sink.add(bag.videos!);
-      }
+
     }
     if (bag.fieldMonitorSchedules != null) {
-      if (bag.fieldMonitorSchedules!.isNotEmpty) {
         _fieldMonitorScheduleController.sink.add(bag.fieldMonitorSchedules!);
-      }
+
     }
     if (bag.users != null) {
-      if (bag.users!.isNotEmpty) {
         _userController.sink.add(bag.users!);
-      }
+
     }
     if (bag.projects != null) {
-      if (bag.projects!.isNotEmpty) {
         _projController.sink.add(bag.projects!);
-      }
+
     }
     if (bag.projectPositions != null) {
-      if (bag.projectPositions!.isNotEmpty) {
         _projPositionsController.sink.add(bag.projectPositions!);
-      }
+
     }
   }
 

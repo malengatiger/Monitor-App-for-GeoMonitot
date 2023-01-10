@@ -10,12 +10,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
+import 'package:test_router/library/api/data_api.dart';
 import 'package:test_router/library/bloc/theme_bloc.dart';
 import 'package:test_router/library/emojis.dart';
 import 'package:test_router/ui/intro/intro_main.dart';
 
 import 'firebase_options.dart';
 import 'library/api/sharedprefs.dart';
+import 'library/functions.dart';
 import 'library/generic_functions.dart';
 import 'library/hive_util.dart';
 
@@ -35,12 +37,13 @@ Future<void> _setup() async {
     if (kReleaseMode) exit(1);
   };
 
-  // await SharedPrefs.deleteConfig();
   themeIndex = await Prefs.getThemeIndex();
   try {
     firebaseApp = await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
     p('${Emoji.heartGreen}${Emoji.heartGreen} Firebase App has been initialized: ${firebaseApp.name}');
+
+    // Prefs.deleteUser();
 
     hiveUtil.initialize();
   } catch (e) {
@@ -58,6 +61,9 @@ Future<void> _setup() async {
     //await DataService.signInAnonymously();
   } else {
     p('${Emoji.blueDot}${Emoji.blueDot} User already exists. $blueDot Cool!');
+    var token = await user.getIdToken();
+    pp(token);
+
   }
 }
 

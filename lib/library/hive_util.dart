@@ -59,11 +59,11 @@ class HiveUtil {
     if (!_isInitialized) {
       p('${Emoji.peach}${Emoji.peach}${Emoji.peach} ... Creating a Hive box collection');
       var appDir = await getApplicationDocumentsDirectory();
-      File file = File('${appDir.path}/db1a.file');
+      File file = File('${appDir.path}/db1c.file');
 
       try {
         _boxCollection = await BoxCollection.open(
-          'DataBoxOneA00', // Name of your database
+          'DataBoxOneA02', // Name of your database
           {
             'organizations',
             'projects',
@@ -441,7 +441,7 @@ class HiveUtil {
   Future addPhoto({required Photo photo}) async {
     var key = '${photo.projectId}_${photo.organizationId}_${photo.userId}';
     await _photoBox?.put(key, photo);
-    pp('$mm Photo added to local cache:  🔵 🔵 ${photo.projectName}');
+    // pp('$mm Photo added to local cache:  🔵 🔵 ${photo.projectName}');
   }
 
   Future addProject({required Project project}) async {

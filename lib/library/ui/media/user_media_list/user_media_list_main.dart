@@ -76,7 +76,7 @@ class UserMediaListMainState extends State<UserMediaListMain>
             ),
           )
         : ScreenTypeLayout(
-            mobile: UserMediaListMobile(user!),
+            mobile: UserMediaListMobile(user: user!),
             tablet: UserMediaListTablet(user!),
             desktop: UserMediaListDesktop(user!),
           );

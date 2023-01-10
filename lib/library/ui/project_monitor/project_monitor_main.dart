@@ -44,7 +44,7 @@ class ProjectMonitorMainState extends State<ProjectMonitorMain>
             ),
           )
         : ScreenTypeLayout(
-            mobile: ProjectMonitorMobile(widget.project),
+            mobile: ProjectMonitorMobile(project: widget.project),
             tablet: ProjectMonitorTablet(widget.project),
             desktop: ProjectMonitorDesktop(widget.project),
           );

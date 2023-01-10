@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
+import 'package:google_fonts/google_fonts.dart';
 
 import '../auth/app_auth.dart';
 import '../functions.dart';
@@ -55,6 +56,8 @@ class SignInState extends State<SignIn> {
                   padding: const EdgeInsets.all(12.0),
                   child: Card(
                     elevation: 4,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0)),
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
@@ -64,7 +67,9 @@ class SignInState extends State<SignIn> {
                           ),
                           Text(
                             'Sign in',
-                            style: Styles.blackBoldLarge,
+                            style: GoogleFonts.lato(
+                              textStyle: Theme.of(context).textTheme.bodyLarge,
+                              fontWeight: FontWeight.w900, fontSize: 24),
                           ),
                           const SizedBox(
                             height: 40,
@@ -74,7 +79,7 @@ class SignInState extends State<SignIn> {
                             keyboardType: TextInputType.emailAddress,
                             controller: emailCntr,
                             decoration: const InputDecoration(
-                              hintText: 'Enter  email address',
+                              hintText: 'Enter email address',
                             ),
                           ),
                           const SizedBox(
@@ -97,10 +102,12 @@ class SignInState extends State<SignIn> {
                             // color: Colors.pink[700],
                             // elevation: 8,
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(12.0),
                               child: Text(
-                                'Submit Sign in credentials',
-                                style: Styles.whiteSmall,
+                                'Submit',
+                                style: GoogleFonts.lato(
+                                  textStyle: Theme.of(context).textTheme.bodyLarge,
+                                  fontWeight: FontWeight.normal,),
                               ),
                             ),
                           ),

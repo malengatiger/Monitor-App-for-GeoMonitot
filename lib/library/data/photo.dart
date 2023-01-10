@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../data/position.dart';
+import '../functions.dart';
 
 part 'photo.g.dart';
 
@@ -37,6 +37,9 @@ class Photo {
   @HiveField(14)
   int? width;
 
+  @HiveField(15)
+  int? landscape;
+
   Photo(
       {required this.url,
       required this.caption,
@@ -51,37 +54,39 @@ class Photo {
       required this.organizationId,
       required this.projectName,
       required this.height,
-        required this.projectPositionId,
-      required this.width});
+      required this.projectPositionId,
+      required this.width,
+      required this.landscape});
 
   Photo.fromJson(Map data) {
-    this.projectPositionId = data['projectPositionId'];
-    this.url = data['url'];
-    this.thumbnailUrl = data['thumbnailUrl'];
-    this.caption = data['caption'];
-    this.height = data['height'];
-    this.width = data['width'];
-    this.created = data['created'];
-    this.organizationId = data['organizationId'];
-    this.userId = data['userId'];
-    this.photoId = data['photoId'];
-    this.userName = data['userName'];
-    this.distanceFromProjectPosition = data['distanceFromProjectPosition'];
-    this.projectId = data['projectId'];
-    this.projectName = data['projectName'];
+    // pp('😡 😡 😡😡 😡 😡😡 😡 😡');
+    // prettyPrint(data, "Photo from json");
+    projectPositionId = data['projectPositionId'];
+    url = data['url'];
+    thumbnailUrl = data['thumbnailUrl'];
+    caption = data['caption'];
+    height = data['height'];
+    width = data['width'];
+    created = data['created'];
+    organizationId = data['organizationId'];
+    landscape = data['landscape'];
+
+    userId = data['userId'];
+    photoId = data['photoId'];
+    userName = data['userName'];
+    distanceFromProjectPosition = data['distanceFromProjectPosition'];
+    projectId = data['projectId'];
+    projectName = data['projectName'];
     if (data['projectPosition'] != null) {
-      this.projectPosition = Position.fromJson(data['projectPosition']);
+      projectPosition = Position.fromJson(data['projectPosition']);
     }
-    if (this.height == null) {
-      this.height = -5;
-    }
-    if (this.width == null) {
-      this.width = -10;
-    }
+    height ??= -5;
+    width ??= -10;
   }
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = {
       'url': url,
+      'landscape': landscape,
       'projectPositionId': projectPositionId,
       'caption': caption,
       'created': created,
@@ -95,13 +100,9 @@ class Photo {
       'projectId': projectId,
       'projectName': projectName,
       'thumbnailUrl': thumbnailUrl,
-      'projectPosition': projectPosition == null ? null : projectPosition!.toJson()
+      'projectPosition':
+          projectPosition == null ? null : projectPosition!.toJson()
     };
     return map;
   }
 }
-
-
-
-
-

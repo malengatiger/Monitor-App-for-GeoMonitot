@@ -1,318 +1,309 @@
 import 'dart:async';
 
+import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/bloc/cloud_storage_bloc.dart';
+import 'package:test_router/library/emojis.dart';
+import 'package:test_router/library/ui/media/list/project_videos.dart';
 
+import '../../../api/sharedprefs.dart';
 import '../../../bloc/user_bloc.dart';
-import '../../../data/video.dart';
-import '../../../data/photo.dart';
 import '../../../data/user.dart';
-
+import '../../../data/video.dart';
 import '../../../functions.dart';
-import '../../../generic_functions.dart';
-import '../../../snack.dart';
-import '../video/video_main.dart';
+import '../../../data/photo.dart';
+import '../../project_monitor/project_monitor_mobile.dart';
+import '../full_photo/full_photo_mobile.dart';
+import '../list/media_grid.dart';
+import '../list/photo_details.dart';
+import '../list/user_photos.dart';
+import '../list/user_videos.dart';
+
 
 class UserMediaListMobile extends StatefulWidget {
   final User user;
 
-  const UserMediaListMobile(this.user, {super.key});
+  const UserMediaListMobile({super.key, required this.user});
+
+
 
   @override
-  UserMediaListMobileState createState() => UserMediaListMobileState();
+  MediaListMobileState createState() => MediaListMobileState();
 }
 
-class UserMediaListMobileState extends State<UserMediaListMobile>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class MediaListMobileState extends State<UserMediaListMobile>
+    with TickerProviderStateMixin
+    implements MediaGridListener {
+  late AnimationController _animationController;
   StreamSubscription<List<Photo>>? photoStreamSubscription;
   StreamSubscription<List<Video>>? videoStreamSubscription;
+  StreamSubscription<Photo>? newPhotoStreamSubscription;
+
+  String? latest, earliest;
+  late TabController _tabController;
 
   var _photos = <Photo>[];
   var _videos = <Video>[];
+  User? user;
+  static const mm = '🔆🔆🔆 UserMediaListMobile 💜💜 ';
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    _animationController = AnimationController(
+        value: 0.0,
+        duration: const Duration(milliseconds: 2000),
+        reverseDuration: const Duration(milliseconds: 1000),
+        vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
     _listen();
-    _refresh();
   }
 
-  void _listen() async {
-    pp('🔆 🔆 🔆 🔆 💜 💜 💜 Listening to streams from monitorBloc ....');
+  Future<void> _listen() async {
+    user ??= await Prefs.getUser();
+
+    _listenToProjectStreams();
+    _listenToPhotoStream();
+    //
+    if (mounted) {
+      _refresh(false);
+    }
+  }
+
+  void _listenToProjectStreams() async {
+    pp('$mm .................... Listening to streams from userBloc ....');
 
     photoStreamSubscription = userBloc.photoStream.listen((value) {
-      pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Photos from stream controller: 💙 ${value.length}');
+      pp('$mm Photos received from stream projectPhotoStream: 💙 ${value.length}');
       _photos = value;
-      _processMedia();
-      setState(() {});
+      _photos.sort((a,b) => b.created!.compareTo(a.created!));
+      if (mounted) {
+        setState(() {});
+      }
     });
+
     videoStreamSubscription = userBloc.videoStream.listen((value) {
-      pp('🔆 🔆 🔆 💜 💜 _MediaListMobileState: Videos from stream controller: 🏈 ${value.length}');
+      pp('$mm:Videos received from projectVideoStream: 🏈 ${value.length}');
       _videos = value;
-      _processMedia();
-      setState(() {});
+      _videos.sort((a,b) => b.created!.compareTo(a.created!));
+      if (mounted) {
+        setState(() {});
+      }
     });
-    _refresh();
   }
 
-  Future<void> _refresh() async {
-    pp('🔆🔆🔆 💜 💜 _MediaListMobileState: _refresh ...');
+  void _listenToPhotoStream() async {
+    newPhotoStreamSubscription = cloudStorageBloc.photoStream.listen((mPhoto) {
+      pp('${Emoji.blueDot}${Emoji.blueDot} '
+          'New photo arrived from newPhotoStreamSubscription: ${mPhoto.toJson()} ${Emoji.blueDot}');
+      _photos.add(mPhoto);
+      if (mounted) {
+        setState(() {
+
+        });
+      }
+    });
+  }
+
+  Future<void> _refresh(bool forceRefresh) async {
+    pp('$mm _MediaListMobileState: .......... _refresh ...forceRefresh: $forceRefresh');
     setState(() {
       isBusy = true;
     });
-    try {
-      _photos = await userBloc.getPhotos(
-          userId: widget.user.userId!, forceRefresh: true);
-      _videos = await userBloc.getVideos(
-          userId: widget.user.userId!, forceRefresh: true);
-      _processMedia();
-    } catch (e) {
-      p(e);
-      AppSnackbar.showErrorSnackbar(
-          scaffoldKey: _key, message: 'Data refresh failed: $e');
-    }
+
+    await userBloc.refreshUserData(
+        userId: widget.user.userId!, forceRefresh: forceRefresh);
+
     setState(() {
       isBusy = false;
     });
   }
 
-  final _key = GlobalKey<ScaffoldState>();
-
+  bool _showPhotoDetail = false;
+  Photo? selectedPhoto;
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     photoStreamSubscription!.cancel();
     videoStreamSubscription!.cancel();
     super.dispose();
   }
 
-  void _processMedia() {
-    suitcases.clear();
-    for (var photo in _photos) {
-      var sc = Suitcase(photo: photo, date: photo.created!);
-      suitcases.add(sc);
-    }
-    for (var video in _videos) {
-      var sc = Suitcase(video: video, date: video.created!);
-      suitcases.add(sc);
-    }
-    if (suitcases.isNotEmpty) {
-      suitcases.sort((a, b) => b.date!.compareTo(a.date!));
-      latest = getFormattedDateShortest(suitcases.first.date!, context);
-      earliest = getFormattedDateShortest(suitcases.last.date!, context);
-    }
-  }
-
-  String? latest, earliest;
 
   @override
   Widget build(BuildContext context) {
+    _photos.sort((a,b) => b.created!.compareTo(a.created!));
     return SafeArea(
-      child: Scaffold(
-        key: _key,
-        appBar: AppBar(
-          title: Text(
-            widget.user.name!,
-            style: Styles.whiteBoldSmall,
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.refresh,
-                size: 20,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Photos & Videos',
+              style: GoogleFonts.lato(
+                textStyle: Theme.of(context).textTheme.bodyMedium,
+                fontWeight: FontWeight.w900,
               ),
-              onPressed: _refresh,
-            )
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(60),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    pp('...... navigate to take photos');
+                    _navigateToMonitor();
+                  },
+                  icon: const Icon(Icons.camera_alt)),
+              IconButton(
+                  onPressed: () {
+                    pp('...... refresh photos');
+                    _refresh(true);
+                  },
+                  icon: const Icon(Icons.refresh)),
+            ],
+            bottom: TabBar(
+              controller: _tabController,
+              tabs: [
+                Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 12.0, right: 12.0, top: 8, bottom: 8),
+                      child: Text(
+                        'Photos',
+                        style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    )),
+                Card(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 12.0, right: 12.0, top: 8, bottom: 8),
+                      child: Text(
+                        'Videos',
+                        style: GoogleFonts.lato(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          body: Stack(
+            children: [
+              TabBarView(
+                controller: _tabController,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      isBusy
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 8,
-                                backgroundColor: Colors.black,
-                              ),
-                            )
-                          : Container(),
-                      const SizedBox(
-                        width: 28,
-                      ),
-                      Text(
-                        'Digital Project Monitor',
-                        style: Styles.whiteSmall,
-                      ),
-                      const SizedBox(
-                        width: 64,
-                      ),
-                      Text(
-                        '${suitcases.length}',
-                        style: Styles.blackBoldSmall,
-                      ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                    ],
+                  UserPhotos(
+                    user: widget.user,
+                    refresh: true,
+                    onPhotoTapped: (Photo photo) {
+                      pp('🔷🔷🔷Photo has been tapped: ${photo.created!}');
+                      selectedPhoto = photo;
+                      setState(() {
+                        _showPhotoDetail = true;
+                      });
+                      _animationController.forward();
+                    },
                   ),
-                  // SizedBox(
-                  //   height: 28,
-                  // ),
-                  // Row(
-                  //   children: [
-                  //     Text(
-                  //       'Latest:',
-                  //       style: Styles.blackTiny,
-                  //     ),
-                  //     SizedBox(
-                  //       width: 8,
-                  //     ),
-                  //     Text(
-                  //       latest == null ? 'some date' : latest,
-                  //       style: Styles.whiteBoldSmall,
-                  //     ),
-                  //     SizedBox(
-                  //       width: 28,
-                  //     ),
-                  //     Text(
-                  //       'Earliest:',
-                  //       style: Styles.blackTiny,
-                  //     ),
-                  //     SizedBox(
-                  //       width: 8,
-                  //     ),
-                  //     Text(
-                  //       earliest == null ? 'some date' : earliest,
-                  //       style: Styles.whiteBoldSmall,
-                  //     )
-                  //   ],
-                  // ),
-                  const SizedBox(
-                    height: 12,
+                  UserVideos(
+                    user: widget.user,
+                    refresh: true,
+                    onVideoTapped: (Video video) {
+                      pp('🍎🍎🍎Video has been tapped: ${video.created!}');
+                    },
                   ),
                 ],
               ),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.brown[100],
-        body: Stack(
-          children: [
-            suitcases.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Card(
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: SizedBox(
-                            height: 200,
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  'No User Media found',
-                                  style: Styles.blackBoldSmall,
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                const Text(
-                                    'Tap the button below to start adding photos and videos for the project'),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text('Start Work')),
-                              ],
-                            ),
-                          ),
+              _showPhotoDetail
+                  ? Positioned(
+                  left: 28,
+                  top: 48,
+                  child: SizedBox(
+                    width: 260,
+                    child: GestureDetector(
+                      onTap: () {
+                        pp('🍏🍏🍏🍏Photo tapped - navigate to full photo');
+                        _animationController.reverse().then((value) {
+                          setState(() {
+                            _showPhotoDetail = false;
+                          });
+                          _navigateToFullPhoto();
+                        });
+
+                      },
+                      child: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (BuildContext context, Widget? child) {
+                          return FadeScaleTransition(
+                            animation: _animationController,
+                            child: child,
+                          );
+                        },
+                        child: PhotoDetails(
+                          photo: selectedPhoto!,
+                          onClose: () {
+                            _animationController.reverse().then((value) {
+                              setState(() {
+                                _showPhotoDetail = false;
+                              });
+                            });
+                          },
                         ),
                       ),
                     ),
-                  )
-                : GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 1,
-                            crossAxisSpacing: 1),
-                    itemCount: suitcases.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var suitcase = suitcases.elementAt(index);
-                      return GestureDetector(
-                        onTap: () {
-                          _onMediaTapped(suitcase);
-                        },
-                        child: SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: suitcase.video != null
-                              ? Image.asset(
-                                  'assets/video3.png',
-                                  width: 160,
-                                  height: 160,
-                                  fit: BoxFit.fill,
-                                )
-                              : Image.network(
-                                  suitcase.photo!.thumbnailUrl!,
-                                  fit: BoxFit.fill,
-                                ),
-                        ),
-                      );
-                    },
-                  ),
-          ],
-        ),
-      ),
-    );
+                  ))
+                  : const SizedBox(),
+            ],
+          ),
+        ));
   }
 
-  var suitcases = <Suitcase>[];
+  void _navigateToFullPhoto() {
+    pp('... about to navigate after waiting 100 ms');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.leftToRightWithFade,
+            alignment: Alignment.topLeft,
+            duration: const Duration(milliseconds: 1000),
+            child: FullPhotoMobile(photo: selectedPhoto!)));
+    Future.delayed(const Duration(milliseconds: 100), () {});
+  }
 
-  void _onMediaTapped(Suitcase suitcase) {
-    if (suitcase.video != null) {
-      pp('🦠 🦠 🦠 _onMediaTapped: Play video from 🦠 ${suitcase.video!.url} 🦠');
-      Navigator.push(
-          context,
-          PageTransition(
-              type: PageTransitionType.scale,
-              alignment: Alignment.bottomRight,
-              duration: const Duration(seconds: 1),
-              child: VideoMain(suitcase.video!)));
-    } else {
-      pp(' 🍎 🍎 🍎 _onMediaTapped: show full image from 🍎 ${suitcase.photo!.url!} 🍎');
-      // Navigator.push(
-      //     context,
-      //     PageTransition(
-      //         type: PageTransitionType.scale,
-      //         alignment: Alignment.bottomRight,
-      //         duration: Duration(seconds: 1),
-      //         child: FullPhotoMain(suitcase.photo, )));
-    }
+  void _navigateToMonitor() {
+    pp('${Emoji.redDot}... about to navigate after waiting 100 ms - should select project if null');
+
+
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   Navigator.push(
+    //       context,
+    //       PageTransition(
+    //           type: PageTransitionType.leftToRightWithFade,
+    //           alignment: Alignment.topLeft,
+    //           duration: const Duration(milliseconds: 1500),
+    //           child: ProjectMonitorMobile(
+    //             project: widget.project,
+    //           )));
+    // });
+
+  }
+
+  @override
+  onMediaSelected(mediaBag) {
+    // TODO: implement onMediaSelected
+    throw UnimplementedError();
   }
 }
 
-class Suitcase {
-  Photo? photo;
-  Video? video;
-  String? date;
 
-  Suitcase({this.photo, this.video, this.date});
-}
+void heavyTask() {}
+
+

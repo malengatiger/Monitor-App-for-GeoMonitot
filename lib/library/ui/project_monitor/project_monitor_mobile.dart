@@ -3,24 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
-import 'package:test_router/library/bloc/project_bloc.dart';
+import 'package:test_router/library/ui/camera/field_camera_video.dart';
 
-import '../../bloc/user_bloc.dart';
+import '../../bloc/project_bloc.dart';
 import '../../functions.dart';
 import '../../hive_util.dart';
 import '../../data/project.dart';
 import '../../data/project_position.dart';
 import '../../location/loc_bloc.dart';
-import '../camera/field_camera.dart';
+import '../camera/field_camera_photo.dart';
 import '../project_location/project_location_main.dart';
+
 class ProjectMonitorMobile extends StatefulWidget {
   final Project project;
 
-  const ProjectMonitorMobile(this.project, {super.key});
+  const ProjectMonitorMobile({super.key, required this.project});
 
   @override
   ProjectMonitorMobileState createState() => ProjectMonitorMobileState();
 }
+
 ///Checks whether the device is within monitoring distance for the project
 class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
     with SingleTickerProviderStateMixin {
@@ -37,7 +39,6 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   }
 
   void _getProjectPositions() async {
-
     setState(() {
       isBusy = true;
     });
@@ -46,8 +47,8 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
           projectId: widget.project.projectId!, forceRefresh: false);
     } catch (e) {
       pp(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data refresh failed: $e')));
-
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Data refresh failed: $e')));
     }
 
     setState(() {
@@ -70,9 +71,10 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
         key: _key,
         appBar: AppBar(
           title: Text(widget.project.organizationName!,
-              style:  GoogleFonts.lato(
-              textStyle: Theme.of(context).textTheme.bodySmall,
-            fontWeight: FontWeight.normal,)),
+              style: GoogleFonts.lato(
+                textStyle: Theme.of(context).textTheme.bodySmall,
+                fontWeight: FontWeight.normal,
+              )),
           actions: [
             IconButton(
               icon: const Icon(Icons.refresh),
@@ -89,25 +91,29 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  Text(widget.project.name!, style: GoogleFonts.lato(
-                      textStyle: Theme.of(context).textTheme.bodyMedium,
-                      fontWeight: FontWeight.normal, )),
+                  Text(widget.project.name!,
+                      style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.bodyMedium,
+                        fontWeight: FontWeight.normal,
+                      )),
                   const SizedBox(
                     height: 60,
                   ),
                   Text(
                     'The project should be monitored only when the device is within a radius of',
                     style: GoogleFonts.lato(
-                        textStyle: Theme.of(context).textTheme.bodySmall,
-                        fontWeight: FontWeight.normal,),
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   Text('${widget.project.monitorMaxDistanceInMetres}',
                       style: GoogleFonts.secularOne(
-                          textStyle: Theme.of(context).textTheme.bodyMedium,
-                          fontWeight: FontWeight.w900, )),
+                        textStyle: Theme.of(context).textTheme.bodyMedium,
+                        fontWeight: FontWeight.w900,
+                      )),
                   const SizedBox(
                     height: 0,
                   ),
@@ -131,31 +137,78 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 48,
+                    height: 16,
                   ),
                   isWithinDistance
-                      ? ElevatedButton(
-                          style: ButtonStyle(elevation: MaterialStateProperty.all(8)),
-                          onPressed: () async {
-                            isWithinDistance = await _checkProjectDistance();
-                            if (isWithinDistance) {
-                              _startMonitoring();
-                            } else {
-                              setState(() {});
-                              _showError();
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(
-                              'Start Monitor',
-                              style: Styles.whiteSmall,
-                            ),
+                      ? SizedBox(
+                          height: 120,
+                          child: Column(
+                            children: [
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(8),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context).primaryColor)),
+                                onPressed: () async {
+                                  isWithinDistance =
+                                      await _checkProjectDistance();
+                                  if (isWithinDistance) {
+                                    _startPhotoMonitoring();
+                                  } else {
+                                    setState(() {});
+                                    _showError();
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                    'Start Photo Monitor',
+                                    style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(8),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context).errorColor)),
+                                onPressed: () async {
+                                  isWithinDistance =
+                                      await _checkProjectDistance();
+                                  if (isWithinDistance) {
+                                    _startVideoMonitoring();
+                                  } else {
+                                    setState(() {});
+                                    _showError();
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                    'Start Video Monitor',
+                                    style: GoogleFonts.lato(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
                       : Container(),
                   const SizedBox(
-                    height: 24,
+                    height: 8,
                   ),
                   isBusy
                       ? Row(
@@ -182,19 +235,23 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                     height: 24,
                   ),
                   isWithinDistance
-                      ? Text('We are ready to start creating photos and videos for ${widget.project.name}',
-                      style: GoogleFonts.lato(
-                          textStyle: Theme.of(context).textTheme.bodyMedium,
-                          fontWeight: FontWeight.normal,))
-                      : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
+                      ? Text(
+                          'We are ready to start creating photos and videos for ${widget.project.name}',
                           style: GoogleFonts.lato(
+                            textStyle: Theme.of(context).textTheme.bodyMedium,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
+                            style: GoogleFonts.lato(
                               textStyle: Theme.of(context).textTheme.bodyMedium,
-                              fontWeight: FontWeight.normal, ),
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
                         ),
-                      ),
                 ],
               ),
             ),
@@ -207,14 +264,15 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   // ignore: missing_return
   Future<ProjectPosition?> _findNearestProjectPosition() async {
     var bags = <BagX>[];
-    var positions = await hiveUtil.getProjectPositions(widget.project.projectId!);
+    var positions =
+        await hiveUtil.getProjectPositions(widget.project.projectId!);
     if (positions.isEmpty) {
       _navigateToProjectLocation();
     } else {
       if (positions.length == 1) {
         return positions.first;
       }
-      for (var pos in positions)  {
+      for (var pos in positions) {
         var distance = await locationBloc.getDistanceFromCurrentPosition(
             latitude: pos.position!.coordinates[1],
             longitude: pos.position!.coordinates[0]);
@@ -240,19 +298,16 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
           latitude: nearestProjectPosition!.position!.coordinates[1],
           longitude: nearestProjectPosition!.position!.coordinates[0]);
 
-      pp("$mm App is ${distance.toStringAsFixed(
-          1)} metres from the project point; widget.project.monitorMaxDistanceInMetres: "
+      pp("$mm App is ${distance.toStringAsFixed(1)} metres from the project point; widget.project.monitorMaxDistanceInMetres: "
           "${widget.project.monitorMaxDistanceInMetres}");
       if (distance > widget.project.monitorMaxDistanceInMetres!) {
-        pp("🔆🔆🔆 App is ${distance.toStringAsFixed(
-            1)} metres is greater than allowed project.monitorMaxDistanceInMetres: "
+        pp("🔆🔆🔆 App is ${distance.toStringAsFixed(1)} metres is greater than allowed project.monitorMaxDistanceInMetres: "
             "🍎 ${widget.project.monitorMaxDistanceInMetres} metres");
         isWithinDistance = false;
       } else {
         isWithinDistance = true;
-        pp(
-            '🌸 🌸 🌸 The app is within the allowable project.monitorMaxDistanceInMetres of '
-                '${widget.project.monitorMaxDistanceInMetres} metres');
+        pp('🌸 🌸 🌸 The app is within the allowable project.monitorMaxDistanceInMetres of '
+            '${widget.project.monitorMaxDistanceInMetres} metres');
       }
       setState(() {
         isBusy = false;
@@ -268,8 +323,8 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
     return false;
   }
 
-  void _startMonitoring() async {
-    pp('🍏 🍏 Start Monitoring this project after checking that the device is within '
+  void _startPhotoMonitoring() async {
+    pp('🍏 🍏 Start Photo Monitoring this project after checking that the device is within '
         ' 🍎 ${widget.project.monitorMaxDistanceInMetres} metres 🍎 of a project point within ${widget.project.name}');
 
     Navigator.push(
@@ -278,16 +333,32 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(seconds: 1),
-            child: FieldCamera(
+            child: FieldPhotoCamera(
+              project: widget.project,
+              projectPosition: nearestProjectPosition!,
+            )));
+  }
+
+  void _startVideoMonitoring() async {
+    pp('🍏 🍏 Start Video Monitoring this project after checking that the device is within '
+        ' 🍎 ${widget.project.monitorMaxDistanceInMetres} metres 🍎 of a project point within ${widget.project.name}');
+
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: const Duration(seconds: 1),
+            child: FieldVideoCamera(
               project: widget.project,
               projectPosition: nearestProjectPosition!,
             )));
   }
 
   _showError() {
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:
-     Text('You are too far from the project for monitoring to work properly')));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+            'You are too far from the project for monitoring to work properly')));
     setState(() {
       isBusy = false;
     });
@@ -300,8 +371,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       pp('🏖 🍎 🍎 🍎 start Google Maps Directions ..... '
           'nearestProjectPosition: ${nearestProjectPosition!.toJson()}');
       var destination =
-          '${nearestProjectPosition!.position!
-          .coordinates[1]},${nearestProjectPosition!.position!.coordinates[0]}';
+          '${nearestProjectPosition!.position!.coordinates[1]},${nearestProjectPosition!.position!.coordinates[0]}';
       var position = await locationBloc.getLocation();
       var origin = '${position.latitude},${position.longitude}';
 

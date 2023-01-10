@@ -316,6 +316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.17"
+  exif:
+    dependency: "direct main"
+    description:
+      name: exif
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.2"
   fake_async:
     dependency: transitive
     description:
@@ -728,6 +735,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  google_maps_cluster_manager:
+    dependency: "direct main"
+    description:
+      name: google_maps_cluster_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0+1"
   google_maps_flutter:
     dependency: "direct main"
     description:
@@ -756,6 +770,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.4"
+  google_maps_utils:
+    dependency: "direct main"
+    description:
+      name: google_maps_utils
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.0+0"
   google_maps_webservice:
     dependency: "direct main"
     description:
@@ -833,6 +854,41 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.7"
+  image_picker:
+    dependency: "direct main"
+    description:
+      name: image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.6"
+  image_picker_android:
+    dependency: transitive
+    description:
+      name: image_picker_android
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.5+4"
+  image_picker_for_web:
+    dependency: transitive
+    description:
+      name: image_picker_for_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.10"
+  image_picker_ios:
+    dependency: transitive
+    description:
+      name: image_picker_ios
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.6+5"
+  image_picker_platform_interface:
+    dependency: transitive
+    description:
+      name: image_picker_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.6.2"
   image_size_getter:
     dependency: "direct main"
     description:
@@ -938,6 +994,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.15"
+  native_device_orientation:
+    dependency: "direct main"
+    description:
+      name: native_device_orientation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.4"
   nested:
     dependency: transitive
     description:
@@ -1279,6 +1342,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.2"
   sqflite:
     dependency: transitive
     description:
@@ -1308,7 +1378,7 @@ packages:
     source: hosted
     version: "0.7.2+1"
   stream_channel:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: stream_channel
       url: "https://pub.dartlang.org"

@@ -180,12 +180,14 @@ class ProjectBloc {
     pp('$mm _processBag: send data to project streams ...');
     if (bag.photos != null) {
       if (bag.photos!.isNotEmpty) {
-        _projectPhotoController.sink.add(bag.photos!);
+        bag.photos?.sort((a,b) => b.created!.compareTo(a.created!));
+        _photoController.sink.add(bag.photos!);
       }
     }
     if (bag.videos != null) {
       if (bag.videos!.isNotEmpty) {
-        _projectVideoController.sink.add(bag.videos!);
+        bag.videos?.sort((a,b) => b.created!.compareTo(a.created!));
+        _videoController.sink.add(bag.videos!);
       }
     }
     // if (bag.fieldMonitorSchedules != null) {

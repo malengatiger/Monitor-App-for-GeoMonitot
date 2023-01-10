@@ -4,6 +4,8 @@ import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/ui/media/list/media_list_mobile.dart';
+import 'package:test_router/library/ui/project_monitor/project_monitor_mobile.dart';
 
 import '../../api/data_api.dart';
 import '../../api/sharedprefs.dart';
@@ -19,7 +21,6 @@ import '../../data/user.dart' as mon;
 import '../../data/project.dart';
 import '../maps/org_map_mobile.dart';
 import '../maps/project_map_mobile.dart';
-import '../media/list/media_list_main.dart';
 import '../project_edit/project_edit_main.dart';
 import '../project_edit/project_edit_mobile.dart';
 import '../project_location/project_location_main.dart';
@@ -167,7 +168,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(milliseconds: 1500),
-            child: MediaListMain(project: p)));
+            child: ProjectMonitorMobile(project: p)));
   }
 
   Future<void> _navigateToOrgMap() async {

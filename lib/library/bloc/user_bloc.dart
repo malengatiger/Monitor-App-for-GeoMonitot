@@ -106,7 +106,6 @@ class UserBloc {
 
   Future refreshUserData(
       {required String userId,
-      required String organizationId,
       required bool forceRefresh}) async {
     pp('$mm refreshUserData ... forceRefresh: $forceRefresh');
     try {

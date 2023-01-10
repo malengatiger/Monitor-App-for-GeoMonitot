@@ -50,6 +50,13 @@ class Prefs {
     return user;
   }
 
+  static void deleteUser() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.remove("user");
+    pp("🌽 🌽 🌽 Prefs. user deleted 🧩");
+
+  }
+
   static Future saveCountry(Country country) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

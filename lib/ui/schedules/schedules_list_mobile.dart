@@ -65,7 +65,7 @@ class SchedulesListMobileState extends State<SchedulesListMobile>
             type: PageTransitionType.scale,
             alignment: Alignment.topLeft,
             duration: const Duration(seconds: 1),
-            child: UserMediaListMobile(_user!)));
+            child: UserMediaListMobile(user:_user!)));
   }
   void _getData(bool refresh) async {
     setState(() {

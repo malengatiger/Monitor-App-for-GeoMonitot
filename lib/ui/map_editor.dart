@@ -82,7 +82,7 @@ class MapEditorState extends State<MapEditor>  {
         children: <Widget>[
            GoogleMap(
                   initialCameraPosition: _cameraPosition,
-                  mapType: mapType ?? MapType.hybrid,
+                  mapType: mapType,
                   markers: _markersForMap,
                   polygons: polygons,
                   myLocationEnabled: true,

@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import 'package:page_transition/page_transition.dart';
@@ -25,55 +26,6 @@ class IntroMobileState extends State<IntroMobile>
   var lorem =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac sagittis lectus. Aliquam dictum elementum massa, '
       'eget mollis elit rhoncus ut.';
-
-  var mList = <PageViewModel>[];
-  void _buildPages(BuildContext context) {
-    var page1 = PageViewModel(
-      titleWidget: Text(
-        "Welcome to The Digital Monitor",
-        style: TextStyle(
-            fontSize: Styles.medium, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-      ),
-      bodyWidget: Text(
-        "$lorem",
-        style: Styles.blackSmall,
-      ),
-      image: Image.asset(
-        "assets/intro/img4.jpeg",
-        fit: BoxFit.cover,
-      ),
-    );
-    var page2 = PageViewModel(
-      titleWidget: Text(
-        "Field Monitors are people too",
-        style: TextStyle(
-            fontSize: Styles.medium, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-      ),
-      bodyWidget: Text(
-        "$lorem",
-        style: Styles.blackSmall,
-      ),
-      image: Image.asset("assets/intro/img5.jpeg", fit: BoxFit.cover),
-    );
-    var page3 = PageViewModel(
-      titleWidget: Text(
-        "Start using The Digital Monitor",
-        style: TextStyle(
-            fontSize: Styles.medium, color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-      ),
-      bodyWidget: Text(
-        "$lorem",
-        style: Styles.blackSmall,
-      ),
-      image: Image.asset("assets/intro/img6.jpeg", fit: BoxFit.cover),
-    );
-    mList.clear();
-    setState(() {
-      mList.add(page1);
-      mList.add(page2);
-      mList.add(page3);
-    });
-  }
 
   @override
   void initState() {
@@ -100,19 +52,19 @@ class IntroMobileState extends State<IntroMobile>
 
   @override
   Widget build(BuildContext context) {
-    if (mList.isEmpty) {
-      _buildPages(context);
-    }
+
     return SafeArea(
       child: Scaffold(
         key: _key,
         appBar: AppBar(
-          leading: widget.user == null? IconButton(icon: Icon(Icons.arrow_back_ios), onPressed: () {
+          leading: widget.user == null? IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () {
             Navigator.pop(context);
           },) : Container(),
           title: Text(
             'The Digital Monitor Platform',
-            style: Styles.whiteSmall,
+            style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.w900,),
           ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(60),
@@ -128,14 +80,15 @@ class IntroMobileState extends State<IntroMobile>
                           TextButton(
                             onPressed: _navigateToSignIn,
                             child:
-                                Text('Sign In', style: Styles.blackBoldSmall),
+                                Text('Sign In', style: GoogleFonts.lato(
+                                  textStyle: Theme.of(context).textTheme.bodyMedium,
+                                  fontWeight: FontWeight.w900,),),
                           ),
                           const SizedBox(
                             width: 24,
                           ),
                         ],
                       ),
-                    // : Text(user == null? '' : user!.name!, style: Styles.blackBoldMedium,),
                 const SizedBox(
                   height: 24,
                 )
@@ -146,7 +99,56 @@ class IntroMobileState extends State<IntroMobile>
         body: Stack(
           children: [
             IntroductionScreen(
-              pages: mList,
+              pages: [
+                PageViewModel(
+                  titleWidget: Text(
+                    "Welcome to The Digital Monitor",
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontWeight: FontWeight.w900,),
+                  ),
+                  bodyWidget: Text(
+                    lorem,
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                      fontWeight: FontWeight.normal,),
+                  ),
+                  image: Image.asset(
+                    "assets/intro/img4.jpeg",
+                    fit: BoxFit.cover, width: 500, height: 600,
+                  ),
+                ),
+                PageViewModel(
+                  titleWidget: Text(
+                    "Field Monitors are people too",
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontWeight: FontWeight.w900,),
+                  ),
+                  bodyWidget: Text(
+                    lorem,
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                      fontWeight: FontWeight.normal,),
+                  ),
+                  image: Image.asset("assets/intro/img5.jpeg", fit: BoxFit.cover,width: 500, height: 600,),
+                ),
+                PageViewModel(
+                  titleWidget: Text(
+                    "Start using The Digital Monitor",
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontWeight: FontWeight.w900,),
+                  ),
+                  bodyWidget: Text(
+                    lorem,
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                      fontWeight: FontWeight.normal,),
+                  ),
+                  image: Image.asset("assets/intro/img6.jpeg", fit: BoxFit.cover, width: 500, height: 600,),
+                ),
+              ],
               onDone: () {
                 _navigateToDashboard();
               },
@@ -156,15 +158,14 @@ class IntroMobileState extends State<IntroMobile>
               done: user == null
                   ? Container()
                   : Text("Done",
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                      )),
+                      style: GoogleFonts.lato(
+                        textStyle: Theme.of(context).textTheme.bodyMedium,
+                        fontWeight: FontWeight.w900,),
+              ),
               dotsDecorator: DotsDecorator(
                 size: const Size.square(10.0),
                 activeSize: const Size(20.0, 10.0),
                 activeColor: Theme.of(context).primaryColor,
-                color: Colors.black26,
                 spacing: const EdgeInsets.symmetric(horizontal: 3.0),
                 activeShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25.0),

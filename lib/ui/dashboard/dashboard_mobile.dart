@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animations/animations.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:test_router/library/bloc/organization_bloc.dart';
 import 'package:test_router/library/data/field_monitor_schedule.dart';
 import 'package:test_router/library/data/project_position.dart';
+import 'package:test_router/library/ui/media/user_media_list/user_media_list_mobile.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../../library/api/sharedprefs.dart';
@@ -38,8 +40,11 @@ class DashboardMobile extends StatefulWidget {
 }
 
 class DashboardMobileState extends State<DashboardMobile>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+    with TickerProviderStateMixin {
+  late AnimationController _projectAnimationController;
+  late AnimationController _userAnimationController;
+  late AnimationController _photoAnimationController;
+  late AnimationController _videoAnimationController;
   var isBusy = false;
   var _projects = <Project>[];
   var _users = <User>[];
@@ -56,7 +61,22 @@ class DashboardMobileState extends State<DashboardMobile>
   bool networkAvailable = false;
   @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    _projectAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 1000),
+        reverseDuration: const Duration(milliseconds: 200),
+        vsync: this);
+    _userAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 1500),
+        reverseDuration: const Duration(milliseconds: 200),
+        vsync: this);
+    _photoAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 2000),
+        reverseDuration: const Duration(milliseconds: 200),
+        vsync: this);
+    _videoAnimationController = AnimationController(
+        duration: const Duration(milliseconds: 2500),
+        reverseDuration: const Duration(milliseconds: 200),
+        vsync: this);
     super.initState();
     _setItems();
     _listenToStreams();
@@ -131,6 +151,7 @@ class DashboardMobileState extends State<DashboardMobile>
           _projects = event;
           pp('$nn projects delivered by stream: ${_projects.length} ...');
         });
+        _projectAnimationController.forward();
       }
     });
     organizationBloc.usersStream.listen((event) {
@@ -139,6 +160,8 @@ class DashboardMobileState extends State<DashboardMobile>
           _users = event;
           pp('$mm users delivered by stream: ${_users.length} ...');
         });
+        // _controller.reset();
+        _userAnimationController.forward();
       }
     });
     organizationBloc.photoStream.listen((event) {
@@ -148,6 +171,9 @@ class DashboardMobileState extends State<DashboardMobile>
           pp('$mm photos delivered by stream: ${_photos.length} ...');
         });
       }
+      // _controller.reset();
+      _photoAnimationController.forward();
+
     });
     organizationBloc.videoStream.listen((event) {
       if (mounted) {
@@ -155,6 +181,8 @@ class DashboardMobileState extends State<DashboardMobile>
           _videos = event;
           pp('$mm videos delivered by stream: ${_videos.length} ...');
         });
+        // _controller.reset();
+        _videoAnimationController.forward();
       }
     });
     organizationBloc.projectPositionsStream.listen((event) {
@@ -163,6 +191,8 @@ class DashboardMobileState extends State<DashboardMobile>
           _projectPositions = event;
           pp('$mm projectPositions delivered by stream: ${_projectPositions.length} ...');
         });
+        // _controller.reset();
+        _projectAnimationController.forward();
       }
     });
     organizationBloc.fieldMonitorScheduleStream.listen((event) {
@@ -171,6 +201,8 @@ class DashboardMobileState extends State<DashboardMobile>
           _schedules = event;
           pp('$mm fieldMonitorSchedules delivered by stream: ${_schedules.length} ...');
         });
+        // _controller.reset();
+        _projectAnimationController.forward();
       }
     });
   }
@@ -229,7 +261,7 @@ class DashboardMobileState extends State<DashboardMobile>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _projectAnimationController.dispose();
     subscription.cancel();
     super.dispose();
   }
@@ -275,7 +307,6 @@ class DashboardMobileState extends State<DashboardMobile>
           case UserType.fieldMonitor:
             userBloc.refreshUserData(
                 userId: user!.userId!,
-                organizationId: user!.organizationId!,
                 forceRefresh: forceRefresh);
             break;
           case UserType.orgExecutive:
@@ -337,13 +368,13 @@ class DashboardMobileState extends State<DashboardMobile>
   void _handleBottomNav(int value) {
     switch (value) {
       case 0:
-        pp(' 🔆🔆🔆 Navigate to MonitorList');
+        pp(' 🔆🔆🔆 Navigate to ProjectList');
         _navigateToProjectList();
         break;
 
       case 1:
-        pp(' 🔆🔆🔆 Navigate to ScheduleList');
-        _navigateToScheduleList();
+        pp(' 🔆🔆🔆 Navigate to UserMediaList');
+        _navigateToUserMediaList();
         break;
 
       case 2:
@@ -385,7 +416,8 @@ class DashboardMobileState extends State<DashboardMobile>
     }
   }
 
-  void _navigateToScheduleList() {
+  void _navigateToUserMediaList() async {
+
     if (mounted) {
       Navigator.push(
           context,
@@ -393,7 +425,7 @@ class DashboardMobileState extends State<DashboardMobile>
               type: PageTransitionType.scale,
               alignment: Alignment.topLeft,
               duration: const Duration(seconds: 1),
-              child: const SchedulesListMain()));
+              child: UserMediaListMobile(user: user!)));
     }
   }
 
@@ -422,8 +454,21 @@ class DashboardMobileState extends State<DashboardMobile>
             child: const UserListMain()));
   }
 
+
   @override
   Widget build(BuildContext context) {
+    var type = 'Field Monitor';
+    if (user != null) {
+      if (user!.userType == UserType.orgAdministrator) {
+        type = 'Administrator';
+      }
+      if (user!.userType == UserType.orgExecutive) {
+        type = 'Executive';
+      }
+    }
+    var style = GoogleFonts.secularOne(
+        textStyle: Theme.of(context).textTheme.headline5,
+        fontWeight: FontWeight.w900);
     return SafeArea(
         child: Scaffold(
       key: _key,
@@ -459,25 +504,31 @@ class DashboardMobileState extends State<DashboardMobile>
           )
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(140),
+          preferredSize: const Size.fromHeight(72),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Text(
                   widget.user.organizationName!,
-                  style: Styles.whiteBoldSmall,
+                  style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    fontWeight: FontWeight.w900,),
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 8,
                 ),
                 Text(
                    widget.user.name!,
-                  style: Styles.whiteBoldMedium,
+                  style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.headline6,
+                      fontWeight: FontWeight.normal)
                 ),
-                user == null? const Text(''):Text(user!.userType!, style: Styles.whiteTiny),
+                user == null? const Text(''):Text(type, style: GoogleFonts.lato(
+                  textStyle: Theme.of(context).textTheme.bodySmall,
+                  fontWeight: FontWeight.normal,),),
                 const SizedBox(
-                  height: 20,
+                  height: 12,
                 ),
               ],
             ),
@@ -509,36 +560,76 @@ class DashboardMobileState extends State<DashboardMobile>
                     children: [
                       GestureDetector(
                         onTap: _navigateToProjectList,
-                        child: Card(
-                          // color: Colors.brown[50],
-                          elevation: 8,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0)),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 32,
-                              ),
-                              Text(
-                                '${_projects.length}',
-                                  style: GoogleFonts.secularOne(
-                                      textStyle: Theme.of(context).textTheme.headline4,
-                                      fontWeight: FontWeight.w900)),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Projects',
-                                style: Styles.greyLabelSmall,
-                              )
-                            ],
+                        child: AnimatedBuilder(
+                          animation: _projectAnimationController,
+                          builder: (BuildContext context, Widget? child) {
+
+                            return FadeScaleTransition(animation: _projectAnimationController, child: child,);
+                          },
+                          child: Card(
+                            // color: Colors.brown[50],
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 32,
+                                ),
+                                Text(
+                                  '${_projects.length}',
+                                    style: style),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Projects',
+                                  style: Styles.greyLabelSmall,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
                       GestureDetector(
                         onTap: _navigateToUserList,
+                        child: AnimatedBuilder(
+                          animation: _userAnimationController,
+                          builder: (BuildContext context, Widget? child) {
+                            return FadeScaleTransition(animation: _userAnimationController, child: child,);
+                          },
+                          child: Card(
+                            // color: Colors.brown[50],
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0)),
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 32,
+                                ),
+                                Text(
+                                  '${_users.length}',
+                                  style: style,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Users',
+                                  style: Styles.greyLabelSmall,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      AnimatedBuilder(
+                        animation: _photoAnimationController,
+                        builder: (BuildContext context, Widget? child) {
+                          return FadeScaleTransition(animation: _photoAnimationController, child: child,);
+                        },
                         child: Card(
-                          // color: Colors.brown[50],
                           elevation: 8,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16.0)),
@@ -548,68 +639,45 @@ class DashboardMobileState extends State<DashboardMobile>
                                 height: 32,
                               ),
                               Text(
-                                '${_users.length}',
-                                style: GoogleFonts.secularOne(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontWeight: FontWeight.w900),
-                              ),
+                                '${_photos.length}',
+                                style: style),
                               const SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                'Users',
+                                'Photos',
                                 style: Styles.greyLabelSmall,
                               )
                             ],
                           ),
                         ),
                       ),
-                      Card(
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0)),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 32,
-                            ),
-                            Text(
-                              '${_photos.length}',
-                              style: GoogleFonts.secularOne(
-                                  textStyle: Theme.of(context).textTheme.headline4,
-                                  fontWeight: FontWeight.w900)),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Photos',
-                              style: Styles.greyLabelSmall,
-                            )
-                          ],
-                        ),
-                      ),
-                      Card(
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0)),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 32,
-                            ),
-                            Text(
-                              '${_videos.length}',
-                                style: GoogleFonts.secularOne(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontWeight: FontWeight.w900)),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'Videos',
-                              style: Styles.greyLabelSmall,
-                            )
-                          ],
+                      AnimatedBuilder(
+                        animation: _videoAnimationController,
+                        builder: (BuildContext context, Widget? child) {
+                          return FadeScaleTransition(animation: _videoAnimationController, child: child,);
+                        },
+                        child: Card(
+                          elevation: 8,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0)),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 32,
+                              ),
+                              Text(
+                                '${_videos.length}',
+                                  style: style),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'Videos',
+                                style: Styles.greyLabelSmall,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       Card(
@@ -623,9 +691,7 @@ class DashboardMobileState extends State<DashboardMobile>
                             ),
                             Text(
                                 '${_projectPositions.length}',
-                                style: GoogleFonts.secularOne(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontWeight: FontWeight.w900)),
+                                style: style),
                             const SizedBox(
                               height: 8,
                             ),
@@ -647,9 +713,7 @@ class DashboardMobileState extends State<DashboardMobile>
                             ),
                             Text(
                                 '${_schedules.length}',
-                                style: GoogleFonts.secularOne(
-                                    textStyle: Theme.of(context).textTheme.headline4,
-                                    fontWeight: FontWeight.w900)),
+                                style: style),
                             const SizedBox(
                               height: 8,
                             ),

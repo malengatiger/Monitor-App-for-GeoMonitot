@@ -5,40 +5,41 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:test_router/library/bloc/cloud_storage_bloc.dart';
+import 'package:test_router/library/emojis.dart';
+import 'package:test_router/library/ui/media/list/project_videos.dart';
 
 import '../../../api/sharedprefs.dart';
-import '../../../bloc/organization_bloc.dart';
 import '../../../bloc/project_bloc.dart';
-import '../../../bloc/user_bloc.dart';
-import '../../../data/organization.dart';
 import '../../../data/user.dart';
 import '../../../data/video.dart';
 import '../../../functions.dart';
-import '../../../snack.dart';
 import '../../../data/photo.dart';
 import '../../../data/project.dart';
+import '../../project_monitor/project_monitor_mobile.dart';
 import '../full_photo/full_photo_mobile.dart';
-import 'helpers.dart';
 import 'media_grid.dart';
+import 'photo_details.dart';
+import 'project_photos.dart';
 
-class MediaListMobile extends StatefulWidget {
-  final Organization? organization;
-  final Project? project;
-  final User? user;
+class ProjectMediaListMobile extends StatefulWidget {
+  final Project project;
 
-  const MediaListMobile(
-      {super.key, this.organization, this.project, this.user});
+  const ProjectMediaListMobile({super.key, required this.project});
+
 
   @override
-  MediaListMobileState createState() => MediaListMobileState();
+  ProjectMediaListMobileState createState() => ProjectMediaListMobileState();
 }
 
-class MediaListMobileState extends State<MediaListMobile>
+class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
     with TickerProviderStateMixin
     implements MediaGridListener {
   late AnimationController _animationController;
   StreamSubscription<List<Photo>>? photoStreamSubscription;
   StreamSubscription<List<Video>>? videoStreamSubscription;
+  StreamSubscription<Photo>? newPhotoStreamSubscription;
+
   String? latest, earliest;
   late TabController _tabController;
 
@@ -56,35 +57,15 @@ class MediaListMobileState extends State<MediaListMobile>
         vsync: this);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
-    user = widget.user;
     _listen();
-    // _tabController.animateTo(2);
   }
 
   Future<void> _listen() async {
     user ??= await Prefs.getUser();
-    if (widget.organization != null) {
-      _listenToOrgStreams();
-      return;
-    }
-    if (widget.project != null) {
-      _listenToProjectStreams();
-      return;
-    }
 
-    if (user != null) {
-      switch (user!.userType!) {
-        case UserType.fieldMonitor:
-          _listenToMonitorStreams();
-          break;
-        case UserType.orgAdministrator:
-          _listenToOrgStreams();
-          break;
-        case UserType.orgExecutive:
-          _listenToOrgStreams();
-          break;
-      }
-    }
+    _listenToProjectStreams();
+    _listenToPhotoStream();
+    //
     if (mounted) {
       _refresh(false);
     }
@@ -96,7 +77,6 @@ class MediaListMobileState extends State<MediaListMobile>
     photoStreamSubscription = projectBloc.photoStream.listen((value) {
       pp('$mm Photos received from stream projectPhotoStream: 💙 ${value.length}');
       _photos = value;
-      _processMedia();
       if (mounted) {
         setState(() {});
       }
@@ -105,100 +85,39 @@ class MediaListMobileState extends State<MediaListMobile>
     videoStreamSubscription = projectBloc.videoStream.listen((value) {
       pp('$mm:Videos received from projectVideoStream: 🏈 ${value.length}');
       _videos = value;
-      _processMedia();
       if (mounted) {
         setState(() {});
       }
     });
   }
 
-  void _listenToMonitorStreams() async {
-    pp('$mm .................... Listening to streams from userBloc ....');
-
-    photoStreamSubscription = userBloc.photoStream.listen((value) {
-      pp('$mm Photos received from stream projectPhotoStream: 💙 ${value.length}');
-      _photos = value;
-      _processMedia();
+  void _listenToPhotoStream() async {
+    newPhotoStreamSubscription = cloudStorageBloc.photoStream.listen((mPhoto) {
+      pp('${Emoji.blueDot}${Emoji.blueDot} '
+          'New photo arrived from newPhotoStreamSubscription: ${mPhoto.toJson()} ${Emoji.blueDot}');
+      _photos.add(mPhoto);
       if (mounted) {
-        setState(() {});
+        setState(() {
+
+        });
       }
     });
-
-    videoStreamSubscription = userBloc.videoStream.listen((value) {
-      pp('$mm:Videos received from projectVideoStream: 🏈 ${value.length}');
-      _videos = value;
-      _processMedia();
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
-  void _listenToOrgStreams() async {
-    pp('$mm .................... Listening to streams from organizationBloc ....');
-    user = await Prefs.getUser();
-
-    photoStreamSubscription = organizationBloc.photoStream.listen((photos) {
-      pp('$mm Photos received from stream photoStream: 💙 ${photos.length}');
-      _photos = photos;
-      _photos.sort((a, b) => b.created!.compareTo(a.created!));
-      _processMedia();
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    videoStreamSubscription = organizationBloc.videoStream.listen((videos) {
-      pp('$mm:Videos received from projectVideoStream: 🏈 ${videos.length}');
-      _videos = videos;
-      _videos.sort((a, b) => b.created!.compareTo(a.created!));
-      _processMedia();
-      if (mounted) {
-        setState(() {});
-      }
-    });
-
-    if (mounted) {
-      _refresh(false);
-    }
   }
 
   Future<void> _refresh(bool forceRefresh) async {
-    pp('$mm _MediaListMobileState: .......... _refresh ...');
+    pp('$mm _MediaListMobileState: .......... _refresh ...forceRefresh: $forceRefresh');
     setState(() {
       isBusy = true;
     });
-    try {
-      if (user != null) {
-        switch (user!.userType!) {
-          case UserType.fieldMonitor:
-            await projectBloc.refreshProjectData(
-                projectId: widget.project!.projectId!,
-                forceRefresh: forceRefresh);
 
-            break;
-          case UserType.orgAdministrator:
-            organizationBloc.refreshOrganizationData(
-                organizationId: user!.organizationId!,
-                forceRefresh: forceRefresh);
-            break;
-          case UserType.orgExecutive:
-            _listenToOrgStreams();
-            break;
-        }
-      }
-      _processMedia();
-    } catch (e) {
-      pp(e);
-      AppSnackbar.showErrorSnackbar(
-          scaffoldKey: _key, message: 'Data refresh failed: $e');
-    }
+    await projectBloc.refreshProjectData(
+        projectId: widget.project.projectId!, forceRefresh: forceRefresh);
+
     setState(() {
       isBusy = false;
     });
   }
 
-  final _key = GlobalKey<ScaffoldState>();
   bool _showPhotoDetail = false;
   Photo? selectedPhoto;
   @override
@@ -209,28 +128,10 @@ class MediaListMobileState extends State<MediaListMobile>
     super.dispose();
   }
 
-  void _processMedia() {
-    pp('$mm _processMedia: create suitcases to hold photos and videos ...');
-    _suitcases.clear();
-    for (var element in _photos) {
-      var sc = MediaBag(photo: element, date: element.created!);
-      _suitcases.add(sc);
-    }
-    for (var element in _videos) {
-      var sc = MediaBag(video: element, date: element.created!);
-      _suitcases.add(sc);
-    }
-    if (_suitcases.isNotEmpty) {
-      _suitcases.sort((a, b) => b.date!.compareTo(a.date!));
-      latest = getFormattedDateShortest(_suitcases.first.date!, context);
-      earliest = getFormattedDateShortest(_suitcases.last.date!, context);
-    }
-    pp('$mm _processMedia: created : ${_suitcases.length} suitcases');
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
+    _photos.sort((a,b) => b.created!.compareTo(a.created!));
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -242,32 +143,51 @@ class MediaListMobileState extends State<MediaListMobile>
           ),
         ),
         actions: [
-          IconButton(onPressed: (){
-            pp('...... navigate to take photos');
-          }, icon: const Icon(Icons.camera_alt)),
+          IconButton(
+              onPressed: () {
+                pp('...... navigate to take photos');
+                _navigateToMonitor();
+              },
+              icon: const Icon(Icons.camera_alt)),
+          IconButton(
+              onPressed: () {
+                pp('...... refresh photos');
+                _refresh(true);
+              },
+              icon: const Icon(Icons.refresh)),
         ],
         bottom: TabBar(
           controller: _tabController,
-          tabs:  [
+          tabs: [
             Card(
-              elevation: 8,
+                elevation: 8,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24.0)),
-                child:  Padding(
-                  padding: const EdgeInsets.only(left:12.0,right: 12.0, top: 8, bottom: 8),
-                  child: Text('Photos', style: GoogleFonts.lato(
-                    textStyle: Theme.of(context).textTheme.bodySmall,
-                    fontWeight: FontWeight.normal,),),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 12.0, right: 12.0, top: 8, bottom: 8),
+                  child: Text(
+                    'Photos',
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 )),
             Card(
                 elevation: 8,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24.0)),
-                child:  Padding(
-                  padding: const EdgeInsets.only(left:12.0,right: 12.0, top: 8, bottom: 8),
-                  child: Text('Videos', style: GoogleFonts.lato(
-                    textStyle: Theme.of(context).textTheme.bodySmall,
-                    fontWeight: FontWeight.normal,),),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 12.0, right: 12.0, top: 8, bottom: 8),
+                  child: Text(
+                    'Videos',
+                    style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
                 )),
           ],
         ),
@@ -277,10 +197,8 @@ class MediaListMobileState extends State<MediaListMobile>
           TabBarView(
             controller: _tabController,
             children: [
-              Photos(
-                organization: widget.organization,
+              ProjectPhotos(
                 project: widget.project,
-                user: widget.user,
                 refresh: true,
                 onPhotoTapped: (Photo photo) {
                   pp('🔷🔷🔷Photo has been tapped: ${photo.created!}');
@@ -291,13 +209,11 @@ class MediaListMobileState extends State<MediaListMobile>
                   _animationController.forward();
                 },
               ),
-              Photos(
-                organization: widget.organization,
+              ProjectVideos(
                 project: widget.project,
-                user: widget.user,
                 refresh: true,
-                onPhotoTapped: (Photo photo) {
-                  pp('🍎🍎🍎Photo has been tapped: ${photo.created!}');
+                onVideoTapped: (Video video) {
+                  pp('🍎🍎🍎Video has been tapped: ${video.created!}');
                 },
               ),
             ],
@@ -311,13 +227,21 @@ class MediaListMobileState extends State<MediaListMobile>
                     child: GestureDetector(
                       onTap: () {
                         pp('🍏🍏🍏🍏Photo tapped - navigate to full photo');
-                        _navigateToFullPhoto();
+                        _animationController.reverse().then((value) {
+                          setState(() {
+                            _showPhotoDetail = false;
+                          });
+                          _navigateToFullPhoto();
+                        });
+
                       },
                       child: AnimatedBuilder(
                         animation: _animationController,
                         builder: (BuildContext context, Widget? child) {
-
-                          return FadeScaleTransition(animation: _animationController, child: child,);
+                          return FadeScaleTransition(
+                            animation: _animationController,
+                            child: child,
+                          );
                         },
                         child: PhotoDetails(
                           photo: selectedPhoto!,
@@ -327,7 +251,6 @@ class MediaListMobileState extends State<MediaListMobile>
                                 _showPhotoDetail = false;
                               });
                             });
-
                           },
                         ),
                       ),
@@ -339,24 +262,34 @@ class MediaListMobileState extends State<MediaListMobile>
     ));
   }
 
-  final _suitcases = <MediaBag>[];
-
   void _navigateToFullPhoto() {
-
     pp('... about to navigate after waiting 100 ms');
     Navigator.push(
         context,
         PageTransition(
             type: PageTransitionType.leftToRightWithFade,
             alignment: Alignment.topLeft,
-            duration: const Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 1000),
             child: FullPhotoMobile(photo: selectedPhoto!)));
-    if (widget.project != null) {
-      Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {});
+  }
 
+  void _navigateToMonitor() {
+    pp('... about to navigate after waiting 100 ms - should select project if null');
+
+
+      Future.delayed(const Duration(milliseconds: 100), () {
+        Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.leftToRightWithFade,
+                alignment: Alignment.topLeft,
+                duration: const Duration(milliseconds: 1500),
+                child: ProjectMonitorMobile(
+                  project: widget.project,
+                )));
       });
 
-    }
   }
 
   @override
@@ -366,57 +299,5 @@ class MediaListMobileState extends State<MediaListMobile>
   }
 }
 
-class PhotoDetails extends StatelessWidget {
-  const PhotoDetails({Key? key, required this.photo, required this.onClose}) : super(key: key);
-  final Photo photo;
-  final Function onClose;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      // height: 420,
-      child: Card(
-        elevation: 8,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(onPressed: (){
-                  onClose();
-                }, icon: const Icon(Icons.close)),
-              ],),
-              const SizedBox(
-                height: 2,
-              ),
-              Text(photo.projectName!, style: GoogleFonts.lato(
-                textStyle: Theme.of(context).textTheme.bodySmall,
-                fontWeight: FontWeight.normal,),),
-              const SizedBox(
-                height: 0,
-              ),
-              Text(getFormattedDateShortWithTime(photo.created!, context), style: GoogleFonts.lato(
-                textStyle: Theme.of(context).textTheme.bodyMedium,
-                fontWeight: FontWeight.w900,),),
-               SizedBox(width: 220,
-                 child: Card(
-                   shape: RoundedRectangleBorder(
-                       borderRadius: BorderRadius.circular(16.0)),
-                   child: CachedNetworkImage(
-                       fit: BoxFit.cover,
-                       fadeInCurve: Curves.easeIn,
-                       fadeInDuration: const Duration(milliseconds: 1000),
-                       imageUrl: photo.thumbnailUrl!),
-                 ),),
-
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+void heavyTask() {}

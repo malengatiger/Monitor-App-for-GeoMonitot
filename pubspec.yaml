@@ -78,6 +78,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.6.2
   transparent_image: ^2.0.0
   image_size_getter: ^2.1.2
+  image_picker:
   animations:
   get:
   crypto:
@@ -90,6 +91,13 @@ dependencies:
   firebase_dynamic_links: ^5.0.11
   flex_color_scheme: ^6.1.1
   flutter_riverpod: ^2.1.1
+  exif: ^3.1.2
+  native_device_orientation: ^1.1.4
+  google_maps_utils: ^1.5.0+0
+  google_maps_cluster_manager: ^3.0.0+1
+  stream_channel: ^2.1.0
+
+
 
 
 dev_dependencies:

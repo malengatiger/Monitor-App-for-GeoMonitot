@@ -131,6 +131,21 @@ class DataAPI {
       rethrow;
     }
   }
+  static Future<String> testUploadPhoto() async {
+    String? mURL = await getUrl();
+    dynamic result;
+    try {
+      result = await _sendHttpGET(
+          '${mURL!}testUploadPhoto');
+
+      pp('$mm 🌿🌿🌿 testUploadPhoto returned: 🌿 $result');
+      return result["url"];
+    } catch (e) {
+      pp('$mm 🌿🌿🌿 testUploadPhoto returned with error below: 🌿 $result');
+      pp(e);
+      rethrow;
+    }
+  }
 
   static Future<List<FieldMonitorSchedule>> getMonitorFieldMonitorSchedules(
       String userId) async {
@@ -800,9 +815,11 @@ class DataAPI {
 
   static Future addPhoto(Photo photo) async {
     String? mURL = await getUrl();
+    pp('$mm check isLandscape: ${photo.toJson()}');
     try {
       var result = await _callWebAPIPost('${mURL!}addPhoto', photo.toJson());
       await hiveUtil.addPhoto(photo: photo);
+      pp('$mm addPhoto has added photo to DB and to Hive cache');
       return result;
     } catch (e) {
       pp(e);
@@ -1099,7 +1116,7 @@ class DataAPI {
 
   static const timeOutInSeconds = 180;
 
-  static const xz = '🌎 🌎 🌎 🌎 🌎 🌎 DataAPI: ';
+  static const xz = '🌎🌎🌎🌎🌎🌎 DataAPI: ';
   static Future _sendHttpGET(String mUrl) async {
     pp('$xz http GET call:  🔆 🔆 🔆 calling : 💙  $mUrl  💙');
     var start = DateTime.now();

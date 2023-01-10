@@ -12,10 +12,10 @@ import 'media_list_mobile.dart';
 import 'media_list_tablet.dart';
 
 class MediaListMain extends StatefulWidget {
-  final Project? project;
-  final Organization? organization;
+  final Project project;
 
-  const MediaListMain({super.key, this.project, this.organization});
+  const MediaListMain({super.key, required this.project});
+
 
 
 
@@ -30,7 +30,7 @@ class MediaListMainState extends State<MediaListMain>
   var isBusy = false;
 
   MediaListDesktop? mediaListDesktop;
-  MediaListMobile? mediaListMobile;
+  ProjectMediaListMobile? mediaListMobile;
   MediaListTablet? mediaListTablet;
 
   @override
@@ -50,8 +50,7 @@ class MediaListMainState extends State<MediaListMain>
       switch (user.userType!) {
         case UserType.fieldMonitor:
           await userBloc.refreshUserData(
-              userId: user.userId!, forceRefresh: true,
-              organizationId: user.organizationId!);
+              userId: user.userId!, forceRefresh: true,);
 
           break;
         case UserType.orgAdministrator:
@@ -103,9 +102,9 @@ class MediaListMainState extends State<MediaListMain>
             ),
           )
         : ScreenTypeLayout(
-            mobile: const MediaListMobile(),
-            tablet: MediaListTablet(widget.project!),
-            desktop: MediaListDesktop(widget.project!),
+            mobile: ProjectMediaListMobile(project: widget.project),
+            tablet: MediaListTablet(widget.project),
+            desktop: MediaListDesktop(widget.project),
           );
   }
 }
