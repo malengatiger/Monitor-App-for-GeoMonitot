@@ -193,38 +193,38 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
   }
 
   /// Display the thumbnail of the captured image or video.
-  Widget _thumbnailWidget() {
-    final VideoPlayerController? localVideoController = videoController;
-
-    return Expanded(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            localVideoController == null && imageFile == null
-                ? Container()
-                : SizedBox(
-                    width: 64.0,
-                    height: 64.0,
-                    child: (localVideoController == null)
-                        ? Image.file(File(imageFile!.path))
-                        : Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.pink)),
-                            child: Center(
-                              child: AspectRatio(
-                                  aspectRatio:
-                                      localVideoController.value.aspectRatio,
-                                  child: VideoPlayer(localVideoController)),
-                            ),
-                          ),
-                  ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _thumbnailWidget() {
+  //   final VideoPlayerController? localVideoController = videoController;
+  //
+  //   return Expanded(
+  //     child: Align(
+  //       alignment: Alignment.centerRight,
+  //       child: Row(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: <Widget>[
+  //           localVideoController == null && imageFile == null
+  //               ? Container()
+  //               : SizedBox(
+  //                   width: 64.0,
+  //                   height: 64.0,
+  //                   child: (localVideoController == null)
+  //                       ? Image.file(File(imageFile!.path))
+  //                       : Container(
+  //                           decoration: BoxDecoration(
+  //                               border: Border.all(color: Colors.green)),
+  //                           child: Center(
+  //                             child: AspectRatio(
+  //                                 aspectRatio:
+  //                                     localVideoController.value.aspectRatio,
+  //                                 child: VideoPlayer(localVideoController)),
+  //                           ),
+  //                         ),
+  //                 ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// Display the control bar with buttons to take pictures and record videos.
   Widget _getCaptureControlRowWidget() {
@@ -235,7 +235,7 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         IconButton(
-          icon: const Icon(Icons.camera_alt),
+          icon: const Icon(Icons.camera_alt, size: 32,),
           color: Colors.blue,
           onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
@@ -298,7 +298,7 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
   }
 
   void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
-    pp('$mm onViewFinderTap ....');
+    pp('$mm ... onViewFinderTap ....');
     if (_cameraController == null) {
       return;
     }
@@ -312,6 +312,7 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
       _cameraController!.setExposurePoint(offset);
       _cameraController!.setFocusPoint(offset);
     }
+    _onTakePictureButtonPressed();
   }
 
   void _onNewCameraSelected(CameraDescription cameraDescription) async {
@@ -367,6 +368,17 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
     if (_deviceOrientation != null) {
       pp('$mm onTakePictureButtonPressed; last saved orientation: 🔵 '
           '${_deviceOrientation!.name}');
+    }
+    bool isValid = await isLocationValid(projectPosition: widget.projectPosition,
+        validDistance: widget.project.monitorMaxDistanceInMetres!);
+    if (!isValid) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            duration: Duration(seconds: 10),
+            content: Text(
+                'You are no longer in range of one of the project location(s). Photos of the project cannot be taken from here')));
+      }
+      return;
     }
 
     takePicture().then((XFile? file) async {
@@ -550,7 +562,7 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
                           color: Colors.black,
                           border: Border.all(
                             color: _cameraController != null
-                                ? Colors.pinkAccent
+                                ? Colors.indigo.shade800
                                 : Colors.grey,
                             width: 1.0,
                           ),
@@ -562,63 +574,9 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
                     ),
                     _getCaptureControlRowWidget(),
                     // _modeControlRowWidget(),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          _thumbnailWidget(),
-                        ],
-                      ),
-                    ),
+
                   ],
                 ),
-          // _showGrid
-          //     ? GridView.builder(
-          //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 2,
-          //       mainAxisSpacing: 1,
-          //       crossAxisSpacing: 1),
-          //   itemCount: _mediaBags.length,
-          //   itemBuilder: (BuildContext context, int index) {
-          //     var item = _mediaBags.elementAt(index);
-          //     return SizedBox(
-          //       height: 180,
-          //       width: 180,
-          //       child: item.isVideo
-          //           ? Image.asset(
-          //         'assets/video3.png',
-          //         width: 180,
-          //         height: 180,
-          //         fit: BoxFit.fill,
-          //       )
-          //           : Image.file(
-          //         item.thumbnailFile!,
-          //         fit: BoxFit.fill,
-          //       ),
-          //     );
-          //   },
-          // )
-          //     : Container(),
-          // Positioned(
-          //     right: 0,
-          //     top: 0,
-          //     child: InkWell(
-          //       onTap: () {
-          //         setState(() {
-          //           _showGrid = !_showGrid;
-          //         });
-          //       },
-          //       child: Container(
-          //           width: 32,
-          //           height: 32,
-          //           decoration: const BoxDecoration(
-          //               shape: BoxShape.circle, color: Colors.teal),
-          //           child: Center(
-          //             child: Text('${_mediaBags.length}',
-          //                 style: Styles.whiteSmall),
-          //           )),
-          //     )),
         ],
       ),
     );
@@ -635,11 +593,6 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
             duration: const Duration(milliseconds: 1500),
             child: MediaListMain(project: widget.project)));
   }
-
-  late Isolate isolate;
-  late ReceivePort receivePort = ReceivePort();
-  double _elapsedSeconds = 0.0;
-  bool _isUploading = false;
 
   Future<File> _processOrientation(File file, NativeDeviceOrientation deviceOrientation) async {
     pp('$mm _processOrientation: attempt to rotate image file ...');
@@ -675,126 +628,15 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
     return mFile;
   }
 
-  Future<void> _createIsolate(
-      {required File file,
-      required File thumbnailFile,
-      required Project project,
-      required bool isVideo,
-      required ProjectPosition projectPosition,
-      required NativeDeviceOrientation deviceOrientation}) async {
-    try {
-      var start = DateTime.now().millisecondsSinceEpoch;
-      setState(() {
-        _isUploading = true;
-      });
-      String? token = await AppAuth.getAuthToken();
-      String? url;
-      pp('🐤🐤🐤🐤 Getting url via .env settings: ${url ?? 'NO URL YET'}');
-      String? status = dot.dotenv.env['CURRENT_STATUS'];
-      pp('🐤🐤🐤🐤 DataAPI: getUrl: Status from .env: $status');
-      if (status == 'dev') {
-        url = dot.dotenv.env['DEV_URL'];
-        pp('$mm Status of the app is  DEVELOPMENT 🌎 🌎 🌎 $url');
-      } else {
-        url = dot.dotenv.env['PROD_URL'];
-        pp('$mm Status of the app is PRODUCTION 🌎 🌎 🌎 $url');
-      }
-      file = await _processOrientation(file, deviceOrientation);
-      receivePort = ReceivePort();
-      var errorReceivePort = ReceivePort();
-      var user = await Prefs.getUser();
-      var distance = await locationBloc.getDistanceFromCurrentPosition(
-          latitude: projectPosition.position!.coordinates[1],
-          longitude: projectPosition.position!.coordinates[0]);
-      UploadParameters params = UploadParameters(
-        sendPort: receivePort.sendPort,
-        file: file,
-        thumbnailFile: thumbnailFile,
-        project: project,
-        projectPosition: projectPosition,
-        isVideo: isVideo,
-        deviceOrientation: deviceOrientation,
-        urlPrefix: url!,
-        user: user!,
-        token: token!, distanceFromProjectPosition: distance,
-      );
-
-      //create channel for comms
-      IsolateChannel channel =
-          IsolateChannel(receivePort, receivePort.sendPort);
-      channel.stream.listen((data) async {
-        if (data != null) {
-          if (data is String) {
-            if (data == 'stop') {
-              isolate.kill();
-              p('${Emoji.blueDot} ${Emoji.blueDot} ${Emoji.blueDot} '
-                  'isolate killed after channel received STOP message '
-                  '{Emoji.blueDot} ${Emoji.blueDot} ${Emoji.blueDot} ${Emoji.redDot}');
-              // sendFinishedMessage();
-            }
-          } else {
-            switch (data['statusCode']) {
-              case uploadBusy:
-                p('${Emoji.heartBlue}${Emoji.heartBlue} Channel received a ${Emoji.redDot} UPLOAD_BUSY '
-                    'message: ${data['message']}');
-                break;
-
-              case uploadFinished:
-                p('${Emoji.heartBlue}${Emoji.heartBlue} Channel received a ${Emoji.redDot} UPLOAD_FINISHED '
-                    'message ');
-                isolate.kill();
-                var end = DateTime.now().millisecondsSinceEpoch;
-                var ms = end - start;
-                _elapsedSeconds = ms / 1000;
-                p('${Emoji.leaf} ${Emoji.redDot}${Emoji.redDot}${Emoji.redDot} isolate has been killed!');
-                if (mounted) {
-                  setState(() {
-                    _isUploading = false;
-                  });
-                }
-                if (mounted) {
-                  // _animationController.reset();
-                  // _animationController.forward();
-                }
-                break;
-            }
-          }
-        }
-      });
-
-      pp('$mm spawning isolate ...');
-      isolate = await Isolate.spawn<UploadParameters>(heavyTask, params,
-          paused: true,
-          onError: errorReceivePort.sendPort,
-          onExit: receivePort.sendPort);
-
-      isolate.addErrorListener(errorReceivePort.sendPort);
-      isolate.resume(isolate.pauseCapability!);
-      isolate.addOnExitListener(receivePort.sendPort);
-
-      errorReceivePort.listen((e) {
-        p('$mm ${Emoji.redDot}${Emoji.redDot} FieldCamera: errorReceivePort: exception occurred: $e');
-      });
-    } catch (e) {
-      p('$mm ${Emoji.redDot} we have a problem ${Emoji.redDot} ${Emoji.redDot}');
-    }
-  }
-
-  @override
+   @override
   onError(String message) {
     throw UnimplementedError();
   }
 
-  @override
-  onUrlObtained(String url) {
-    // TODO: implement onUrlObtained
-    throw UnimplementedError();
-  }
 
   @override
   onVideoReady(Video video) {
-    // TODO: implement onVideoReady
-    throw UnimplementedError();
+
   }
 }
 
@@ -863,3 +705,5 @@ class UploadMessage {
     return map;
   }
 }
+
+

@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import 'data/project_position.dart';
+import 'location/loc_bloc.dart';
+
 List<String> logs = [];
 bool isBusy = false;
 List<Color> _colors = [];
@@ -69,6 +72,17 @@ Color getRandomPastelColor() {
       Random(DateTime.now().millisecondsSinceEpoch * _rand.nextInt(10000));
   int index = _rand.nextInt(_colors.length - 1);
   return _colors.elementAt(index);
+}
+
+Future<bool>  isLocationValid({required ProjectPosition projectPosition, required double validDistance}) async {
+  var distance = await locationBloc.getDistanceFromCurrentPosition(
+      latitude: projectPosition.position!.coordinates[1],
+      longitude: projectPosition.position!.coordinates[0]);
+
+  if (distance <= validDistance) {
+    return false;
+  }
+  return false;
 }
 
 class Styles {

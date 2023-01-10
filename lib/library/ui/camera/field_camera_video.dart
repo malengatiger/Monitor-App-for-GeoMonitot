@@ -1,14 +1,8 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
-// ignore_for_file: public_member_api_docs
 
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
@@ -16,24 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:stream_channel/isolate_channel.dart';
-import 'package:test_router/library/auth/app_auth.dart';
 import 'package:test_router/library/bloc/cloud_storage_bloc.dart';
 import 'package:test_router/library/emojis.dart';
 import 'package:test_router/library/ui/camera/play_video.dart';
 import 'package:test_router/library/ui/media/list/media_list_main.dart';
 import 'package:video_player/video_player.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dot;
 import 'package:video_thumbnail/video_thumbnail.dart' as vt;
-import '../../api/sharedprefs.dart';
 import '../../data/project.dart';
 import '../../data/project_position.dart';
 import '../../data/user.dart';
 import '../../data/video.dart';
 import '../../functions.dart';
-import '../../generic_functions.dart';
-import '../../location/loc_bloc.dart';
 
 class FieldVideoCamera extends StatefulWidget {
   final Project project;
@@ -135,7 +122,6 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final bool _showGrid = false;
 
   void _getCameras() async {
     cameras = await availableCameras();
@@ -231,58 +217,6 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
   }
 
   /// Display the control bar with buttons to take pictures and record videos.
-  Widget _captureControlRowWidget() {
-    final CameraController? cameraController = _cameraController;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.videocam),
-          color: Colors.blue,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  !cameraController.value.isRecordingVideo
-              ? _onVideoRecordButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: cameraController != null &&
-                  cameraController.value.isRecordingPaused
-              ? const Icon(Icons.play_arrow)
-              : const Icon(Icons.pause),
-          color: Colors.blue,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  cameraController.value.isRecordingVideo
-              ? (cameraController.value.isRecordingPaused)
-                  ? _onResumeButtonPressed
-                  : _onPauseButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.stop),
-          color: Colors.red,
-          onPressed: cameraController != null &&
-                  cameraController.value.isInitialized &&
-                  cameraController.value.isRecordingVideo
-              ? _onStopButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.pause_presentation),
-          color:
-              cameraController != null && cameraController.value.isPreviewPaused
-                  ? Colors.red
-                  : Colors.blue,
-          onPressed:
-              cameraController == null ? null : _onPausePreviewButtonPressed,
-        ),
-      ],
-    );
-  }
-
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
   void showInSnackBar(String message) {
@@ -474,8 +408,19 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
     return thumb;
   }
 
-  void _onVideoRecordButtonPressed() {
+  Future<void> _onVideoRecordButtonPressed() async {
     pp('$mm onVideoRecordButtonPressed 🥏 🥏 🥏 ....');
+    bool isValid = await isLocationValid(projectPosition: widget.projectPosition,
+        validDistance: widget.project.monitorMaxDistanceInMetres!);
+    if (!isValid) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            duration: Duration(seconds: 30),
+            content: Text(
+                'You are no longer in range of one of the project location(s). Videos of the project cannot be made from here')));
+      }
+      return;
+    }
     _startVideoRecording().then((_) {
       if (mounted) setState(() {});
     });
@@ -681,111 +626,123 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
       ),
       body: Stack(
         children: [
-          landscapeLeft || landscapeRight? RotatedBox(
-            quarterTurns: landscapeLeft? 1: 3,
-            child: Center(
-              child: Card(
-                elevation: 8,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0)),
-                child: SizedBox(height: 140, child: Column(
-                  children:  [
-                    const SizedBox(height: 24,),
-                    Text('Careful Now!', style: GoogleFonts.lato(
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                      fontWeight: FontWeight.w900,
-                    )),
-                    const SizedBox(height: 12,),
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text('You should keep your device in portrait mode to capture video!'),
-                    ),
-                  ],
-                ),),
-              ),
-            ),
-          ): Column(
-            children: <Widget>[
-              Container(
-                height: 4,
-                color: Colors.teal,
-              ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    border: Border.all(
-                      color: _cameraController != null
-                          ? Colors.redAccent
-                          : Colors.teal,
-                      width: 3.0,
-                    ),
-                  ),
+          landscapeLeft || landscapeRight
+              ? RotatedBox(
+                  quarterTurns: landscapeLeft ? 1 : 3,
                   child: Center(
-                    child: _cameraPreviewWidget(),
+                    child: Card(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0)),
+                      child: SizedBox(
+                        height: 140,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Text('Careful Now!',
+                                style: GoogleFonts.lato(
+                                  textStyle:
+                                      Theme.of(context).textTheme.bodyLarge,
+                                  fontWeight: FontWeight.w900,
+                                )),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Text(
+                                  'You should keep your device in portrait mode to capture video!'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.videocam),
-                    color: Colors.blue,
-                    onPressed: _cameraController != null &&
-                            _cameraController!.value.isInitialized &&
-                            !_cameraController!.value.isRecordingVideo
-                        ? _onVideoRecordButtonPressed
-                        : null,
-                  ),
-                  IconButton(
-                    icon: _cameraController != null &&
-                            _cameraController!.value.isRecordingPaused
-                        ? const Icon(Icons.play_arrow)
-                        : const Icon(Icons.pause),
-                    color: Colors.blue,
-                    onPressed: _cameraController != null &&
-                            _cameraController!.value.isInitialized &&
-                            _cameraController!.value.isRecordingVideo
-                        ? (_cameraController!.value.isRecordingPaused)
-                            ? _onResumeButtonPressed
-                            : _onPauseButtonPressed
-                        : null,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.stop),
-                    color: Colors.red,
-                    onPressed: _cameraController != null &&
-                            _cameraController!.value.isInitialized &&
-                            _cameraController!.value.isRecordingVideo
-                        ? _onStopButtonPressed
-                        : null,
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.pause_presentation),
-                    color: _cameraController != null &&
-                            _cameraController!.value.isPreviewPaused
-                        ? Colors.red
-                        : Colors.blue,
-                    onPressed: _cameraController == null
-                        ? null
-                        : _onPausePreviewButtonPressed,
-                  ),
-                ],
-              ),
-              // _modeControlRowWidget(),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                )
+              : Column(
                   children: <Widget>[
-                    _thumbnailWidget(),
+                    Container(
+                      height: 4,
+                      color: Colors.teal,
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          border: Border.all(
+                            color: _cameraController != null
+                                ? Colors.redAccent
+                                : Colors.teal,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: _cameraPreviewWidget(),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.videocam),
+                          color: Colors.blue,
+                          onPressed: _cameraController != null &&
+                                  _cameraController!.value.isInitialized &&
+                                  !_cameraController!.value.isRecordingVideo
+                              ? _onVideoRecordButtonPressed
+                              : null,
+                        ),
+                        IconButton(
+                          icon: _cameraController != null &&
+                                  _cameraController!.value.isRecordingPaused
+                              ? const Icon(Icons.play_arrow)
+                              : const Icon(Icons.pause),
+                          color: Colors.blue,
+                          onPressed: _cameraController != null &&
+                                  _cameraController!.value.isInitialized &&
+                                  _cameraController!.value.isRecordingVideo
+                              ? (_cameraController!.value.isRecordingPaused)
+                                  ? _onResumeButtonPressed
+                                  : _onPauseButtonPressed
+                              : null,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.stop),
+                          color: Colors.red,
+                          onPressed: _cameraController != null &&
+                                  _cameraController!.value.isInitialized &&
+                                  _cameraController!.value.isRecordingVideo
+                              ? _onStopButtonPressed
+                              : null,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.pause_presentation),
+                          color: _cameraController != null &&
+                                  _cameraController!.value.isPreviewPaused
+                              ? Colors.red
+                              : Colors.blue,
+                          onPressed: _cameraController == null
+                              ? null
+                              : _onPausePreviewButtonPressed,
+                        ),
+                      ],
+                    ),
+                    // _modeControlRowWidget(),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          _thumbnailWidget(),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
           _showPlayUI
               ? Positioned(
                   bottom: 72,
@@ -811,152 +768,6 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
             alignment: Alignment.topLeft,
             duration: const Duration(milliseconds: 1500),
             child: MediaListMain(project: widget.project)));
-  }
-
-  late Isolate isolate;
-  late ReceivePort receivePort = ReceivePort();
-  double _elapsedSeconds = 0.0;
-  bool _isUploading = false;
-
-  Future<File> _processOrientation(
-      File file, NativeDeviceOrientation deviceOrientation) async {
-    pp('$mm _processOrientation: attempt to rotate image file ...');
-    switch (deviceOrientation.name) {
-      case 'landscapeLeft':
-        pp('$mm landscapeLeft ....');
-        break;
-      case 'landscapeRight':
-        pp('$mm landscapeRight ....');
-        break;
-      case 'portraitUp':
-        return file;
-      case 'portraitDown':
-        return file;
-    }
-    final appDocumentDirectory = await getApplicationDocumentsDirectory();
-    final File mFile = File(
-        '${appDocumentDirectory.path}/rotatedImageFile${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-    final img.Image? capturedImage = img.decodeImage(await file.readAsBytes());
-    var orientedImage = img.copyRotate(capturedImage!, angle: 270);
-
-    await File(mFile.path).writeAsBytes(img.encodeJpg(orientedImage));
-
-    final heightOrig = capturedImage.height;
-    final widthOrig = capturedImage.width;
-
-    final height = orientedImage.height;
-    final width = orientedImage.width;
-
-    pp('$mm _processOrientation: rotated file has 😡height: $height 😡width: $width, 🔵 '
-        'original file size: height: $heightOrig width: $widthOrig');
-    return mFile;
-  }
-
-  Future<void> _createIsolate(
-      {required File file,
-      required File thumbnailFile,
-      required Project project,
-      required bool isVideo,
-      required ProjectPosition projectPosition,
-      required NativeDeviceOrientation deviceOrientation}) async {
-    try {
-      var start = DateTime.now().millisecondsSinceEpoch;
-      setState(() {
-        _isUploading = true;
-      });
-      String? token = await AppAuth.getAuthToken();
-      String? url;
-      pp('🐤🐤🐤🐤 Getting url via .env settings: ${url ?? 'NO URL YET'}');
-      String? status = dot.dotenv.env['CURRENT_STATUS'];
-      pp('🐤🐤🐤🐤 DataAPI: getUrl: Status from .env: $status');
-      if (status == 'dev') {
-        url = dot.dotenv.env['DEV_URL'];
-        pp('$mm Status of the app is  DEVELOPMENT 🌎 🌎 🌎 $url');
-      } else {
-        url = dot.dotenv.env['PROD_URL'];
-        pp('$mm Status of the app is PRODUCTION 🌎 🌎 🌎 $url');
-      }
-      file = await _processOrientation(file, deviceOrientation);
-      receivePort = ReceivePort();
-      var errorReceivePort = ReceivePort();
-      var user = await Prefs.getUser();
-      var distance = await locationBloc.getDistanceFromCurrentPosition(
-          latitude: projectPosition.position!.coordinates[1],
-          longitude: projectPosition.position!.coordinates[0]);
-      UploadParameters params = UploadParameters(
-        sendPort: receivePort.sendPort,
-        file: file,
-        thumbnailFile: thumbnailFile,
-        project: project,
-        projectPosition: projectPosition,
-        isVideo: isVideo,
-        deviceOrientation: deviceOrientation,
-        urlPrefix: url!,
-        user: user!,
-        token: token!,
-        distanceFromProjectPosition: distance,
-      );
-
-      //create channel for comms
-      IsolateChannel channel =
-          IsolateChannel(receivePort, receivePort.sendPort);
-      channel.stream.listen((data) async {
-        if (data != null) {
-          if (data is String) {
-            if (data == 'stop') {
-              isolate.kill();
-              p('${Emoji.blueDot} ${Emoji.blueDot} ${Emoji.blueDot} '
-                  'isolate killed after channel received STOP message '
-                  '{Emoji.blueDot} ${Emoji.blueDot} ${Emoji.blueDot} ${Emoji.redDot}');
-              // sendFinishedMessage();
-            }
-          } else {
-            switch (data['statusCode']) {
-              case uploadBusy:
-                p('${Emoji.heartBlue}${Emoji.heartBlue} Channel received a ${Emoji.redDot} UPLOAD_BUSY '
-                    'message: ${data['message']}');
-                break;
-
-              case uploadFinished:
-                p('${Emoji.heartBlue}${Emoji.heartBlue} Channel received a ${Emoji.redDot} UPLOAD_FINISHED '
-                    'message ');
-                isolate.kill();
-                var end = DateTime.now().millisecondsSinceEpoch;
-                var ms = end - start;
-                _elapsedSeconds = ms / 1000;
-                p('${Emoji.leaf} ${Emoji.redDot}${Emoji.redDot}${Emoji.redDot} isolate has been killed!');
-                if (mounted) {
-                  setState(() {
-                    _isUploading = false;
-                  });
-                }
-                if (mounted) {
-                  // _animationController.reset();
-                  // _animationController.forward();
-                }
-                break;
-            }
-          }
-        }
-      });
-
-      pp('$mm spawning isolate ...');
-      isolate = await Isolate.spawn<UploadParameters>(heavyTask, params,
-          paused: true,
-          onError: errorReceivePort.sendPort,
-          onExit: receivePort.sendPort);
-
-      isolate.addErrorListener(errorReceivePort.sendPort);
-      isolate.resume(isolate.pauseCapability!);
-      isolate.addOnExitListener(receivePort.sendPort);
-
-      errorReceivePort.listen((e) {
-        p('$mm ${Emoji.redDot}${Emoji.redDot} FieldVideoCamera: errorReceivePort: exception occurred: $e');
-      });
-    } catch (e) {
-      p('$mm ${Emoji.redDot} we have a problem ${Emoji.redDot} ${Emoji.redDot}');
-    }
   }
 
   @override
