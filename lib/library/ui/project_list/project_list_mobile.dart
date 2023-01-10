@@ -4,7 +4,7 @@ import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:page_transition/page_transition.dart';
-import 'package:test_router/library/ui/media/list/media_list_mobile.dart';
+import 'package:test_router/library/ui/media/list/project_media_list_mobile.dart';
 import 'package:test_router/library/ui/project_monitor/project_monitor_mobile.dart';
 
 import '../../api/data_api.dart';
@@ -161,7 +161,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
             child: ProjectLocationMain(p)));
   }
 
-  void _navigateToMedia(Project p) {
+  void _navigateToMonitorStart(Project p) {
     Navigator.push(
         context,
         PageTransition(
@@ -169,6 +169,15 @@ class ProjectListMobileState extends State<ProjectListMobile>
             alignment: Alignment.topLeft,
             duration: const Duration(milliseconds: 1500),
             child: ProjectMonitorMobile(project: p)));
+  }
+  void _navigateToProjectMedia(Project p) {
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.scale,
+            alignment: Alignment.topLeft,
+            duration: const Duration(milliseconds: 1500),
+            child: ProjectMediaListMobile(project: p)));
   }
 
   Future<void> _navigateToOrgMap() async {
@@ -229,7 +238,20 @@ class ProjectListMobileState extends State<ProjectListMobile>
             color: Theme.of(context).primaryColor,
           ),
           onPressed: () {
-            _navigateToMedia(p);
+            _navigateToProjectMedia(p);
+          }),
+    );
+    menuItems.add(
+      FocusedMenuItem(
+          title:  Text('Start Monitoring', style: GoogleFonts.lato(
+              textStyle: Theme.of(context).textTheme.bodyMedium,
+              fontWeight: FontWeight.normal, color: Colors.black)),
+          trailingIcon: Icon(
+            Icons.camera,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () {
+            _navigateToMonitorStart(p);
           }),
     );
     if (user!.userType == ORG_ADMINISTRATOR) {

@@ -295,13 +295,14 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
   final zoomLevels = [1.0, 2.0, 3.0, 4.0, 5.0];
   int currentZoomIndex = 0;
 
-  Future<void> onViewFinderTap(TapDownDetails details, BoxConstraints constraints) async {
+  Future<void> onViewFinderTap(
+      TapDownDetails details, BoxConstraints constraints) async {
     pp('$mm onViewFinderTap .... ${details.kind.toString()} BoxConstraints: $constraints');
     if (_cameraController == null) {
       return;
     }
     double zoomLevel = 1.0;
-    switch(currentZoomIndex) {
+    switch (currentZoomIndex) {
       case 0:
         zoomLevel = zoomLevels.elementAt(0);
         break;
@@ -333,11 +334,9 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
     if (_cameraController != null) {
       _cameraController!.setExposurePoint(offset);
       _cameraController!.setFocusPoint(offset);
-      _cameraController!.setZoomLevel(zoomLevel);
+      //_cameraController!.setZoomLevel(zoomLevel);
     }
-    setState(() {
-
-    });
+    setState(() {});
 
     var maxZoomLevel = await _cameraController!.getMaxZoomLevel();
     // just calling it dragIntensity for now, you can call it whatever you like.
@@ -398,11 +397,47 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
         NativeDeviceOrientationCommunicator()
             .onOrientationChanged(useSensor: true);
     orientStreamSubscription = stream.listen((event) {
-      pp('${Emoji.blueDot}${Emoji.blueDot} orientation, name: ${event.name} index: ${event.index}');
+      pp('${Emoji.blueDot}${Emoji.blueDot} orientation, name: ${event.name} 🔵 index: ${event.index}');
       _deviceOrientation = event;
+      switch (_deviceOrientation!.name) {
+        case 'landscapeLeft':
+          if (mounted) {
+            setState(() {
+              landscapeLeft = true;
+              landscapeRight = false;
+            });
+          }
+          break;
+        case 'landscapeRight':
+          if (mounted) {
+            setState(() {
+              landscapeRight = true;
+              landscapeLeft = false;
+            });
+          }
+          break;
+        case 'portraitUp':
+          if (mounted) {
+            setState(() {
+              landscapeRight = false;
+              landscapeLeft = false;
+            });
+          }
+          break;
+        case 'portraitDown':
+          if (mounted) {
+            setState(() {
+              landscapeRight = false;
+              landscapeLeft = false;
+            });
+          }
+          break;
+      }
     });
   }
 
+  bool landscapeLeft = false;
+  bool landscapeRight = false;
   Future<File> _getVideoThumbnail(File file) async {
     final Directory directory = await getApplicationDocumentsDirectory();
 
@@ -618,7 +653,7 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
 
   Video? _currentVideo;
 
-  _navigateToPlayer() {
+  void _navigateToPlayer() {
     Navigator.push(
         context,
         PageTransition(
@@ -646,96 +681,119 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
       ),
       body: Stack(
         children: [
-          _showGrid
-              ? Container()
-              : Column(
-                  children: <Widget>[
-                    Container(
-                      height: 4,
-                      color: Colors.teal,
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(
-                            color: _cameraController != null
-                                ? Colors.redAccent
-                                : Colors.teal,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: Center(
-                          child: _cameraPreviewWidget(),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        IconButton(
-                          icon: const Icon(Icons.videocam),
-                          color: Colors.blue,
-                          onPressed: _cameraController != null &&
-                                  _cameraController!.value.isInitialized &&
-                                  !_cameraController!.value.isRecordingVideo
-                              ? _onVideoRecordButtonPressed
-                              : null,
-                        ),
-                        IconButton(
-                          icon: _cameraController != null &&
-                                  _cameraController!.value.isRecordingPaused
-                              ? const Icon(Icons.play_arrow)
-                              : const Icon(Icons.pause),
-                          color: Colors.blue,
-                          onPressed: _cameraController != null &&
-                                  _cameraController!.value.isInitialized &&
-                                  _cameraController!.value.isRecordingVideo
-                              ? (_cameraController!.value.isRecordingPaused)
-                                  ? _onResumeButtonPressed
-                                  : _onPauseButtonPressed
-                              : null,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.stop),
-                          color: Colors.red,
-                          onPressed: _cameraController != null &&
-                                  _cameraController!.value.isInitialized &&
-                                  _cameraController!.value.isRecordingVideo
-                              ? _onStopButtonPressed
-                              : null,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.pause_presentation),
-                          color: _cameraController != null &&
-                                  _cameraController!.value.isPreviewPaused
-                              ? Colors.red
-                              : Colors.blue,
-                          onPressed: _cameraController == null
-                              ? null
-                              : _onPausePreviewButtonPressed,
-                        ),
-                      ],
-                    ),
-                    // _modeControlRowWidget(),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          _thumbnailWidget(),
-                        ],
-                      ),
+          landscapeLeft || landscapeRight? RotatedBox(
+            quarterTurns: landscapeLeft? 1: 3,
+            child: Center(
+              child: Card(
+                elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0)),
+                child: SizedBox(height: 140, child: Column(
+                  children:  [
+                    const SizedBox(height: 24,),
+                    Text('Careful Now!', style: GoogleFonts.lato(
+                      textStyle: Theme.of(context).textTheme.bodyLarge,
+                      fontWeight: FontWeight.w900,
+                    )),
+                    const SizedBox(height: 12,),
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text('You should keep your device in portrait mode to capture video!'),
                     ),
                   ],
+                ),),
+              ),
+            ),
+          ): Column(
+            children: <Widget>[
+              Container(
+                height: 4,
+                color: Colors.teal,
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    border: Border.all(
+                      color: _cameraController != null
+                          ? Colors.redAccent
+                          : Colors.teal,
+                      width: 3.0,
+                    ),
+                  ),
+                  child: Center(
+                    child: _cameraPreviewWidget(),
+                  ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.videocam),
+                    color: Colors.blue,
+                    onPressed: _cameraController != null &&
+                            _cameraController!.value.isInitialized &&
+                            !_cameraController!.value.isRecordingVideo
+                        ? _onVideoRecordButtonPressed
+                        : null,
+                  ),
+                  IconButton(
+                    icon: _cameraController != null &&
+                            _cameraController!.value.isRecordingPaused
+                        ? const Icon(Icons.play_arrow)
+                        : const Icon(Icons.pause),
+                    color: Colors.blue,
+                    onPressed: _cameraController != null &&
+                            _cameraController!.value.isInitialized &&
+                            _cameraController!.value.isRecordingVideo
+                        ? (_cameraController!.value.isRecordingPaused)
+                            ? _onResumeButtonPressed
+                            : _onPauseButtonPressed
+                        : null,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.stop),
+                    color: Colors.red,
+                    onPressed: _cameraController != null &&
+                            _cameraController!.value.isInitialized &&
+                            _cameraController!.value.isRecordingVideo
+                        ? _onStopButtonPressed
+                        : null,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.pause_presentation),
+                    color: _cameraController != null &&
+                            _cameraController!.value.isPreviewPaused
+                        ? Colors.red
+                        : Colors.blue,
+                    onPressed: _cameraController == null
+                        ? null
+                        : _onPausePreviewButtonPressed,
+                  ),
+                ],
+              ),
+              // _modeControlRowWidget(),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    _thumbnailWidget(),
+                  ],
+                ),
+              ),
+            ],
+          ),
           _showPlayUI
-              ?  Positioned(
+              ? Positioned(
                   bottom: 72,
                   left: 48,
-                  child: SizedBox(height: 160,
-                    child: PlayVideoCard(onPlayVideo: onPlayVideo, onClose: onClose),
+                  child: SizedBox(
+                    height: 160,
+                    child: PlayVideoCard(
+                        onPlayVideo: onPlayVideo, onClose: onClose),
                   ))
               : const SizedBox(),
         ],
@@ -909,7 +967,6 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
   String? url;
   bool _showPlayUI = false;
 
-
   onPlayVideo() {
     pp('$mm onPlayVideo navigate to player ...🔵🔵');
     _navigateToPlayer();
@@ -1000,32 +1057,39 @@ class UploadMessage {
 }
 
 class PlayVideoCard extends StatelessWidget {
-   const PlayVideoCard({Key? key, required this.onPlayVideo, required this.onClose}) : super(key: key);
+  const PlayVideoCard(
+      {Key? key, required this.onPlayVideo, required this.onClose})
+      : super(key: key);
   final Function() onPlayVideo;
   final Function() onClose;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: 200,
+    return SizedBox(
+      width: 200,
       child: Card(
         // color: Colors.teal,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Column(
             children: [
-              Row(mainAxisAlignment: MainAxisAlignment.end,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(onPressed: (){
-                    onClose();
-                  }, icon: const Icon(Icons.close)),
+                  IconButton(
+                      onPressed: () {
+                        onClose();
+                      },
+                      icon: const Icon(Icons.close)),
                 ],
               ),
-               Text('Video is ready for review', style: GoogleFonts.lato(
-                textStyle: Theme.of(context).textTheme.bodySmall,
-                fontWeight: FontWeight.normal,
-              )),
+              Text('Video is ready for review',
+                  style: GoogleFonts.lato(
+                    textStyle: Theme.of(context).textTheme.bodySmall,
+                    fontWeight: FontWeight.normal,
+                  )),
               const SizedBox(
                 height: 8,
               ),
@@ -1041,7 +1105,7 @@ class PlayVideoCard extends StatelessWidget {
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }
-

@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:test_router/library/bloc/cloud_storage_bloc.dart';
 import 'package:test_router/library/emojis.dart';
+import 'package:test_router/library/ui/camera/play_video.dart';
 import 'package:test_router/library/ui/media/list/project_videos.dart';
 
 import '../../../api/sharedprefs.dart';
@@ -218,6 +219,10 @@ class MediaListMobileState extends State<UserMediaListMobile>
                     refresh: true,
                     onVideoTapped: (Video video) {
                       pp('🍎🍎🍎Video has been tapped: ${video.created!}');
+                      setState(() {
+                        selectedVideo = video;
+                      });
+                      _navigateToPlayVideo();
                     },
                   ),
                 ],
@@ -275,7 +280,17 @@ class MediaListMobileState extends State<UserMediaListMobile>
             alignment: Alignment.topLeft,
             duration: const Duration(milliseconds: 1000),
             child: FullPhotoMobile(photo: selectedPhoto!)));
-    Future.delayed(const Duration(milliseconds: 100), () {});
+  }
+  Video? selectedVideo;
+  void _navigateToPlayVideo() {
+    pp('... about to navigate after waiting 100 ms');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.leftToRightWithFade,
+            alignment: Alignment.topLeft,
+            duration: const Duration(milliseconds: 1000),
+            child: PlayVideo(video: selectedVideo!)));
   }
 
   void _navigateToMonitor() {

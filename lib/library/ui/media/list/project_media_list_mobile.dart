@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animations/animations.dart';
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,7 @@ import '../../../data/video.dart';
 import '../../../functions.dart';
 import '../../../data/photo.dart';
 import '../../../data/project.dart';
+import '../../camera/play_video.dart';
 import '../../project_monitor/project_monitor_mobile.dart';
 import '../full_photo/full_photo_mobile.dart';
 import 'media_grid.dart';
@@ -52,8 +54,8 @@ class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
   void initState() {
     _animationController = AnimationController(
         value: 0.0,
-        duration: const Duration(milliseconds: 2000),
-        reverseDuration: const Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 3000),
+        reverseDuration: const Duration(milliseconds: 2000),
         vsync: this);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -80,6 +82,7 @@ class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
       if (mounted) {
         setState(() {});
       }
+      _animationController.forward();
     });
 
     videoStreamSubscription = projectBloc.videoStream.listen((value) {
@@ -88,6 +91,7 @@ class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
       if (mounted) {
         setState(() {});
       }
+      _animationController.forward();
     });
   }
 
@@ -197,24 +201,40 @@ class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
           TabBarView(
             controller: _tabController,
             children: [
-              ProjectPhotos(
-                project: widget.project,
-                refresh: true,
-                onPhotoTapped: (Photo photo) {
-                  pp('🔷🔷🔷Photo has been tapped: ${photo.created!}');
-                  selectedPhoto = photo;
-                  setState(() {
-                    _showPhotoDetail = true;
-                  });
-                  _animationController.forward();
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (BuildContext context, Widget? child) {
+                  return FadeScaleTransition(animation: _animationController, child: child,);
                 },
+                child: ProjectPhotos(
+                  project: widget.project,
+                  refresh: true,
+                  onPhotoTapped: (Photo photo) {
+                    pp('🔷🔷🔷Photo has been tapped: ${photo.created!}');
+                    selectedPhoto = photo;
+                    setState(() {
+                      _showPhotoDetail = true;
+                    });
+                    _animationController.forward();
+                  },
+                ),
               ),
-              ProjectVideos(
-                project: widget.project,
-                refresh: true,
-                onVideoTapped: (Video video) {
-                  pp('🍎🍎🍎Video has been tapped: ${video.created!}');
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (BuildContext context, Widget? child) {
+                  return FadeScaleTransition(animation: _animationController, child: child,);
                 },
+                child: ProjectVideos(
+                  project: widget.project,
+                  refresh: true,
+                  onVideoTapped: (Video video) {
+                    pp('🍎🍎🍎Video has been tapped: ${video.created!}');
+                    setState(() {
+                      selectedVideo = video;
+                    });
+                    _navigateToPlayVideo();
+                  },
+                ),
               ),
             ],
           ),
@@ -261,7 +281,17 @@ class ProjectMediaListMobileState extends State<ProjectMediaListMobile>
       ),
     ));
   }
-
+  Video? selectedVideo;
+  void _navigateToPlayVideo() {
+    pp('... about to navigate after waiting 100 ms');
+    Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.leftToRightWithFade,
+            alignment: Alignment.topLeft,
+            duration: const Duration(milliseconds: 1000),
+            child: PlayVideo(video: selectedVideo!)));
+  }
   void _navigateToFullPhoto() {
     pp('... about to navigate after waiting 100 ms');
     Navigator.push(

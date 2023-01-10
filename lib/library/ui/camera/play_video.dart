@@ -1,4 +1,5 @@
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
@@ -35,14 +36,12 @@ class PlayVideoState extends State<PlayVideo>
             '$videoController 🍎DURATION: ${videoController!.value.duration} seconds!');
         setState(() {
           if (videoController != null) {
-
             videoController!.value.isPlaying
                 ? videoController!.pause()
                 : videoController!.play();
           }
         });
       });
-    //_startVideoPlayer();
   }
 
   // Future<void> _startVideoPlayer() async {
@@ -110,7 +109,16 @@ class PlayVideoState extends State<PlayVideo>
           aspectRatio: videoController!.value.aspectRatio,
           child: VideoPlayer(videoController!),
         )
-            : Container(),
+            :  Center(
+          child: Card(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Text('Video is buffering ...'),
+              )),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

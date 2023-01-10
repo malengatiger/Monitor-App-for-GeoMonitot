@@ -8,7 +8,7 @@ import '../../../data/project.dart';
 import '../../../data/user.dart';
 import '../../../functions.dart';
 import 'media_list_desktop.dart';
-import 'media_list_mobile.dart';
+import 'project_media_list_mobile.dart';
 import 'media_list_tablet.dart';
 
 class MediaListMain extends StatefulWidget {

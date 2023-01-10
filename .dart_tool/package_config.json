@@ -56,6 +56,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "badges",
+      "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/badges-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///Users/aubreymalabie/Work/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.1.0",
       "packageUri": "lib/",
@@ -1376,7 +1382,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-10T08:31:04.797580Z",
+  "generated": "2023-01-10T16:21:24.685382Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }
