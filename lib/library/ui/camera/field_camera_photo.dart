@@ -377,6 +377,11 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
             duration: Duration(seconds: 10),
             content: Text(
                 'You are no longer in range of one of the project location(s). Photos of the project cannot be taken from here')));
+
+        showToast(message: 'Cannot do this, Boss! ${Emoji.peach}',
+            textStyle: const TextStyle(color: Colors.white),
+            duration: const Duration(seconds: 10),backgroundColor: Colors.pink,
+            context: context);
       }
       return;
     }
@@ -425,9 +430,12 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
               projectPosition: widget.projectPosition.position!,
               isVideo: false, isLandscape: isLandscape);
 
+          var size = await mFile.length();
+          var m = (size/1024/1024).toStringAsFixed(2);
+          pp('$mm Picture taken is $m MB in size' );
           showToast(
               context: context,
-              message: 'Picture file saved on device',
+              message: 'Picture file saved on device, size: $m MB',
               backgroundColor: Colors.teal,
               textStyle: Styles.whiteSmall,
               toastGravity: ToastGravity.TOP,

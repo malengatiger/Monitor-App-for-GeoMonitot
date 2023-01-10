@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
@@ -12,6 +13,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:test_router/library/bloc/cloud_storage_bloc.dart';
 import 'package:test_router/library/emojis.dart';
+import 'package:test_router/library/generic_functions.dart';
 import 'package:test_router/library/ui/camera/play_video.dart';
 import 'package:test_router/library/ui/media/list/media_list_main.dart';
 import 'package:video_player/video_player.dart';
@@ -419,6 +421,10 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
             content: Text(
                 'You are no longer in range of one of the project location(s). Videos of the project cannot be made from here')));
       }
+      showToast(message: 'Cannot do this, Boss! ${Emoji.peach}',
+          textStyle: const TextStyle(color: Colors.white),
+          duration: const Duration(seconds: 10),backgroundColor: Colors.pink,
+          context: context);
       return;
     }
     _startVideoRecording().then((_) {
@@ -435,7 +441,7 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
         var length = await file.length();
         pp('$mm onStopButtonPressed 🥏 🥏 🥏 maybe we should start uploading the video file ...');
         showInSnackBar(
-            'Video has been recorded; length: ${length / 1024 / 1024} MB ');
+            'Video has been recorded; size: ${(length / 1024 / 1024).toStringAsFixed(1)} MB ');
         videoFile = file;
         var mFile = File(file.path);
         var thumb = await _getThumbnail(file: mFile, isVideo: true);
@@ -450,6 +456,18 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
             projectPosition: widget.projectPosition.position!,
             isVideo: true,
             isLandscape: false);
+
+        var size = await mFile.length();
+        var m = (size/1024/1024).toStringAsFixed(2);
+        pp('$mm Video taken is $m MB in size' );
+
+        showToast(
+            context: context,
+            message: 'Video file saved on device, size: $m MB',
+            backgroundColor: Colors.teal,
+            textStyle: Styles.whiteSmall,
+            toastGravity: ToastGravity.CENTER,
+            duration: const Duration(seconds: 3));
       }
     });
   }

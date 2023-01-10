@@ -80,7 +80,7 @@ Future<bool>  isLocationValid({required ProjectPosition projectPosition, require
       longitude: projectPosition.position!.coordinates[0]);
 
   if (distance <= validDistance) {
-    return false;
+    return true;
   }
   return false;
 }
