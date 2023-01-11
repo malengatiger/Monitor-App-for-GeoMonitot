@@ -570,7 +570,7 @@ class FieldPhotoCameraState extends State<FieldPhotoCamera>
                           color: Colors.black,
                           border: Border.all(
                             color: _cameraController != null
-                                ? Colors.indigo.shade800
+                                ? Theme.of(context).primaryColorLight
                                 : Colors.grey,
                             width: 1.0,
                           ),

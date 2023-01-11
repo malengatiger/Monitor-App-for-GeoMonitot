@@ -203,7 +203,7 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
                         ? Image.file(File(imageFile!.path))
                         : Container(
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.pink)),
+                                border: Border.all(color: Theme.of(context).primaryColor)),
                             child: Center(
                               child: AspectRatio(
                                   aspectRatio:
@@ -681,17 +681,14 @@ class FieldVideoCameraState extends State<FieldVideoCamera>
                 )
               : Column(
                   children: <Widget>[
-                    Container(
-                      height: 4,
-                      color: Colors.teal,
-                    ),
+
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black,
                           border: Border.all(
                             color: _cameraController != null
-                                ? Colors.redAccent
+                                ? Theme.of(context).primaryColor
                                 : Colors.teal,
                             width: 3.0,
                           ),
@@ -922,7 +919,7 @@ class PlayVideoCard extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              ElevatedButton(
+              TextButton(
                   onPressed: () {
                     onPlayVideo();
                   },

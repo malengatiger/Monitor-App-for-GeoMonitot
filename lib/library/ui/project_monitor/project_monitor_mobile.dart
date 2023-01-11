@@ -70,6 +70,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       child: Scaffold(
         key: _key,
         appBar: AppBar(
+          leading: const SizedBox(),
           title: Text(widget.project.organizationName!,
               style: GoogleFonts.lato(
                 textStyle: Theme.of(context).textTheme.bodySmall,
@@ -86,7 +87,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
             )
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(240),
+            preferredSize: const Size.fromHeight(200),
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -119,7 +120,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                   ),
                   const Text('metres'),
                   const SizedBox(
-                    height: 12,
+                    height: 8,
                   ),
                 ],
               ),
@@ -137,11 +138,11 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
               child: Column(
                 children: [
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   isWithinDistance
                       ? SizedBox(
-                          height: 120,
+                          height: 180,
                           child: Column(
                             children: [
                               ElevatedButton(
@@ -173,13 +174,13 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                                 ),
                               ),
                               const SizedBox(
-                                height: 8,
+                                height: 12,
                               ),
                               ElevatedButton(
                                 style: ButtonStyle(
                                     elevation: MaterialStateProperty.all(8),
                                     backgroundColor: MaterialStateProperty.all(
-                                        Theme.of(context).errorColor)),
+                                        Theme.of(context).primaryColor)),
                                 onPressed: () async {
                                   isWithinDistance =
                                       await _checkProjectDistance();
@@ -203,12 +204,18 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              TextButton(onPressed: (){
+                                Navigator.of(context).pop();
+                              }, child: const Text('Cancel')),
                             ],
                           ),
                         )
                       : Container(),
                   const SizedBox(
-                    height: 8,
+                    height: 4,
                   ),
                   isBusy
                       ? Row(
@@ -232,11 +239,11 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                         )
                       : Container(),
                   const SizedBox(
-                    height: 24,
+                    height: 4,
                   ),
                   isWithinDistance
                       ? Text(
-                          'We are ready to start creating photos and videos for ${widget.project.name}',
+                          'We are ready to start creating photos and videos for ${widget.project.name} \n🍎',
                           style: GoogleFonts.lato(
                             textStyle: Theme.of(context).textTheme.bodyMedium,
                             fontWeight: FontWeight.normal,
@@ -244,12 +251,20 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
                         )
                       : Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
-                            style: GoogleFonts.lato(
-                              textStyle: Theme.of(context).textTheme.bodyMedium,
-                              fontWeight: FontWeight.normal,
-                            ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Device is too far from ${widget.project.name} for monitoring capabilities. Please move closer!',
+                                style: GoogleFonts.lato(
+                                  textStyle: Theme.of(context).textTheme.bodyMedium,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                              const SizedBox(height: 32,),
+                              TextButton(onPressed: (){
+                                Navigator.of(context).pop();
+                              }, child: const Text('Cancel')),
+                            ],
                           ),
                         ),
                 ],
@@ -260,7 +275,6 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
       ),
     );
   }
-
   // ignore: missing_return
   Future<ProjectPosition?> _findNearestProjectPosition() async {
     var bags = <BagX>[];
@@ -326,7 +340,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   void _startPhotoMonitoring() async {
     pp('🍏 🍏 Start Photo Monitoring this project after checking that the device is within '
         ' 🍎 ${widget.project.monitorMaxDistanceInMetres} metres 🍎 of a project point within ${widget.project.name}');
-
+    Navigator.of(context).pop();
     Navigator.push(
         context,
         PageTransition(
@@ -342,7 +356,7 @@ class ProjectMonitorMobileState extends State<ProjectMonitorMobile>
   void _startVideoMonitoring() async {
     pp('🍏 🍏 Start Video Monitoring this project after checking that the device is within '
         ' 🍎 ${widget.project.monitorMaxDistanceInMetres} metres 🍎 of a project point within ${widget.project.name}');
-
+    Navigator.of(context).pop();
     Navigator.push(
         context,
         PageTransition(

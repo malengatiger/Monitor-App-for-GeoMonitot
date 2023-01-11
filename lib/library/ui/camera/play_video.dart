@@ -228,7 +228,7 @@ class PlayVideoState extends State<PlayVideo>
             //_startVideoPlayer();
           },
           child: Icon(
-            videoController == null ? Icons.cached : Icons.play_arrow,
+            videoController == null ? Icons.pause : Icons.play_arrow,
           ),
         ),
       ),

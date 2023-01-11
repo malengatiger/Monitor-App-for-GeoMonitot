@@ -248,7 +248,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
               textStyle: Theme.of(context).textTheme.bodyMedium,
               fontWeight: FontWeight.normal, color: Colors.black)),
           trailingIcon: Icon(
-            Icons.camera,
+            Icons.lock_clock,
             color: Theme.of(context).primaryColor,
           ),
           onPressed: () {
