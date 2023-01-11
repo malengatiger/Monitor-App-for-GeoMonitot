@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -363,7 +364,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
                   actions: _getActions(),
                   bottom: PreferredSize(
                     preferredSize:
-                        Size.fromHeight(isProjectsByLocation ? 160 : 140),
+                        Size.fromHeight(isProjectsByLocation ? 160 : 120),
                     child: Column(
                       children: [
                         Text(
@@ -445,22 +446,7 @@ class ProjectListMobileState extends State<ProjectListMobile>
                             const SizedBox(
                               width: 24,
                             ),
-                            Text(
-                              'Projects',
-                                style: GoogleFonts.lato(
-                                    textStyle: Theme.of(context).textTheme.bodySmall,
-                                    fontWeight: FontWeight.normal)),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              '${projects.length}',
-                                style: GoogleFonts.secularOne(
-                                    textStyle: Theme.of(context).textTheme.bodyLarge,
-                                    fontWeight: FontWeight.w900)),
-                            const SizedBox(
-                              width: 24,
-                            )
+
                           ],
                         ),
                         const SizedBox(
@@ -507,65 +493,78 @@ class ProjectListMobileState extends State<ProjectListMobile>
                               )
                             : Stack(
                                 children: [
-                                  ListView.builder(
-                                    itemCount: projects.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      var selectedProject =
-                                          projects.elementAt(index);
+                                  Badge(
+                                    position: BadgePosition.topEnd(top: -8, end: -2),
+                                    badgeContent: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Text('${projects.length}',style: GoogleFonts.lato(
+                                        textStyle:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                        fontWeight: FontWeight.normal,
+                                      ),),
+                                    ),
+                                    badgeColor: Theme.of(context).primaryColor,
+                                    elevation: 8,
+                                    child: ListView.builder(
+                                      itemCount: projects.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        var selectedProject =
+                                            projects.elementAt(index);
 
-                                      return FocusedMenuHolder(
-                                        menuOffset: 20,
-                                        duration: const Duration(milliseconds: 300),
-                                        menuItems:
-                                            getPopUpMenuItems(selectedProject),
-                                        animateMenuItems: true,
-                                        openWithTap: true,
-                                        onPressed: () {
-                                          pp('.... 💛️ 💛️ 💛️ not sure what I pressed ...');
-                                        },
-                                        child: Card(
-                                          elevation: 4,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(16.0)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: Column(
-                                              children: [
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Opacity(
-                                                      opacity: 0.5,
-                                                      child: Icon(
-                                                        Icons.water_damage,
-                                                        color: Theme.of(context)
-                                                            .primaryColor,
+                                        return FocusedMenuHolder(
+                                          menuOffset: 20,
+                                          duration: const Duration(milliseconds: 300),
+                                          menuItems:
+                                              getPopUpMenuItems(selectedProject),
+                                          animateMenuItems: true,
+                                          openWithTap: true,
+                                          onPressed: () {
+                                            pp('.... 💛️ 💛️ 💛️ not sure what I pressed ...');
+                                          },
+                                          child: Card(
+                                            elevation: 4,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(16.0)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(12.0),
+                                              child: Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 12,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Opacity(
+                                                        opacity: 0.5,
+                                                        child: Icon(
+                                                          Icons.water_damage,
+                                                          color: Theme.of(context)
+                                                              .primaryColor,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Flexible(
-                                                      child: Text(
-                                                        selectedProject.name!,
-                                                          style: GoogleFonts.lato(
-                                                              textStyle: Theme.of(context).textTheme.bodySmall,
-                                                              fontWeight: FontWeight.bold)),
-                                                    )
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 12,
-                                                ),
-                                              ],
+                                                      const SizedBox(
+                                                        width: 8,
+                                                      ),
+                                                      Flexible(
+                                                        child: Text(
+                                                          selectedProject.name!,
+                                                            style: GoogleFonts.lato(
+                                                                textStyle: Theme.of(context).textTheme.bodySmall,
+                                                                fontWeight: FontWeight.bold)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 12,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               )));

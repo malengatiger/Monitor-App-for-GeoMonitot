@@ -47,33 +47,6 @@ class PlayVideoState extends State<PlayVideo>
       });
   }
 
-  // Future<void> _startVideoPlayer() async {
-  //
-  //   pp('$mm _startVideoPlayer .... 🥏 🥏 🥏 🥏 video url: ${widget.video} }');
-  //   videoController =
-  //   //VideoPlayerController.file(File(widget.videoFile.path));
-  //   videoController = VideoPlayerController.network(widget.video);
-  //   videoPlayerListener = () {
-  //     if (videoController != null) {
-  //       // Refreshing the state to update video player with the correct ratio.
-  //       if (mounted) setState(() {});
-  //       videoController!.removeListener(videoPlayerListener!);
-  //     }
-  //   };
-  //
-  //   if (videoController != null) {
-  //     videoController!.addListener(videoPlayerListener!);
-  //     await videoController!.setLooping(false);
-  //     await videoController!.initialize();
-  //     //await videoController?.dispose();
-  //     if (mounted) {
-  //       await videoController!.play();
-  //     }
-  //   }
-  //
-  //
-  // }
-
   @override
   void dispose() {
     _animationController.dispose();
@@ -84,15 +57,22 @@ class PlayVideoState extends State<PlayVideo>
     super.dispose();
   }
 
+  bool _showElapsed = false;
   @override
   Widget build(BuildContext context) {
     var m = getFormattedDateLongWithTime(widget.video.created!, context);
+    var elapsedMinutes = 0.0;
+    var elapsedSeconds = 0;
+    if (videoController != null) {
+      elapsedSeconds = videoController!.value.position.inSeconds;
+      elapsedMinutes = (elapsedSeconds /60);
+    }
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Video Player'),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(40),
+            preferredSize: const Size.fromHeight(80),
             child: Column(
               children: [
                 Text(
@@ -115,24 +95,41 @@ class PlayVideoState extends State<PlayVideo>
                 const SizedBox(
                   height: 8,
                 ),
-                Row(mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text('Video Duration',style: GoogleFonts.lato(
+                    Text(
+                      'Video Duration',
+                      style: GoogleFonts.lato(
                         textStyle: Theme.of(context).textTheme.bodySmall,
-                        fontWeight: FontWeight.normal, ),),
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
                       videoDurationInMinutes > 1.0
-                          ? '${videoDurationInMinutes.toStringAsFixed(2)} minutes'
-                          : '$videoDurationInSeconds seconds',
+                          ? videoDurationInMinutes.toStringAsFixed(2)
+                          : '$videoDurationInSeconds',
+                      style: GoogleFonts.secularOne(
+                          textStyle: Theme.of(context).textTheme.bodySmall,
+                          fontWeight: FontWeight.w900,
+                          color: Theme.of(context).primaryColor),
+                    ),
+                    const SizedBox(width: 8,),
+                    Text(
+                      videoDurationInMinutes > 1.0
+                          ? 'minutes'
+                          : 'seconds',
                       style: GoogleFonts.lato(
                           textStyle: Theme.of(context).textTheme.bodySmall,
-                          fontWeight: FontWeight.normal,
-                          color: Theme.of(context).primaryColorLight),
+                          fontWeight: FontWeight.normal,),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 8,
                 ),
               ],
             ),
@@ -142,39 +139,87 @@ class PlayVideoState extends State<PlayVideo>
             ? const Center(
                 child: Text('Not ready yet!'),
               )
-            : Center(
-                child: videoController!.value.isInitialized
-                    ? AspectRatio(
-                        aspectRatio: videoController!.value.aspectRatio,
-                        child: GestureDetector(
-                            onTap: () {
-                              pp('$mm Tap happened! Pause the video if playing 🍎 ...');
-                              if (videoController!.value.isPlaying) {
-                                if (mounted) {
-                                  setState(() {
-                                    videoController!.pause();
-                                  });
-                                }
-                              }
-
-                            },
-                            child: VideoPlayer(videoController!)),
-                      )
-                    : Center(
-                        child: Card(
-                            elevation: 8,
+            : Stack(
+                children: [
+                  Center(
+                    child: videoController!.value.isInitialized
+                        ? AspectRatio(
+                            aspectRatio: videoController!.value.aspectRatio,
+                            child: GestureDetector(
+                                onTap: () {
+                                  pp('$mm Tap happened! Pause the video if playing 🍎 ...');
+                                  if (videoController!.value.isPlaying) {
+                                    if (mounted) {
+                                      setState(() {
+                                        videoController!.pause();
+                                        _showElapsed = true;
+                                      });
+                                    }
+                                  }
+                                },
+                                child: VideoPlayer(videoController!)),
+                          )
+                        : Center(
+                            child: Card(
+                                elevation: 8,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0)),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(20.0),
+                                  child: Text('Video is buffering ...'),
+                                )),
+                          ),
+                  ),
+                  _showElapsed
+                      ? Positioned(
+                          top: 72,
+                          left: 4,
+                          child: Card(
+                            color: Colors.black26,
+                            elevation: 4,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.0)),
-                            child: const Padding(
-                              padding: EdgeInsets.all(20.0),
-                              child: Text('Video is buffering ...'),
-                            )),
-                      ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Video paused at:  ',
+                                    style: GoogleFonts.lato(
+                                      textStyle:
+                                          Theme.of(context).textTheme.bodySmall,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(elapsedMinutes > 1.0?
+                                      elapsedMinutes.toStringAsFixed(2) : '$elapsedSeconds',style: GoogleFonts.secularOne(
+                                    textStyle:
+                                    Theme.of(context).textTheme.bodyMedium,
+                                    fontWeight: FontWeight.w900,
+                                  ),),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                   Text(elapsedMinutes> 1.0? 'minutes elapsed':'seconds elapsed',style: GoogleFonts.lato(
+                                    textStyle:
+                                    Theme.of(context).textTheme.bodySmall,
+                                    fontWeight: FontWeight.normal,
+                                  ),),
+                                ],
+                              ),
+                            ),
+                          ))
+                      : const SizedBox(),
+                ],
               ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
               if (videoController != null) {
+                _showElapsed = false;
                 videoController!.value.isPlaying
                     ? videoController!.pause()
                     : videoController!.play();
